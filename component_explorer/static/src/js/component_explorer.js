@@ -30,6 +30,8 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             if (this.model === 'component.site') {
                 this.getParent().getParent().show_location_view(this.id);
             } else if (this.model === 'component.location') {
+                this.getParent().getParent().show_location_mixed_view(this.id);
+            } else if (this.model === 'component.sublocation') {
                 this.getParent().getParent().show_component_view(this.id);
             } else {
                 this._super.apply(this, arguments);
@@ -177,7 +179,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this.$buttons.on('click', '.oe_form_button_edit',
                 function () {
                     var action = self.edit_record();
-                    alert(JSON.stringify(action));
                     self.do_action(action);
                 });
         },
@@ -252,11 +253,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this.list_view = null;
             this.project_dataset = new data.DataSetSearch(this, "component.project", this.get_context());
             this.location_dataset = new data.DataSetSearch(this, "component.location", this.get_context());
+            this.sublocation_dataset = new data.DataSetSearch(this, "component.sublocation", this.get_context());
             this.site_dataset = new data.DataSetSearch(this, "component.site", this.get_context());
             this.component_dataset = new data.DataSetSearch(this, "component.component", this.get_context());
             this.datasets = new DatasetMap();
             this.datasets.add_model("component.project",this.project_dataset);
             this.datasets.add_model("component.location", this.location_dataset);
+            this.datasets.add_model("component.sublocation", this.sublocation_dataset);
             this.datasets.add_model("component.component", this.component_dataset);
             this.datasets.add_model("component.site",this.site_dataset);
             //alert(JSON.stringify(this.datasets)+"\n"+this.datasets.get_dataset("component.project"));
@@ -398,6 +401,50 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 this.property_view = null;
             }
         },
+        new_record_action: function (model) {
+            var action = {
+                type: 'ir.actions.act_window',
+                res_model: model,
+                views: [[false, 'form']],
+                target: 'new',
+                flags: {
+                    action_buttons: true,
+                    create: true,
+                }
+            };
+            return action
+        },
+        add_project: function () {
+            var self = this;
+            this.view_manager.do_action(this.new_record_action("component.project"), {
+                on_close: function() {
+                    self.load_treeview();
+                },
+            });
+        },
+        show_properties_action: function (model, id) {
+            var action = {
+                type: 'ir.actions.act_window',
+                res_model: model,
+                res_id: Number(id),
+                views: [[false, 'form']],
+                target: 'new',
+                flags: {
+                    action_buttons: true,
+                    create: false,
+                }
+            };
+            return action
+        },
+        show_properties: function (model, id) {
+            var self = this;
+            alert(model+"_"+id);
+            this.view_manager.do_action(this.show_properties_action(model, id), {
+                on_close: function() {
+                    self.load_treeview();
+                },
+            });
+        },
         show_site_view: function (project) {
             var self = this;
             this.current_project = project;
@@ -422,17 +469,21 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         show_property_view: function (model, id) {
             var self = this;
             this.property_panel_parent = this.$(".o_cexplorer_properties");
+            if (this.property_view!=null){
+                this.remove_view(this.property_view);
+            }
             this.view_model.query(['id','name','type']).filter([['model','=',model],
                 ['type','=','form']]).first().then(function(view) {
                 self.property_view = new CExplorerPropertiesFormView(self, self.datasets.get_dataset(model), view.id, self.get_default_properties_options());
                 self.property_view.appendTo(self.property_panel_parent);
                 self.property_view.on("view_loaded", self, function (fields_view) {
                     var domain = [["id","=",Number(id)]];
-                    alert(JSON.stringify(domain));
-                    self.datasets.get_dataset(model).read_slice([], domain).done(function (records) {
+                    self.datasets.get_dataset(model).read_slice([], {domain: domain}).done(function (records) {
                         if (records.length != 0){
                             self.property_view.load_record(records[0]);
+/*
                             self.property_view.render_buttons($(".o_cexplorer-properties-buttons"));
+*/
                         }
                     })
                 })
@@ -492,21 +543,30 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                         alert(location);
                     };
                     $(".o-kanban-button-new").parent().detach();
+/*
                     self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
+*/
                     self.active_view = self.right_panel_parent;
                 })
             });
         },
-        show_component_view: function (location) {
+        show_location_mixed_view: function (sublocation) {
+
+        },
+        show_component_view: function (location, where) {
             var self = this;
             this.current_location = location;
             this.current_model = "component.component";
             this.list_view.activate_location_node(location);
-            this.remove_any_previous_view();
+            this.remove_any_previous_view(self.right_panel_parent);
+            var component_view_parent = self.right_panel_parent;
+            if (where){
+                component_view_parent = where;
+            }
             this.view_model.query(['id','name','type']).filter([['name','=','Component Kanban']]).first().then(function(view) {
                 //var options = {"view_id": view.id, "view_type": view.type, "context": self.context, "toolbar": false};
                 self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("component"));
-                self.right_panel_view.appendTo(self.right_panel_parent);
+                self.right_panel_view.appendTo(component_view_parent);
                 self.right_panel_view.load_view();
                 self.right_panel_view.on("view_loaded", self, function (fields_view) {
                     var context = {"default_site_id": self.current_site, "default_location_id": self.current_location};
@@ -514,11 +574,11 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     //alert(JSON.stringify(location_domin)+"\nlocation:"+self.current_location+"\nquery:"+self.current_query);
                     self.right_panel_view.do_search(location_domin, context, []);
                     $(".o-kanban-button-new").parent().detach();
+/*
                     self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
+*/
                 })
             });
-            this.show_property_view("component.location", location)
-            this.show_sld_view("component.location", location)
         },
         do_switch_view: function(model){
             var self = this;
@@ -662,64 +722,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
     });
 
 // static method to open simple confirm dialog
-    var CExplorerKanbanView = KanbanView.extend({
-        init: function (parent, dataset, view_id, options) {
-            this._super(parent, dataset, view_id, options);
-            this.cexplorer_view = parent;
-        },
-        //El metodo load_record del KanbanView original no permite cargar un filtro determinado para limitar los objetos.
-        //estamos redefiniendo el método para poder filtrar los objetos
-        load_records: function (offset, dataset) {
-            var options = {
-                'limit': this.limit,
-                'offset': offset,
-            };
-            if (this.get_domain() != undefined){
-                options['domain'] = this.get_domain();
-            }
-            dataset = dataset || this.dataset;
-            return dataset
-                .read_slice(this.fields_keys.concat(['__last_update']), options)
-                .then(function(records) {
-                    return {
-                        records: records,
-                        is_empty: !records.length,
-                        grouped: false,
-                    };
-                });
-        },
-        set_domain: function (domain) {
-            this._domain = domain;
-        },
-        get_domain: function () {
-            return this._domain;
-        },
-        do_search: function(domain, context, group_by) {
-            this.set_domain(domain);
-            return this._super(domain, context, group_by);
-        },
-        add_record: function() {
-            this.cexplorer_view.add_record();
-        },
-        show_component_view: function (location) {
-            this.parent.show_component_view(location);
-        },
-        remove_record: function (id) {
-            var self = this;
-            function do_it() {
-                return $.when(self.dataset.unlink([id])).done(function() {
-                    Dialog.alert(this, _t("Changes where done."));
-                    return true;
-                });
-            }
-            if (this.options.confirm_on_delete) {
-                Dialog.confirm(this, _t("Are you sure you want to delete this record ?"), { confirm_callback: do_it });
-            } else {
-                do_it();
-            }
-        }
-    });
-
 
     ListView.List.include(/** @lends instance.web.ListView.List# */{
         row_clicked: function (e) {

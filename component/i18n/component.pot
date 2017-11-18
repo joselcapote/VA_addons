@@ -468,6 +468,8 @@ msgstr ""
 
 #. module: component
 #: field:component.component,image_small:0
+#: field:component.location,image_small:0
+#: field:component.sublocation,image_small:0
 msgid "Small-sized image"
 msgstr ""
 

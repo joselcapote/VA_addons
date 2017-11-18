@@ -118,15 +118,8 @@ class site_location_base(model_with_sld):
     _name = 'component.locationbase'
     _inherit = "component.sld"
 
-    def _component_count(self, cr, uid, ids, field_name, arg, context=None):
-        res = dict.fromkeys(ids, 0)
-        components = self.pool['component.component']
-        for location in self.browse(cr, uid, ids, context):
-            res[location.id] = components.search_count(cr, uid, [('location_id',"=",location.id)], context);
-        return res;
-
     _columns = {
-        'name':         fields.char('Place Name', size=32, required=True, help='An internal identification of a Place'),
+        'name':         fields.char('Location Name', size=32, required=True, help='An internal identification of a Place'),
         'shape':        fields.selection([('square','Square'),('round','Round')],'Shape', required=True),
         'position_h':   fields.float('Horizontal Position', help="The location's horizontal position from the left side to the location's center, in pixels"),
         'position_v':   fields.float('Vertical Position', help="The location's vertical position from the top to the location's center, in pixels"),
@@ -134,9 +127,6 @@ class site_location_base(model_with_sld):
         'height':       fields.float('Height',  help="The location's height in pixels"),
         'color':        fields.char('Color',    help="The location's color, expressed as a valid 'background' CSS property value"),
         'active':       fields.boolean('Active',help='If false, the location is deactivated and will not be available in the point of sale'),
-
-        'component_count': fields.function(_component_count, string='Component count', type='integer'),
-        'component_ids':     fields.one2many('component.component', 'location_id', 'Components', help='The list of Devices in this Location', ondelete='cascade'),
     }
 
     _defaults = {
@@ -198,6 +188,14 @@ class site_location(model_with_sld):
     _name = 'component.location'
     _inherit = 'component.locationbase'
 
+    def _component_count(self, cr, uid, ids, field_name, arg, context=None):
+        res = dict.fromkeys(ids, 0)
+        components = self.pool['component.component']
+        for component in components.read_group(cr, uid, [('parent_model', '=', 'component.location'), ('parent_id', 'in', ids)],
+                                          ['parent_id'], ['parent_id'], context):
+            res[component['parent_id']] = components.search_count(cr,uid, [('parent_id', '=', component['parent_id'])], context=context)
+        return res
+
     def _sublocation_count(self, cr, uid, ids, field_name, arg, context=None):
         res = dict.fromkeys(ids, 0)
         sublocations = self.pool['component.sublocation']
@@ -206,15 +204,28 @@ class site_location(model_with_sld):
         return res;
 
     _columns = {
-        'site_id':      fields.many2one('component.site','Site'),
+        'site_id':      fields.many2one('component.site','Site', required=True),
         'sublocation_count': fields.function(_sublocation_count, string='Component count', type='integer'),
         'sublocation_ids':     fields.one2many('component.sublocation', 'location_id', 'Sub-locations', help='The list of sub-locations in this Location', ondelete='cascade'),
+
+        'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.location')], string='Devices'),
+        'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
 
 class site_sublocation(model_with_sld):
     _name = 'component.sublocation'
     _inherit = 'component.locationbase'
 
+    def _component_count(self, cr, uid, ids, field_name, arg, context=None):
+        res = dict.fromkeys(ids, 0)
+        components = self.pool['component.component']
+        for component in components.read_group(cr, uid, [('parent_model', '=', 'component.sublocation'), ('parent_id', 'in', ids)],
+                                               ['parent_id'], ['parent_id'], context):
+            res[component['parent_id']] = components.search_count(cr,uid, [('parent_id', '=', component['parent_id'])], context=context)
+        return res
+
     _columns = {
-        'location_id':      fields.many2one('component.location','Location'),
+        'location_id':      fields.many2one('component.location','Location', required=True),
+        'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.sublocation')], string='Devices'),
+        'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
