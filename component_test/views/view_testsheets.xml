@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Top menu item -->
+        <menuitem name="Test Sheets" id="base.menu_test_root" sequence="70"/>
+
+        <menuitem name="Test sheets" id="testsheets_menu" parent="base.menu_test_root"/>
+
+        <record id="test_sheets_lv_ac_cable_action2" model="ir.actions.act_window">
+            <field name="name">AC LV Cable</field>
+            <field name="res_model">component_test.lv_ac_cable_test</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="test_sheets_lv_ac_cable_action2" id="test_sheets_menu2" sequence="1"
+                  parent="testsheets_menu"/>
+
+        <record id="test_sheets_lv_cb_action" model="ir.actions.act_window">
+            <field name="name">LV Circuit Breaker</field>
+            <field name="res_model">component_test.lv_cb_test</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="test_sheets_lv_cb_action" id="test_sheets_menu1" sequence="2" parent="testsheets_menu"/>
+
+        <record id="test_sheets_swr_action" model="ir.actions.act_window">
+            <field name="name">Switch Relay</field>
+            <field name="res_model">component_test.swr_component_test</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="test_sheets_swr_action" id="test_sheets_menu3" sequence="3" parent="testsheets_menu"/>
+
+        <record id="test_sheets_drytransformer_action1" model="ir.actions.act_window">
+            <field name="name">Dry Transformer</field>
+            <field name="res_model">component_test.dry_transformer_test</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--
+                        <field name="context">{'component_component_id': 'component_id'}</field>
+            -->
+            <!--
+                         <field target="new"></field>
+            -->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create a new test of Dry Transformer.
+                </p>
+                <p>
+                    When the Dry Transformer Test is saved, you can access and change
+                    it at any time.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="test_sheets_drytransformer_action1"
+                  id="test_sheets_menu_dry_transformer"
+                  sequence="4"
+                  parent="testsheets_menu"/>
+
+        <!-- Test Sheets Form View -->
+        <record id="testsheets_form_view" model="ir.ui.view">
+            <field name="name">component_test.test_sheet_form_view</field>
+            <field name="model">component_test.order</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Components" version="7.0">
+                    <sheet name="testsheet_component">
+                        <group>
+                            <group>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <field name="company_logo" widget="image" class="oe_avatar oe_left"/>
+                                        </td>
+                                        <td>
+                                            <field name="company_name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </group>
+                            <group>
+                                <h1>Test Sheet</h1>
+                            </group>
+                        </group>
+                        <hr noshade="noshade" size="2"/>
+
+                        <h4>Work Order Data:</h4>
+                        <group>
+                            <group>
+                                <field name="job_number" string="Job No:"/>
+                                <field name="date_execution" string="Date:"/>
+                                <field name="technician" string="Technician:"/>
+                            </group>
+                            <group>
+                                <field name="Customer" string="Customer:"/>
+                                <field name="site_id" string="Site:"/>
+                                <field name="place_id" string="Place:"/>
+                            </group>
+                        </group>
+                        <hr noshade="noshade" size="2"/><!--Component Information-->
+
+                        <group col="2">
+                            <group>
+                                <field name="component_name" string=""/>
+                                <field name="electric_component_type" string=""/>
+                            </group>
+                            <group>
+                                <field name="component_image" widget="image" string=" " class="oe_avatar"/>
+                            </group>
+                        </group>
+                        <hr noshade="noshade" size="2"/><!-- Test specific Information -->
+
+                        <group name="testsheet_info">
+                            <!-- this space is reserved for inherited views -->
+                        </group>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

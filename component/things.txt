@@ -1,0 +1,12 @@
+$("body").append("<img id='hiddenImage' src='"+imageData+"' />");
+var width = $('#hiddenImage').width();
+var height = $('#hiddenImage').height();
+$('#hiddenImage').remove();
+alert("width:"+width+" height:"+height);
+
+var img = new Image();
+img.src = some_base64_image_source;
+console.log(img.width);       // This might print out 0!
+img.onload = function() {
+    console.log(img.width);   // This will print out the width.
+}

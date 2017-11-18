@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="component_widgets" name="component_widgets" inherit_id="web.assets_backend">
+          <xpath expr="." position="inside">
+              <script type="text/javascript" src="/component/static/src/js/component_widgets.js"></script>
+          </xpath>
+        </template>
+
+
+    </data>
+</openerp>

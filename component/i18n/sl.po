@@ -1,0 +1,514 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* Component
+#
+# Matjaž Mozetič <m.mozetic@matmoz.si>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0-20130204-000102\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-29 04:56+0000\n"
+"PO-Revision-Date: 2015-02-22 08:14+0100\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
+"Language-Team: Slovenian <translate@matmoz.si>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+"Language: sl\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_Component
+msgid "Components"
+msgstr "Sredstva"
+
+#. module: base
+#: model:ir.module.module,summary:base.module_Component
+msgid "Component Management"
+msgstr "Upravljanje sredstev"
+
+#. module: Component
+#: view:Component.Component:0
+msgid "Info"
+msgstr "Informacije"
+
+#. module: Component
+#: field:Component.Component,manufacturer_id:0
+msgid "Manufacturer"
+msgstr "Proizvajalec"
+
+#. module: Component
+#: field:Component.Component,property_stock_Component:0
+msgid "Component Location"
+msgstr "Lokacija sredstva"
+
+#. module: Component
+#: view:Component.Component:0
+msgid "Serial No:"
+msgstr "Serijska številka"
+
+#. module: Component
+#: view:Component.Component:0
+#: model:ir.actions.act_window,name:Component.action_Components
+#: model:ir.ui.menu,name:Component.menu_maintenance_Components
+#: model:ir.ui.menu,name:Component.menu_maintenance_Components_Components
+#: model:stock.location,name:Component.stock_location_Components
+msgid "Components"
+msgstr "Sredstva"
+
+#. module: Component
+#: model:ir.ui.menu,name:base.menu_component_root
+msgid "Maintenance"
+msgstr "Vzdrževanje"
+
+#. module: Component
+#: view:Component.Component:0
+msgid "Model:"
+msgstr "Model:"
+
+#. module: Component
+#: help:Component.Component,image_small:0
+msgid ""
+"Small-sized image of the Component. It is automatically resized as a 64x64px "
+"image, with aspect ratio preserved. Use this field anywhere a small image is "
+"required."
+msgstr ""
+"Manjša slika sredstva. Samodejno prilagodi velikost na 64x64 px in ohrani "
+"razmerja. To polje uporabite kjerkoli je potrebna majhna slika."
+
+#. module: Component
+#: field:Component.Component,image:0
+msgid "Image"
+msgstr "Slika"
+
+#. module: Component
+#: view:Component.Component:0
+msgid "Manufacturer:"
+msgstr "Proizvajalec:"
+
+#. module: Component
+#: model:stock.location,name:Component.stock_location_locations_Component
+msgid "Component Locations"
+msgstr "Lokacije sredstev"
+
+#. module: Component
+#: field:Component.Component,serial:0
+msgid "Serial no."
+msgstr "Serijska številka"
+
+#. module: Component
+#: field:Component.Component,image_medium:0
+msgid "Medium-sized image"
+msgstr "Srednje velika slika"
+
+#. module: Component
+#: help:Component.Component,image_medium:0
+msgid ""
+"Medium-sized image of the Component. It is automatically resized as a 128x128px "
+"image, with aspect ratio preserved, only when the image exceeds one of those "
+"sizes. Use this field in form views or some kanban views."
+msgstr ""
+"Srednje velika slika sredstva.  Samodejno prilagodi velikost na 128x128 px in "
+"ohrani razmerja, če presega to velikost. To polje uporabite v obrazcih in "
+"pogledih tipa kanban."
+
+#. module: Component
+#: model:ir.model,name:Component.model_Component_Component
+msgid "Component"
+msgstr "Sredstvo"
+
+#. module: Component
+#: field:Component.Component,active:0
+msgid "Active"
+msgstr "Aktivno"
+
+#. module: Component
+#: field:Component.Component,image_small:0
+msgid "Small-sized image"
+msgstr "Manjša slika"
+
+#. module: Component
+#: field:Component.Component,model:0
+msgid "Model"
+msgstr "Model"
+
+#. module: Component
+#: view:Component.Component:0
+#: field:Component.Component,name:0
+msgid "Component Name"
+msgstr "Naziv sredstva"
+
+#. module: Component
+#: help:Component.Component,property_stock_Component:0
+msgid ""
+"This location will be used as the destination location for installed parts "
+"during Component life."
+msgstr ""
+"Ta lokacija bo uporabljena kot ciljna lokacija za nameščene dele med "
+"življenjskim ciklom sredstva."
+
+#. module: Component
+#: help:Component.Component,image:0
+msgid ""
+"This field holds the image used as image for the Component, limited to "
+"1024x1024px."
+msgstr ""
+"To polje vsebuje sliko, ki se uporabi kot slika sredstva, omejena je na "
+"1024x1024 px."
+
+#. module: Component
+#: model:ir.model,name:Component.model_stock_location
+msgid "Location"
+msgstr "Lokacija"
+
+#. module: Component
+#: field:Component.Component,user_id:0
+msgid "Assigned to"
+msgstr "Dodeljeno k"
+
+#. module: Component
+#: model:Component.Component,name:Component.Component_Component_1
+msgid "Moulding machine 25"
+msgstr "Preoblikovalni stroj 25"
+
+#. module: Component
+#: model:Component.Component,name:Component.Component_Component_2
+msgid "Truck"
+msgstr "Tovornjak"
+
+#. module: Component
+#: model:Component.Component,name:Component.Component_Component_3
+msgid "Building"
+msgstr "Zgradba"
+
+#. module: Component
+#: field:Component.Component,Component_number:0
+msgid "Component Number"
+msgstr "Številka sredstva"
+
+#. module: Component
+#: view:Component.Component:0
+msgid "Warranty"
+msgstr "Garancija"
+
+#. module: Component
+#: field:Component.Component,warranty_start_date:0
+msgid "Warranty Start"
+msgstr "Začetek garancijske dobe"
+
+#. module: Component
+#: field:Component.Component,warranty_end_date:0
+msgid "Warranty End"
+msgstr "Konec garancijske dobe"
+
+#. module: Component
+#: field:Component.Component,vendor_id:0
+msgid "Vendor"
+msgstr "Prodajalec"
+
+#. module: Component
+#: field:Component.Component,start_date:0
+msgid "Start Date"
+msgstr "Začetni datum"
+
+#. module: Component
+#: field:Component.Component,purchase_date:0
+msgid "Purchase Date"
+msgstr "Datum nabave"
+
+#. module: Component
+#: field:Component.Component,criticality:0
+msgid "Criticality"
+msgstr "Kritičnost"
+
+#. module: Component
+#: selection:Component.Component,criticality:0
+msgid "General"
+msgstr "Splošno"
+
+#. module: Component
+#: selection:Component.Component,criticality:0
+msgid "Important"
+msgstr "Pomembno"
+
+#. module: Component
+#: selection:Component.Component,criticality:0
+msgid "Very important"
+msgstr "Zelo pomembno"
+
+#. module: Component
+#: selection:Component.Component,criticality:0
+msgid "Critical"
+msgstr "Kritično"
+
+#. module: Component
+#: field:Component.Component,maintenance_state_id:0
+#: view:Component.state:0
+#: field:Component.state,name:0
+msgid "State"
+msgstr "Stanje"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_planned
+msgid "Planned"
+msgstr "Načrtovano"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_rented
+msgid "Rented"
+msgstr "Posojeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_purchased
+msgid "Purchased"
+msgstr "Kupljeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_leased
+msgid "Leased"
+msgstr "Dano v najem"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_sold
+msgid "Sold"
+msgstr "Prodano"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_shipped
+msgid "Shipped"
+msgstr "Odpremljeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_moves
+msgid "Moves"
+msgstr "Premiki"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_stored
+msgid "Stored"
+msgstr "Skladiščeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_installed
+msgid "Installed"
+msgstr "Nameščeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_use
+msgid "Use"
+msgstr "Uporaba"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_stolen
+msgid "Stolen"
+msgstr "Ukradeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_retired
+msgid "Retired"
+msgstr "Umaknjeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_shutdown
+msgid "Shutdown"
+msgstr "Izključitev"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_run
+msgid "Run"
+msgstr "Zagon"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_setup
+msgid "Setup"
+msgstr "Nastavitev"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_standby
+msgid "Standby"
+msgstr "V pripravljenosti"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_down
+msgid "Down"
+msgstr "Odklopljeno"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_breakdown
+msgid "Breakdown"
+msgstr "Okvara"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_repair
+msgid "Repair"
+msgstr "Popravilo"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_maintenance
+msgid "Maintenance"
+msgstr "Vzdrževanje"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_operable
+msgid "Operable"
+msgstr "Delujoče"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_draft
+msgid "Draft"
+msgstr "Osnutek"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_depreciation
+msgid "Depreciation"
+msgstr "Amortizacija"
+
+#. module: Component
+#: model:Component.state,name:Component.Component_state_close
+msgid "Close"
+msgstr "Zaključi"
+
+#. module: Component
+#: field:Component.state,sequence:0
+msgid "Sequence"
+msgstr "Zaporedje"
+
+#. module: Component
+#: field:Component.state,team:0
+msgid "Scope Team"
+msgstr "Razporejena ekipa"
+
+#. module: Component
+#: selection:Component.state,team:0
+msgid "Finance"
+msgstr "Finance"
+
+#. module: Component
+#: selection:Component.state,team:0
+msgid "Warehouse"
+msgstr "Skladišče"
+
+#. module: Component
+#: selection:Component.state,team:0
+msgid "Manufacture"
+msgstr "Proizvodnja"
+
+#. module: Component
+#: selection:Component.state,team:0
+#: model:ir.module.category,name:Component.module_category_maintenance
+msgid "Maintenance"
+msgstr "Vzdrževanje"
+
+#. module: Component
+#: selection:Component.state,team:0
+msgid "Accounting"
+msgstr "Računovodstvo"
+
+#. module: Component
+#: field:Component.Component,maintenance_state_color:0
+msgid "Color"
+msgstr "Barva"
+
+#. module: Component
+#: field:Component.state,state_color:0
+msgid "State Color"
+msgstr "Barva indikatorja"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Red"
+msgstr "Rdeča"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Green"
+msgstr "Zelena"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Blue"
+msgstr "Modra"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Yellow"
+msgstr "Rumena"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Magenta"
+msgstr "Škrlatna"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Cyan"
+msgstr "Sinja"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Black"
+msgstr "Črna"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "White"
+msgstr "Bela"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "Orange"
+msgstr "Oranžna"
+
+#. module: Component
+#: selection:Component.Component,maintenance_state_color:0
+#: selection:Component.state,state_color:0
+msgid "SkyBlue"
+msgstr "Nebesno modra"
+
+#. module: Component
+#: view:Component.state:0
+msgid "Change color"
+msgstr "Sprememba barve"
+
+#. module: Component
+#: model:ir.ui.menu,name:Component.menu_maintenance_config
+msgid "Configuration"
+msgstr "Nastavitve"
+
+#. module: Component
+#: model:ir.actions.act_window,name:Component.action_Component_state
+#: model:ir.ui.menu,name:Component.menu_Component_state
+msgid "Component States"
+msgstr "Stanja sredstva"
+
+#. module: Component
+#: model:ir.actions.act_window,name:Component.action_management_Components
+#: model:ir.ui.menu,name:Component.menu_maintenance_Components_management
+msgid "Manage states"
+msgstr "Upravljanje stanj"
+
+#. module: Component
+#: model:res.groups,name:Component.group_component_component_customer
+msgid "Customer"
+msgstr "Kupec"
+
+#. module: Component
+#: model:res.groups,name:Component.group_component_component_user
+msgid "User"
+msgstr "Uporabnik"
+
+#. module: Component
+#: model:res.groups,name:Component.group_component_component_manager
+msgid "Manager"
+msgstr "Upravitelj"
+

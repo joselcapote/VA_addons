@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <!--Action-->
+        <record id="action_dry_transformer_components" model="ir.actions.act_window">
+            <field name="name">Dry Transformers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.dry_transformer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" eval="False"/>
+            <field name="context">{'group_by': ['site_id', 'location_id']}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new Cable component.
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!-- Menu Item AC LV Cable -->
+        <menuitem name="Dry Transformers"
+                  action="action_dry_transformer_components"
+                  id="menu_dry_transformer_components"
+                  parent="menu_components_components"
+                  groups="component.group_component_component_customer"
+                  sequence="105"/>
+
+        <!-- Kanban View Dry Transformer -->
+        <record model="ir.ui.view" id="electric_dry_transformer_component_kanban">
+            <field name="name">electric_cable_component_kanban</field>
+            <field name="model">component.dry_transformer</field>
+            <field name="inherit_id" ref="components_electric_kanban_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                    <xpath expr="//group[@name='extended']" position="inside">
+<!--
+                        <field name="electric_info"/>
+                                Power Rating: <field name="PowerRating"/>
+                                High Voltage: <field name="HV"/>
+                                Low Voltage: <field name="LV"/>
+                                Frequency: <field name="Frequency"/>
+-->
+                        <!--
+                            'Manufacturer': fields.char('Manufacturer', size=50, required=False),
+                            'PowerRating': fields.float('PowerRating', digits=0, required=False),
+                            'HV': fields.float('HV', digits=0, required=False),
+                            'LV': fields.float('LV', digits=0, required=False),
+                            'Frequency': fields.float('Frequency', digits=0, required=False),
+                            'Serial': fields.char('Serial', size=20, required=False),
+                            'Type': fields.char('Type', size=20, required=False),
+                            'MFGDate': fields.date('MFGDate', required=False),
+                            'Phase': fields.char('Phase', size=20, required=False),
+                            'Tap': fields.char('Tap', size=20, required=False),
+                            'TCooling': fields.char('TCooling', size=20, required=False),
+                            'Impedance': fields.float('Impedance', digits=0, required=False),
+                            'ImpTemp': fields.float('ImpTemp', digits=0, required=False),
+                            'TempRise': fields.float('TempRise', digits=0, required=False),
+                            'WindingConf': fields.char('WindingConf', size=20, required=False),
+                            'Style': fields.char('Style', size=20, required=False),
+
+                        -->
+
+                    </xpath>
+            </field>
+        </record>
+
+        <!-- Dry Transformer Form View  -->
+        <record id="dry_transformer_component_form_view" model="ir.ui.view">
+            <field name="name">dry_transformer_component_form_view</field>
+            <field name="model">component.dry_transformer</field>
+            <field name="inherit_id" ref="components_form_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <!--Here replace the aditional information of the component-->
+                <xpath expr="//group[@name = 'aditional']" position="replace">
+                <group>
+                    <group>
+                      <field name="PowerRating"/>
+                      <field name="HV"/>
+                      <field name="LV"/>
+                      <field name="Frequency"/>
+                      <field name="Serial"/>
+                      <field name="Type"/>
+                      <field name="MFGDate"/>
+                    </group>
+                    <group>
+                      <field name="Phase"/>
+                      <field name="Tap"/>
+                      <field name="TCooling"/>
+                      <field name="Impedance"/>
+                      <field name="TempRise"/>
+                      <field name="WindingConf"/>
+                      <field name="Style"/>
+                    </group>
+                </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <report id="report_dry_transf_action"
+            string="Dry TRansformer"
+            model="component_test.dry_transformer_test"
+            report_type="qweb-pdf"
+            name="testsheets.drytransf_report"
+    />
+    <template id="drytransf_report">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                            <table width="100%">
+                                <tr>
+                                    <td><img src="actesla.png" width="124" height="39" /></td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td> </td>
+                                    <td><p align="center"><strong>Dry Transformer</strong></p></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="3" />
+                            <p><strong>Work Order Data:</strong></p>
+                            <table width="90%">
+                                <tr>
+                                    <td width="13%" style="vertical-align:bottom"><div align="right">Date:  </div></td>
+                                    <td width="16%" style="border:none;border-bottom:solid windowtext 1pt"><div t-field="o.Date"/></td>
+                                    <td width="11%" style="vertical-align:bottom"><div align="right">ACT Job No.:  </div></td>
+                                    <td width="18%" style="border:none;border-bottom:solid windowtext 1pt"><div t-field="o.ACTJobNo"/></td>
+                                    <td width="9%" style="vertical-align:bottom"><div align="right">Technicians:  </div></td>
+                                    <td width="33%" style="border:none;border-bottom:solid windowtext 1pt"><div t-field="o.Technicians"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td height="50" style="vertical-align:bottom"><div align="right">Customer:  </div></td>
+                                    <td colspan="2" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"><div t-field="o.Customer"/></td>
+                                    <td style="vertical-align:bottom"><div align="right">Site:  </div></td>
+                                    <td colspan="2" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"> <div t-field="o.Site"/></td>
+                                </tr>
+                                <tr>
+                                    <td  height="50" style="vertical-align:bottom"><div align="leftt" colspan="3">Equip. Designation: </div></td>
+                                    <td colspan="4" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"> <div t-field="o.EqpDesig"/></td>
+                                </tr>
+                            </table>
+
+                            <group name="aditional">
+                            </group>
+
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Mechanical  Electrical Inspection:</strong></p>
+                            <table width="100%" cellspacing="0">
+                                <tr>
+                                    <td width="41%"><table width="100%" border="1" cellspacing="0">
+                                        <tr>
+                                            <td width="57%"><strong>Description</strong></td>
+                                            <td width="13%"><div align="center"><strong>Status</strong></div></td>
+                                            <td width="30%"><div align="center"><strong>Notes</strong></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>External Condition</td>
+                                            <td><div align="center" t-field="o.Status1"/> </td>
+                                            <td><div align="center" t-field="o.Notes1"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Coil, Core &amp; Supports</td>
+                                            <td><div align="center" t-field="o.Status2"/> </td>
+                                            <td> <div align="center" t-field="o.Notes2"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Primary Connection</td>
+                                            <td><div align="center" t-field="o.Status3"/> </td>
+                                            <td><div align="center" t-field="o.Notes3"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Secondary Connection</td>
+                                            <td><div align="center" t-field="o.Status4"/> </td>
+                                            <td><div align="center" t-field="o.Notes4"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ground Connection</td>
+                                            <td> <div align="center" t-field="o.Status5"/></td>
+                                            <td><div align="center" t-field="o.Notes5"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Temperature Relay</td>
+                                            <td> <div align="center" t-field="o.Status6"/></td>
+                                            <td><div align="center" t-field="o.Notes6"/> </td>
+                                        </tr>
+                                    </table></td>
+                                    <td width="18%"> </td>
+                                    <td width="41%">
+                                        <table width="99%" border="1" cellspacing="0">
+                                        <tr>
+                                            <td width="57%"><strong>Description</strong></td>
+                                            <td width="13%"><div align="center"><strong>Status</strong></div></td>
+                                            <td width="30%"><div align="center"><strong>Notes</strong></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Inspect Overheating &amp; Moisture</td>
+                                            <td> <div align="center" t-field="o.Status7"/></td>
+                                            <td><div align="center" t-field="o.Notes7"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Isolators</td>
+                                            <td> <div align="center" t-field="o.Status8"/></td>
+                                            <td><div align="center" t-field="o.Notes8"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Energized Noise</td>
+                                            <td> <div align="center" t-field="o.Status9"/></td>
+                                            <td><div align="center" t-field="o.Notes9"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fan Operation</td>
+                                            <td> <div align="center" t-field="o.Status10"/></td>
+                                            <td><div align="center" t-field="o.Notes10"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name Plate &amp; Warning Sign</td>
+                                            <td> <div align="center" t-field="o.Status11"/></td>
+                                            <td><div align="center" t-field="o.Notes11"/> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tap Changer</td>
+                                            <td> <div align="center" t-field="o.Status12"/></td>
+                                            <td><div align="center" t-field="o.Notes12"/> </td>
+                                        </tr>
+                                    </table>
+                                        <div align="right"></div></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Transformer Turn Ratio Test:</strong></p>
+
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td rowspan="2"><div align="center"><strong>Tap Position</strong></div></td>
+                                    <td rowspan="2"><div align="center"><strong>Pri.Voltage</strong></div></td>
+                                    <td rowspan="2"><div align="center"><strong>Sec. Voltage</strong></div></td>
+                                    <td rowspan="2"><div align="center"><strong>Calc. Ratio</strong></div></td>
+                                    <td colspan="2"><div align="center"><strong>H3H1/X0X1</strong></div></td>
+                                    <td colspan="2"><div align="center"><strong>H1H2/X0X2</strong></div></td>
+                                    <td colspan="2"><div align="center"><strong>H2H3/X0X3</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>Ratio</strong></div></td>
+                                    <td><div align="center"><strong>mA</strong></div></td>
+                                    <td><div align="center"><strong>Ratio</strong></div></td>
+                                    <td><div align="center"><strong>mA</strong></div></td>
+                                    <td><div align="center"><strong>Ratio</strong></div></td>
+                                    <td><div align="center"><strong>mA</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td> <div align="center" t-field="o.TapP1"/></td>
+                                    <td> <div align="center" t-field="o.PriV1"/></td>
+                                    <td> <div align="center" t-field="o.SecV1"/></td>
+                                    <td> <div align="center" t-field="o.CalcRatio1"/></td>
+                                    <td> <div align="center" t-field="o.H3H1R1"/></td>
+                                    <td> <div align="center" t-field="o.H3H1mA1"/></td>
+                                    <td> <div align="center" t-field="o.H1H2R1"/></td>
+                                    <td> <div align="center" t-field="o.H1H2mA1"/></td>
+                                    <td> <div align="center" t-field="o.H2H3R1"/></td>
+                                    <td> <div align="center" t-field="o.H2H3mA1"/></td>
+                                </tr>
+                                <tr>
+                                    <td> <div align="center" t-field="o.TapP2"/></td>
+                                    <td> <div align="center" t-field="o.PriV2"/></td>
+                                    <td> <div align="center" t-field="o.SecV2"/></td>
+                                    <td> <div align="center" t-field="o.CalcRatio2"/></td>
+                                    <td> <div align="center" t-field="o.H3H1R2"/></td>
+                                    <td> <div align="center" t-field="o.H3H1mA2"/></td>
+                                    <td> <div align="center" t-field="o.H1H2R2"/></td>
+                                    <td> <div align="center" t-field="o.H1H2mA2"/></td>
+                                    <td> <div align="center" t-field="o.H2H3R2"/></td>
+                                    <td> <div align="center" t-field="o.H2H3mA2"/></td>
+                                </tr>
+                                <tr>
+                                    <td> <div align="center" t-field="o.TapP3"/></td>
+                                    <td> <div align="center" t-field="o.PriV3"/></td>
+                                    <td> <div align="center" t-field="o.SecV3"/></td>
+                                    <td> <div align="center" t-field="o.CalcRatio3"/></td>
+                                    <td> <div align="center" t-field="o.H3H1R3"/></td>
+                                    <td> <div align="center" t-field="o.H3H1mA3"/></td>
+                                    <td> <div align="center" t-field="o.H1H2R3"/></td>
+                                    <td> <div align="center" t-field="o.H1H2mA3"/></td>
+                                    <td> <div align="center" t-field="o.H2H3R3"/></td>
+                                    <td> <div align="center" t-field="o.H2H3mA3"/></td>
+                                </tr>
+                                <tr>
+                                    <td> <div align="center" t-field="o.TapP4"/></td>
+                                    <td> <div align="center" t-field="o.PriV4"/></td>
+                                    <td> <div align="center" t-field="o.SecV4"/></td>
+                                    <td> <div align="center" t-field="o.CalcRatio4"/></td>
+                                    <td> <div align="center" t-field="o.H3H1R4"/></td>
+                                    <td> <div align="center" t-field="o.H3H1mA4"/></td>
+                                    <td> <div align="center" t-field="o.H1H2R4"/></td>
+                                    <td> <div align="center" t-field="o.H1H2mA4"/></td>
+                                    <td> <div align="center" t-field="o.H2H3R4"/></td>
+                                    <td> <div align="center" t-field="o.H2H3mA4"/></td>
+                                </tr>
+                                <tr>
+                                    <td> <div align="center" t-field="o.TapP5"/></td>
+                                    <td> <div align="center" t-field="o.PriV5"/></td>
+                                    <td> <div align="center" t-field="o.SecV5"/></td>
+                                    <td> <div align="center" t-field="o.CalcRatio5"/></td>
+                                    <td> <div align="center" t-field="o.H3H1R5"/></td>
+                                    <td> <div align="center" t-field="o.H3H1mA5"/></td>
+                                    <td> <div align="center" t-field="o.H1H2R5"/></td>
+                                    <td> <div align="center" t-field="o.H1H2mA5"/></td>
+                                    <td> <div align="center" t-field="o.H2H3R5"/></td>
+                                    <td> <div align="center" t-field="o.H2H3mA5"/></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Transformer Surge Arrestor:</strong></p>
+                            <table width="100%">
+                                <tr>
+                                    <td width="13%" style="vertical-align:bottom"><div align="right">Manufacturer:</div></td>
+                                    <td width="25%" style="border:none;border-bottom:solid windowtext 1pt"> <div t-field="o.TSAManufacturer"/></td>
+                                    <td width="10%" style="vertical-align:bottom"><div align="right">Catalog No.:</div></td>
+                                    <td width="15%" style="border:none;border-bottom:solid windowtext 1pt"> <div t-field="o.CatalogNo"/></td>
+                                    <td width="14%" style="vertical-align:bottom"><div align="right">Mac  MCOV Rating:</div></td>
+                                    <td width="23%" style="border:none;border-bottom:solid windowtext 1pt"> <div t-field="o.MCOVRating"/></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Insulation Resistance (M&#8486;)     (5000 VDC for 1 Minute):</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td width="17%"><strong>Phase_to_Ground</strong></td>
+                                    <td width="23%"><table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="30%" style="vertical-align:middle">A_GND:</td>
+                                            <td width="70%"> <div t-field="o.PhtoGroundA"/></td>
+                                        </tr>
+                                    </table></td>
+                                    <td width="26%"><table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="25%" style="vertical-align:middle">B_GND:</td>
+                                            <td width="75%"> <div t-field="o.PhtoGroundB"/></td>
+                                        </tr>
+                                    </table></td>
+                                    <td width="34%"><table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="18%" style="vertical-align:middle" >C_GND:</td>
+                                            <td width="82%"> <div t-field="o.PhtoGroundC"/></td>
+                                        </tr>
+                                    </table></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Insulation Resistance as per NETA Specifications (M&#8486;):</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td colspan="3"> </td>
+                                    <td width="13%"><div align="center"><strong>HV/Ground</strong></div></td>
+                                    <td width="19%"><div align="center"><strong>HV/LV &amp; Ground</strong></div></td>
+                                    <td width="13%"><div align="center"><strong>LV/Groun</strong></div></td>
+                                    <td width="19%"><div align="center"><strong>LV/HV &amp; Ground</strong></div></td>
+                                    <td width="15%"><div align="center"><strong>Core/Ground</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Test Voltage</strong></td>
+                                    <td> <div align="center" t-field="o.TestV1"/></td>
+                                    <td> <div align="center" t-field="o.TestV2"/></td>
+                                    <td> <div align="center" t-field="o.TestV3"/></td>
+                                    <td> <div align="center" t-field="o.TestV4"/></td>
+                                    <td> <div align="center" t-field="o.TestV5"/></td>
+                                </tr>
+                                <tr>
+                                    <td width="12%"><strong>Measured at</strong></td>
+                                    <td width="5%"> <div align="right" t-field="o.Measureat"/></td>
+                                    <td width="4%">C</td>
+                                    <td> <div align="center" t-field="o.Measured1"/></td>
+                                    <td> <div align="center" t-field="o.Measured2"/></td>
+                                    <td> <div align="center" t-field="o.Measured3"/></td>
+                                    <td> <div align="center" t-field="o.Measured4"/></td>
+                                    <td> <div align="center" t-field="o.Measured5"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Reported at</strong></td>
+                                    <td> <div align="right" t-field="o.Reportat"/></td>
+                                    <td>C</td>
+                                    <td> <div align="center" t-field="o.Reported1"/></td>
+                                    <td> <div align="center" t-field="o.Reported2"/></td>
+                                    <td> <div align="center" t-field="o.Reported3"/></td>
+                                    <td> <div align="center" t-field="o.Reported4"/></td>
+                                    <td> <div align="center" t-field="o.Reported5"/></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Primary Winding Resistance:</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td><div align="center"></div></td>
+                                    <td><div align="center"><strong>Current</strong></div></td>
+                                    <td><div align="center"><strong>Duration</strong></div></td>
+                                    <td><div align="center"><strong>Resistance</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>H1 - H2</strong></div></td>
+                                    <td><div align="center"> <div t-field="o.H1H2Current"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H1H2Duration"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H1H2Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>H2 - H3</strong></div></td>
+                                    <td><div align="center"> <div t-field="o.H2H3Current"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H2H3Duration"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H2H3Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>H3 - H1</strong></div></td>
+                                    <td><div align="center"> <div t-field="o.H3H1Current"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H3H1Duration"/></div></td>
+                                    <td><div align="center"> <div t-field="o.H3H1Resistance"/></div></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Secondary Winding Resistance:</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td><div align="center"></div></td>
+                                    <td><div align="center"><strong>Current</strong></div></td>
+                                    <td><div align="center"><strong>Duration</strong></div></td>
+                                    <td><div align="center"><strong>Resistance</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X0 - X1</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X0X1Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X1Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X1Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X0 - X2</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X0X2Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X2Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X2Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X0 - X3</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X0X3Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X3Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X0X3Resistance"/></div></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td><div align="center"></div></td>
+                                    <td><div align="center"><strong>Current</strong></div></td>
+                                    <td><div align="center"><strong>Duration</strong></div></td>
+                                    <td><div align="center"><strong>Resistance</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X1 - X2</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X1X2Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X1X2Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X1X2Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X2 - X3</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X2X3Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X2X3Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X2X3Resistance"/></div></td>
+                                </tr>
+                                <tr>
+                                    <td><div align="center"><strong>X3 - X1</strong></div></td>
+                                    <td><div align="center"><div t-field="o.X3X1Current"/></div></td>
+                                    <td><div align="center"><div t-field="o.X3X1Duration"/></div></td>
+                                    <td><div align="center"><div t-field="o.X3X1Resistance"/></div></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Dissipation Factor &amp; Insulation Capacitance:</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td> </td>
+                                    <td><div align="center"><strong>CH-L &amp; CH-G</strong></div></td>
+                                    <td><div align="center"><strong>CH-G</strong></div></td>
+                                    <td><div align="center"><strong>CH-L</strong></div></td>
+                                    <td><div align="center"><strong>CL-G</strong></div></td>
+                                    <td><div align="center"><strong>CL-H &amp; CL-G</strong></div></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dissipation Factor</strong></td>
+                                    <td> <div align="center" t-field="o.DisFactor1"/></td>
+                                    <td> <div align="center" t-field="o.DisFactor2"/></td>
+                                    <td> <div align="center" t-field="o.DisFactor3"/></td>
+                                    <td> <div align="center" t-field="o.DisFactor4"/></td>
+                                    <td> <div align="center" t-field="o.DisFactor5"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Capacitance (Reading) Multiplier (F)</strong></td>
+                                    <td> <div align="center" t-field="o.CapReading1"/></td>
+                                    <td> <div align="center" t-field="o.CapReading2"/></td>
+                                    <td> <div align="center" t-field="o.CapReading3"/></td>
+                                    <td> <div align="center" t-field="o.CapReading4"/></td>
+                                    <td> <div align="center" t-field="o.CapReading5"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Capacitance (F)</strong></td>
+                                    <td> <div align="center" t-field="o.Capacitance1"/></td>
+                                    <td> <div align="center" t-field="o.Capacitance2"/></td>
+                                    <td> <div align="center" t-field="o.Capacitance3"/></td>
+                                    <td> <div align="center" t-field="o.Capacitance4"/></td>
+                                    <td> <div align="center" t-field="o.Capacitance5"/></td>
+                                </tr>
+                            </table>
+                            <hr noshade="noshade" size="2" />
+                            <p><strong>Notes &amp; Comments:</strong></p>
+                            <table width="100%" border="1" cellspacing="0">
+                                <tr>
+                                    <td height="99"><div t-field="o.Comments"/> </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div align="center">(C) Correct    (N/C) Non Conform    (N/A) Non Applicable    (N/V) Non Verified    (ok) Satisfactory</div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p><strong></strong></p>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</data>
+</openerp>

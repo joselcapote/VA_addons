@@ -1,0 +1,34 @@
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_component_plane">
+            <field name="name">Components</field>
+            <field name="model">component.component</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <component_plane>
+                    <field name="name"/>
+                    <field name="maintenance_state_id"/>
+                    <field name="maintenance_state_color"/>
+                    <field name="user_id"/>
+                    <field name="criticality"/>
+                </component_plane>
+            </field>
+        </record>
+
+        <!--    Component explorer  -->
+<!--
+        <record id="action_component_plane" model="ir.actions.act_window">
+            <field name="name">Component plane</field>
+            <field name="res_model">component.component</field>
+            <field name="view_mode">component_plane,list,form</field>
+            <field name="view_id" ref="view_component_plane"/>
+        </record>
+
+        <menuitem name="Component plane"
+                  id="menu_site_plane"
+                  action="action_component_plane"
+                  web_icon="component,static/description/icon.png"
+                  groups="base.group_user"/>
+-->
+    </data>
+</openerp>

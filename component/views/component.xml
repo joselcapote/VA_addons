@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="components_backend" name="component components" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/component/static/src/css/component.css"/>
+            </xpath>
+        </template>
+    </data>
+</openerp>

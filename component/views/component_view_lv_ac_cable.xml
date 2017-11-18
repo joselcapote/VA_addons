@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <!--Action-->
+        <record id="action_cable_components" model="ir.actions.act_window">
+            <field name="name">AC LV Cable</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.lv_ac_cable</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_id" eval="False"/>
+            <field name="context">{'group_by': ['site_id', 'location_id']}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new Cable component.
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!-- Menu Item AC LV Cable -->
+        <menuitem name="AC LV Cable"
+                  action="action_cable_components"
+                  id="menu_cable_components"
+                  parent="menu_components_components"
+                  groups="component.group_component_component_customer"
+                  sequence="104"/>
+
+        <!-- Kanban View AC LC Cable -->
+        <record model="ir.ui.view" id="electric_cable_component_kanban">
+            <field name="name">electric_cable_component_kanban</field>
+            <field name="model">component.lv_ac_cable</field>
+            <field name="inherit_id" ref="components_electric_kanban_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                    <xpath expr="//group[@name='extended']" position="inside">
+                        <!--<field name="awg">AWG</field>-->
+                        <!--<field name="per_phase">Per Phase</field>-->
+                        <!--<field name="from_component_id">From</field>-->
+                        <!--<field name="to_component_id">To</field>-->
+                    </xpath>
+            </field>
+        </record>
+
+        <!-- Cable Form View  -->
+        <record id="cable_component_form_view" model="ir.ui.view">
+            <field name="name">cable_component_form_view</field>
+            <field name="model">component.lv_ac_cable</field>
+            <field name="inherit_id" ref="components_form_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name = 'aditional']" position="replace">
+                    <group>
+                        <field name="awg">AWG</field>
+                        <field name="per_phase">Per Phase</field>
+                        <field name="from_node">From</field>
+                        <field name="to_node">To</field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

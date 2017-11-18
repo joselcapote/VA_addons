@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ProjectTreeView">
+        <div id="tree">
+            <ul id="treeData">
+
+            </ul>
+        </div>
+    </t>
+
+    <t t-name="ProjectFolder">
+        <li t-attf-id="project_#{project.id}" class="folder"><t t-esc="project.name"/></li>
+            <ul t-attf-id="project_#{project.id}_site_data">
+
+            </ul>
+    </t>
+
+</templates>

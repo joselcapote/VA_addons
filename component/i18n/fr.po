@@ -1,0 +1,600 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* component
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-06 15:03+0000\n"
+"PO-Revision-Date: 2015-09-06 15:03+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: component
+#: selection:component.state,team:0
+msgid "Accounting"
+msgstr "Comptabilité"
+
+#. module: component
+#: field:component.component,active:0
+msgid "Active"
+msgstr "Actif"
+
+#. module: component
+#: model:ir.model,name:component.model_component_component
+msgid "Component"
+msgstr "Équipement"
+
+#. module: component
+#: field:component.component,property_stock_component:0
+msgid "Component Location"
+msgstr "Emlocationment d'équipement"
+
+#. module: component
+#: model:stock.location,name:component.stock_location_locations_component
+msgid "Component Locations"
+msgstr "Emlocationments d'équipements"
+
+#. module: component
+#: field:component.component,name:0
+msgid "Component Name"
+msgstr "Nom"
+
+#. module: component
+#: field:component.component,component_number:0
+msgid "Component Number"
+msgstr "Numéro"
+
+#. module: component
+#: view:component.component:component.components_search
+msgid "Component Search"
+msgstr "Recherche d'équipement"
+
+#. module: component
+#: model:ir.actions.act_window,name:component.action_component_state
+#: model:ir.ui.menu,name:component.menu_component_state
+msgid "Component States"
+msgstr "États des équipements"
+
+#. module: component
+#: view:component.category:component.component_category_tree_view
+#: model:ir.actions.act_window,name:component.action_component_category
+#: model:ir.model,name:component.model_component_category
+#: model:ir.ui.menu,name:component.menu_component_category
+msgid "Component Tags"
+msgstr "Étiquettes"
+
+#. module: component
+#: view:component.component:component.components_form_view
+#: view:component.component:component.components_tree_view
+#: field:component.category,component_ids:0
+#: model:ir.actions.act_window,name:component.action_components
+#: model:ir.ui.menu,name:component.menu_maintenance_components
+#: model:ir.ui.menu,name:component.menu_maintenance_components_components
+#: model:stock.location,name:component.stock_location_components
+msgid "Components"
+msgstr "Équipements"
+
+#. module: component
+#: field:component.component,user_id:0
+msgid "Assigned to"
+msgstr "Affecté à"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Black"
+msgstr "Black"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Blue"
+msgstr "Blue"
+
+#. module: component
+#: model:component.state,name:component.component_state_breakdown
+msgid "Breakdown"
+msgstr "Cassé"
+
+#. module: component
+#: view:component.state:component.component_state_kanban_view
+msgid "Change color"
+msgstr "Changer la couleur"
+
+#. module: component
+#: model:component.state,name:component.component_state_close
+msgid "Close"
+msgstr "Fermer"
+
+#. module: component
+#: field:component.component,maintenance_state_color:0
+msgid "Color"
+msgstr "Couleur"
+
+#. module: component
+#: model:ir.ui.menu,name:component.menu_maintenance_config
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: component
+#: field:component.component,create_uid:0
+#: field:component.category,create_uid:0
+#: field:component.state,create_uid:0
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: component
+#: field:component.component,create_date:0
+#: field:component.category,create_date:0
+#: field:component.state,create_date:0
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: component
+#: selection:component.component,criticality:0
+msgid "Critical"
+msgstr "Critique"
+
+#. module: component
+#: field:component.component,criticality:0
+msgid "Criticality"
+msgstr "Criticité"
+
+#. module: component
+#: model:res.groups,name:component.group_component_component_customer
+msgid "Customer"
+msgstr "Client"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Cyan"
+msgstr "Cyan"
+
+#. module: component
+#: help:component.component,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr "Date of the last message posted on the record."
+
+#. module: component
+#: model:component.state,name:component.component_state_depreciation
+msgid "Depreciation"
+msgstr "Dépréciation"
+
+#. module: component
+#: model:component.state,name:component.component_state_down
+msgid "Down"
+msgstr "En panne"
+
+#. module: component
+#: model:component.state,name:component.component_state_draft
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: component
+#: model:ir.module.category,name:component.module_category_eam
+msgid "Enterprise Component Management"
+msgstr "Gestion des immobilisations"
+
+#. module: component
+#: selection:component.state,team:0
+msgid "Finance"
+msgstr "Finance"
+
+#. module: component
+#: field:component.component,message_follower_ids:0
+msgid "Followers"
+msgstr "Abonnés"
+
+#. module: component
+#: selection:component.component,criticality:0
+msgid "General"
+msgstr "Général"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Green"
+msgstr "Green"
+
+#. module: component
+#: model:ir.module.category,description:component.module_category_eam
+msgid "Helps you manage your components."
+msgstr "Gestion de vos immobilisations."
+
+#. module: component
+#: model:ir.module.category,description:component.module_category_maintenance
+msgid "Helps you manage your maintenance processes."
+msgstr "Aide à la gestion des processus de maintenance."
+
+#. module: component
+#: help:component.component,message_summary:0
+msgid "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+
+#. module: component
+#: field:component.component,id:0
+#: field:component.category,id:0
+#: field:component.state,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: component
+#: help:component.component,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "If checked new messages require your attention."
+
+#. module: component
+#: field:component.component,image:0
+msgid "Image"
+msgstr "Image"
+
+#. module: component
+#: selection:component.component,criticality:0
+msgid "Important"
+msgstr "Important"
+
+#. module: component
+#: view:component.component:component.components_form_view
+msgid "Info"
+msgstr "Info"
+
+#. module: component
+#: model:component.state,name:component.component_state_installed
+msgid "Installed"
+msgstr "Installé"
+
+#. module: component
+#: model:ir.model,name:component.model_stock_location
+msgid "Inventory Locations"
+msgstr "Emlocationments de stock"
+
+#. module: component
+#: field:component.component,message_is_follower:0
+msgid "Is a Follower"
+msgstr "Est abonné"
+
+#. module: component
+#: field:component.component,message_last_post:0
+msgid "Last Message Date"
+msgstr "Date du dernier message"
+
+#. module: component
+#: field:component.component,write_uid:0
+#: field:component.category,write_uid:0
+#: field:component.state,write_uid:0
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: component
+#: field:component.component,write_date:0
+#: field:component.category,write_date:0
+#: field:component.state,write_date:0
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: component
+#: model:component.state,name:component.component_state_leased
+msgid "Leased"
+msgstr "Leasing"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Magenta"
+msgstr "Magenta"
+
+#. module: component
+#: model:component.state,name:component.component_state_maintenance
+#: selection:component.state,team:0
+#: model:ir.module.category,name:component.module_category_maintenance
+msgid "Maintenance"
+msgstr "Maintenance"
+
+#. module: component
+#: model:ir.actions.act_window,name:component.action_management_components
+#: model:ir.ui.menu,name:component.menu_maintenance_components_management
+msgid "Manage states"
+msgstr "Gérer les états"
+
+#. module: component
+#: model:res.groups,name:component.group_component_component_manager
+msgid "Manager"
+msgstr "Responsable"
+
+#. module: component
+#: selection:component.state,team:0
+msgid "Manufacture"
+msgstr "En production"
+
+#. module: component
+#: field:component.component,manufacturer_id:0
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#. module: component
+#: view:component.component:component.components_kanban_view
+msgid "Manufacturer:"
+msgstr "Fabricant:"
+
+#. module: component
+#: field:component.component,image_medium:0
+msgid "Medium-sized image"
+msgstr "Medium-sized image"
+
+#. module: component
+#: help:component.component,image_medium:0
+msgid "Medium-sized image of the component. It is automatically resized as a 128x128px image, with aspect ratio preserved, only when the image exceeds one of those sizes. Use this field in form views or some kanban views."
+msgstr "Medium-sized image of the component. It is automatically resized as a 128x128px image, with aspect ratio preserved, only when the image exceeds one of those sizes. Use this field in form views or some kanban views."
+
+#. module: component
+#: field:component.component,message_ids:0
+msgid "Messages"
+msgstr "Messages"
+
+#. module: component
+#: help:component.component,message_ids:0
+msgid "Messages and communication history"
+msgstr "Historique des messages et communications"
+
+#. module: component
+#: field:component.component,model:0
+msgid "Model"
+msgstr "Modèle"
+
+#. module: component
+#: view:component.component:component.components_kanban_view
+msgid "Model:"
+msgstr "Modèle:"
+
+#. module: component
+#: model:component.state,name:component.component_state_moves
+msgid "Moves"
+msgstr "Mouvements"
+
+#. module: component
+#: model:component.state,name:component.component_state_operable
+msgid "Operable"
+msgstr "Fonctionnel"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Orange"
+msgstr "Orange"
+
+#. module: component
+#: model:component.state,name:component.component_state_planned
+msgid "Planned"
+msgstr "Plannifié"
+
+#. module: component
+#: field:component.component,purchase_date:0
+msgid "Purchase Date"
+msgstr "Date d'achat"
+
+#. module: component
+#: model:component.state,name:component.component_state_purchased
+msgid "Purchased"
+msgstr "Acheté"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Red"
+msgstr "Red"
+
+#. module: component
+#: model:component.state,name:component.component_state_rented
+msgid "Rented"
+msgstr "Loué"
+
+#. module: component
+#: model:component.state,name:component.component_state_repair
+msgid "Repair"
+msgstr "Réparation"
+
+#. module: component
+#: model:component.state,name:component.component_state_retired
+msgid "Retired"
+msgstr "Retiré"
+
+#. module: component
+#: model:component.state,name:component.component_state_run
+msgid "Run"
+msgstr "En fonction"
+
+#. module: component
+#: field:component.state,team:0
+msgid "Scope Team"
+msgstr "Scope Team"
+
+#. module: component
+#: field:component.state,sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: component
+#: view:component.component:component.components_kanban_view
+msgid "Serial No:"
+msgstr "Numéro de série:"
+
+#. module: component
+#: field:component.component,serial:0
+msgid "Serial no."
+msgstr "Numéro de série"
+
+#. module: component
+#: model:component.state,name:component.component_state_setup
+msgid "Setup"
+msgstr "Configuration"
+
+#. module: component
+#: model:component.state,name:component.component_state_shipped
+msgid "Shipped"
+msgstr "Expédié"
+
+#. module: component
+#: model:component.state,name:component.component_state_shutdown
+msgid "Shutdown"
+msgstr "Arrêt"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "SkyBlue"
+msgstr "SkyBlue"
+
+#. module: component
+#: field:component.component,image_small:0
+msgid "Small-sized image"
+msgstr "Small-sized image"
+
+#. module: component
+#: help:component.component,image_small:0
+msgid "Small-sized image of the component. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+msgstr "Small-sized image of the component. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+
+#. module: component
+#: model:component.state,name:component.component_state_sold
+msgid "Sold"
+msgstr "Vendu"
+
+#. module: component
+#: model:component.state,name:component.component_state_standby
+msgid "Standby"
+msgstr "Pause"
+
+#. module: component
+#: field:component.component,start_date:0
+msgid "Start Date"
+msgstr "Date de début"
+
+#. module: component
+#: field:component.component,finance_state_id:0
+#: field:component.component,maintenance_state_id:0
+#: field:component.component,manufacture_state_id:0
+#: field:component.component,warehouse_state_id:0
+#: view:component.state:component.component_state_form_view
+#: field:component.state,name:0
+msgid "State"
+msgstr "État"
+
+#. module: component
+#: field:component.state,state_color:0
+msgid "State Color"
+msgstr "State Color"
+
+#. module: component
+#: model:ir.model,name:component.model_component_state
+msgid "State of Component"
+msgstr "État de l'équipement"
+
+#. module: component
+#: model:component.state,name:component.component_state_stolen
+msgid "Stolen"
+msgstr "Volé"
+
+#. module: component
+#: model:component.state,name:component.component_state_stored
+msgid "Stored"
+msgstr "En stock"
+
+#. module: component
+#: field:component.component,message_summary:0
+msgid "Summary"
+msgstr "Résumé"
+
+#. module: component
+#: field:component.category,name:0
+msgid "Tag"
+msgstr "Étiquette"
+
+#. module: component
+#: field:component.component,category_ids:0
+msgid "Tags"
+msgstr "Étiquettes"
+
+#. module: component
+#: view:component.component:component.components_form_view
+msgid "Tags..."
+msgstr "Étiquettes..."
+
+#. module: component
+#: help:component.component,image:0
+msgid "This field holds the image used as image for the component, limited to 1024x1024px."
+msgstr "This field holds the image used as image for the component, limited to 1024x1024px."
+
+#. module: component
+#: help:component.component,property_stock_component:0
+msgid "This location will be used as the destination location for installed parts during component life."
+msgstr "Cet emlocationment sera utilisé comme destination pour les pièces installées au cours de la vie d'une immobilisation."
+
+#. module: component
+#: field:component.component,message_unread:0
+msgid "Unread Messages"
+msgstr "Messages non lus"
+
+#. module: component
+#: model:component.state,name:component.component_state_use
+msgid "Use"
+msgstr "Usagé"
+
+#. module: component
+#: help:component.state,sequence:0
+msgid "Used to order states."
+msgstr "Used to order states."
+
+#. module: component
+#: model:res.groups,name:component.group_component_component_user
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: component
+#: field:component.component,vendor_id:0
+msgid "Vendor"
+msgstr "Vendeur"
+
+#. module: component
+#: selection:component.component,criticality:0
+msgid "Very important"
+msgstr "Très important"
+
+#. module: component
+#: selection:component.state,team:0
+msgid "Warehouse"
+msgstr "Entrepôt"
+
+#. module: component
+#: view:component.component:component.components_form_view
+msgid "Warranty"
+msgstr "Garantie"
+
+#. module: component
+#: field:component.component,warranty_end_date:0
+msgid "Warranty End"
+msgstr "Fin de garantie"
+
+#. module: component
+#: field:component.component,warranty_start_date:0
+msgid "Warranty Start"
+msgstr "Début de garantie"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "White"
+msgstr "White"
+
+#. module: component
+#: selection:component.component,maintenance_state_color:0
+#: selection:component.state,state_color:0
+msgid "Yellow"
+msgstr "Yellow"
+

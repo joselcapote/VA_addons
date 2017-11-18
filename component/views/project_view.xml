@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_project_form">
+            <field name="name">Projects</field>
+            <field name="model">component.project</field>
+            <field name="arch" type="xml">
+                <form string="Project">
+                    <group col="4" align="left">
+                        <div class="oe_title">
+                            <field name="image" widget="image"  width="128px" height="128px" class="oe_avatar oe_left"/>
+                        </div>
+                        <div colspan="2">
+                            <field name="name"/>
+                            <field name="abstract"/>
+                            <field name="contract_no"/>
+                        </div>
+                        <div>
+                            <button type="object" class="oe_highlight" string="Document" name="action_get_attachment_tree_view"/>
+                            <group>
+                                <field name="attachment_number"/>
+                            </group>
+                        </div>
+                    </group>
+                    <notebook>
+                        <page name="general_info" string="General">
+                            <field name="company_id"/>
+                            <field name="contacts"/>
+                            <field name="scope_of_work"/>
+                        </page>
+                        <page name="sites" string="Sites">
+                            <field name="site_ids">
+                                <tree string='Sites'>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_project_form">
+            <field name="name">Projects</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.project</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a project.
+                </p>
+            </field>
+        </record>
+
+
+        <!-- Sites item -->
+        <menuitem name="Project"
+                  action="action_project_form"
+                  id="menu_project"
+                  parent="menu_component_top_root"
+                  groups="component.group_component_component_customer"
+                  sequence="200"/>
+
+    </data>
+</openerp>

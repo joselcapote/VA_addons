@@ -1,0 +1,85 @@
+<template>
+    <div t-name="CExplorerFormView.buttons" class="oe_form_buttons">
+        <t t-if="widget.options.action_buttons !== false">
+            <div class="o_form_buttons_view">
+                <button t-if="widget.is_action_enabled('edit')"
+                        type="button"
+                        class="oe_form_button_edit btn btn-default btn-sm" accesskey="E">
+                    Edit
+                </button>
+            </div>
+        </t>
+    </div>
+
+    <div t-name="FormView.buttons" class="oe_form_buttons">
+    <t t-if="widget.options.action_buttons !== false">
+        <div class="o_form_buttons_view">
+            <button t-if="widget.is_action_enabled('edit')"
+                    type="button"
+                    class="oe_form_button_edit btn btn-default btn-sm" accesskey="E">
+                Edit
+            </button>
+            <button t-if="widget.is_action_enabled('create')"
+                    type="button" class="oe_form_button_create btn btn-default btn-sm"
+                    accesskey="C">
+                Create
+            </button>
+        </div>
+        <span class="o_form_buttons_edit">
+            <button type="button" class="oe_form_button_save btn btn-primary btn-sm" accesskey="S">Save</button>
+            <button type="button" class="oe_form_button_cancel btn btn-sm btn-default" accesskey="D">Discard</button>
+        </span>
+    </t>
+</div>
+
+    <div t-name="ComponentExplorerView" class="container-fluid o_cexplorer_container" style="height:100%">
+        <div class="row">
+            <div class="o_cexplorer_sidebar_container col-sm-3 hidden-xs"/>
+            <div class="col-sm-9">
+                <notebook>
+                    <page name="properties_page" string="Properties">
+                        <div class="o_cexplorer-properties-control-panel">
+                            <div class="o_cexplorer-properties-buttons">
+                            </div>
+                        </div>
+                        <div class="o_cexplorer_properties"/>
+                    </page>
+                    <page name="cexplorer_page" string="Explorer">
+                        <div class="o_cexplorer-control-panel">
+                            <div class="o_cexplorer-cp-buttons"/>
+                        </div>
+                        <div class="o_cexplorer_view"/>
+                    </page>
+                    <page name="devices_page" string="Devices">
+                        <div class="o_cexplorer_devices"/>
+                    </page>
+                    <page name="sld_page" string="Single Line Diagram">
+                        <div class="o_cexplorer-sld-control-panel">
+                            <div class="o_cexplorer-sld-buttons">
+                            </div>
+                        </div>
+                        <div class="o_cexplorer_sld" style="width:100%;height:100%;background-color: #00b3ee;">
+                            <div id="map" />
+                        </div>
+                    </page>
+                </notebook>
+            </div>
+        </div>
+    </div>
+
+    <t t-name="ComponentExplorerView.sidebar">
+        <div class="o_cexplorer_sidebar">
+            <div class="o_cexplorer_mini"/>
+            <div class="o_cexplorer_filter">
+                <h3 t-if="widget.getParent().color_string"><t t-esc="widget.getParent().color_string"/></h3>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="ComponentTypeSelectDialog">
+        <div t-foreach='component_types' t-as='type'>
+            <input type="radio" name="type_select" t-att-value='type.model'/>
+            <t t-esc="type.title"/>
+        </div>
+    </t>
+</template>

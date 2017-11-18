@@ -1,0 +1,974 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="test_sheets_drytransformer_tree">
+            <field name="name">testsheets.drytransf.tree</field>
+            <field name="model">component_test.dry_transformer_test</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="dry_transformer">
+                    <field name="date_execution"/>
+                    <field name="job_number"/>
+                    <field name="technician"/>
+                    <field name="component_name"/>
+                    <field name="site_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="testsheets_drytransformer_form" model="ir.ui.view">
+            <field name="name">Dry Transformer Test Sheet Form</field>
+            <field name="model">component_test.dry_transformer_test</field>
+            <field name="inherit_id" ref="component_test.testsheets_form_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+
+                <!--Here replace the Testsheet info group to add the Specific TestSheet Data-->
+                <group name="testsheet_info" position="replace">
+                    <h4>
+                        Equipment Data:
+                    </h4>
+                    <group col="3">
+                        <group >
+                            <field name="Manufacturer"/>
+                            <field name="PowerRating"/>
+                            <field name="HV"/>
+                            <field name="LV"/>
+                            <field name="Tap"/>
+                        </group>
+                        <group>
+                            <field name="Frequency"/>
+                            <field name="Serial"/>
+                            <field name="Type"/>
+                            <field name="MFGDate"/>
+                            <field name="Phase"/>
+                        </group>
+                        <group>
+                            <field name="TCooling"/>
+                            <field name="Impedance"/>
+                            <field name="TempRise"/>
+                            <field name="WindingConf"/>
+                            <field name="Style"/>
+                        </group>
+                    </group>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Mechanical Electrical Inspection:
+                    </h4>
+                    <table width="100%" cellspacing="0">
+                        <tr>
+                            <td width="36%">
+                                <table width="100%" border="1" cellspacing="0">
+                                    <tr>
+                                        <td width="61%">
+                                            <strong>Description</strong>
+                                        </td>
+                                        <td width="10%">
+                                            <strong>Status</strong>
+                                        </td>
+                                        <td width="29%">
+                                            <strong>Notes</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>External Condition</td>
+                                        <td>
+                                            <field name="Status1"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes1"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Coil, Core &amp; Supports</td>
+                                        <td>
+                                            <field name="Status2"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes2"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Primary Connection</td>
+                                        <td>
+                                            <field name="Status3"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes3"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Secondary Connection</td>
+                                        <td>
+                                            <field name="Status4"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes4"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ground Connection</td>
+                                        <td>
+                                            <field name="Status5"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes5"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Temperature Relay</td>
+                                        <td>
+                                            <field name="Status6"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes6"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="23%"></td>
+                            <td width="41%">
+                                <table width="99%" border="1" cellspacing="0">
+                                    <tr>
+                                        <td width="57%">
+                                            <strong>Description</strong>
+                                        </td>
+                                        <td width="13%">
+                                            <strong>Status</strong>
+                                        </td>
+                                        <td width="30%">
+                                            <strong>Notes</strong>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inspect Overheating &amp; Moisture</td>
+                                        <td>
+                                            <field name="Status7"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes7"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Isolators</td>
+                                        <td>
+                                            <field name="Status8"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes8"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Energized Noise</td>
+                                        <td>
+                                            <field name="Status9"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes9"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fan Operation</td>
+                                        <td>
+                                            <field name="Status10"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes10"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name Plate &amp; Warning Sign</td>
+                                        <td>
+                                            <field name="Status11"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes11"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tap Changer</td>
+                                        <td>
+                                            <field name="Status12"/>
+                                        </td>
+                                        <td>
+                                            <field name="Notes12"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div align="right"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/><!--Transformer Turn Ratio-->
+                    <h4>
+                        Transformer Turn Ratio Test:
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td rowspan="2">
+                                <div align="center">
+                                    <strong>Tap Position</strong>
+                                </div>
+                            </td>
+                            <td rowspan="2">
+                                <div align="center">
+                                    <strong>Pri.Voltage</strong>
+                                </div>
+                            </td>
+                            <td rowspan="2">
+                                <div align="center">
+                                    <strong>Sec. Voltage</strong>
+                                </div>
+                            </td>
+                            <td rowspan="2">
+                                <div align="center">
+                                    <strong>Calc. Ratio</strong>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div align="center">
+                                    <strong>H3H1/X0X1</strong>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div align="center">
+                                    <strong>H1H2/X0X2</strong>
+                                </div>
+                            </td>
+                            <td colspan="2">
+                                <div align="center">
+                                    <strong>H2H3/X0X3</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>Ratio</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>mA</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Ratio</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>mA</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Ratio</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>mA</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <field name="TapP1"/>
+                            </td>
+                            <td>
+                                <field name="PriV1"/>
+                            </td>
+                            <td>
+                                <field name="SecV1"/>
+                            </td>
+                            <td>
+                                <field name="CalcRatio1"/>
+                            </td>
+                            <td>
+                                <field name="H3H1R1"/>
+                            </td>
+                            <td>
+                                <field name="H3H1mA1"/>
+                            </td>
+                            <td>
+                                <field name="H1H2R1"/>
+                            </td>
+                            <td>
+                                <field name="H1H2mA1"/>
+                            </td>
+                            <td>
+                                <field name="H2H3R1"/>
+                            </td>
+                            <td>
+                                <field name="H2H3mA1"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <field name="TapP2"/>
+                            </td>
+                            <td>
+                                <field name="PriV2"/>
+                            </td>
+                            <td>
+                                <field name="SecV2"/>
+                            </td>
+                            <td>
+                                <field name="CalcRatio2"/>
+                            </td>
+                            <td>
+                                <field name="H3H1R2"/>
+                            </td>
+                            <td>
+                                <field name="H3H1mA2"/>
+                            </td>
+                            <td>
+                                <field name="H1H2R2"/>
+                            </td>
+                            <td>
+                                <field name="H1H2mA2"/>
+                            </td>
+                            <td>
+                                <field name="H2H3R2"/>
+                            </td>
+                            <td>
+                                <field name="H2H3mA2"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <field name="TapP3"/>
+                            </td>
+                            <td>
+                                <field name="PriV3"/>
+                            </td>
+                            <td>
+                                <field name="SecV3"/>
+                            </td>
+                            <td>
+                                <field name="CalcRatio3"/>
+                            </td>
+                            <td>
+                                <field name="H3H1R3"/>
+                            </td>
+                            <td>
+                                <field name="H3H1mA3"/>
+                            </td>
+                            <td>
+                                <field name="H1H2R3"/>
+                            </td>
+                            <td>
+                                <field name="H1H2mA3"/>
+                            </td>
+                            <td>
+                                <field name="H2H3R3"/>
+                            </td>
+                            <td>
+                                <field name="H2H3mA3"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <field name="TapP4"/>
+                            </td>
+                            <td>
+                                <field name="PriV4"/>
+                            </td>
+                            <td>
+                                <field name="SecV4"/>
+                            </td>
+                            <td>
+                                <field name="CalcRatio4"/>
+                            </td>
+                            <td>
+                                <field name="H3H1R4"/>
+                            </td>
+                            <td>
+                                <field name="H3H1mA4"/>
+                            </td>
+                            <td>
+                                <field name="H1H2R4"/>
+                            </td>
+                            <td>
+                                <field name="H1H2mA4"/>
+                            </td>
+                            <td>
+                                <field name="H2H3R4"/>
+                            </td>
+                            <td>
+                                <field name="H2H3mA4"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <field name="TapP5"/>
+                            </td>
+                            <td>
+                                <field name="PriV5"/>
+                            </td>
+                            <td>
+                                <field name="SecV5"/>
+                            </td>
+                            <td>
+                                <field name="CalcRatio5"/>
+                            </td>
+                            <td>
+                                <field name="H3H1R5"/>
+                            </td>
+                            <td>
+                                <field name="H3H1mA5"/>
+                            </td>
+                            <td>
+                                <field name="H1H2R5"/>
+                            </td>
+                            <td>
+                                <field name="H1H2mA5"/>
+                            </td>
+                            <td>
+                                <field name="H2H3R5"/>
+                            </td>
+                            <td>
+                                <field name="H2H3mA5"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Transformer Surge Arrestor:
+                    </h4>
+                    <table width="100%">
+                        <tr>
+                            <td width="13%" style="vertical-align:bottom">
+                                <div align="right">Manufacturer:</div>
+                            </td>
+                            <td width="25%" style="border:none;border-bottom:solid windowtext 1pt">
+                                <field name="TSAManufacturer"/>
+                            </td>
+                            <td width="10%" style="vertical-align:bottom">
+                                <div align="right">Catalog No.:</div>
+                            </td>
+                            <td width="15%" style="border:none;border-bottom:solid windowtext 1pt">
+                                <field name="CatalogNo"/>
+                            </td>
+                            <td width="14%" style="vertical-align:bottom">
+                                <div align="right">Mac MCOV Rating:</div>
+                            </td>
+                            <td width="23%" style="border:none;border-bottom:solid windowtext 1pt">
+                                <field name="MCOVRating"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Insulation Resistance (MΩ) (5000 VDC for 1 Minute):
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td width="17%">
+                                <strong>Phase_to_Ground</strong>
+                            </td>
+                            <td width="23%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="30%" style="vertical-align:middle">A_GND:</td>
+                                        <td width="70%">
+                                            <field name="PhtoGroundA"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="26%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="25%" style="vertical-align:middle">B_GND:</td>
+                                        <td width="75%">
+                                            <field name="PhtoGroundB"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="34%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="18%" style="vertical-align:middle">C_GND:</td>
+                                        <td width="82%">
+                                            <field name="PhtoGroundC"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Insulation Resistance as per NETA Specifications (MΩ):
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td colspan="3"></td>
+                            <td width="13%">
+                                <strong>HV/Ground</strong>
+                            </td>
+                            <td width="19%">
+                                <strong>HV/LV &amp; Ground</strong>
+                            </td>
+                            <td width="13%">
+                                <strong>LV/Groun</strong>
+                            </td>
+                            <td width="19%">
+                                <strong>LV/HV &amp; Ground</strong>
+                            </td>
+                            <td width="15%">
+                                <strong>Core/Ground</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <strong>Test Voltage</strong>
+                            </td>
+                            <td>
+                                <field name="TestV1"/>
+                            </td>
+                            <td>
+                                <field name="TestV2"/>
+                            </td>
+                            <td>
+                                <field name="TestV3"/>
+                            </td>
+                            <td>
+                                <field name="TestV4"/>
+                            </td>
+                            <td>
+                                <field name="TestV5"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="12%">
+                                <strong>Measured at</strong>
+                            </td>
+                            <td width="5%">
+                                <field name="Measureat"/>
+                            </td>
+                            <td width="4%">C</td>
+                            <td>
+                                <field name="Measured1"/>
+                            </td>
+                            <td>
+                                <field name="Measured2"/>
+                            </td>
+                            <td>
+                                <field name="Measured3"/>
+                            </td>
+                            <td>
+                                <field name="Measured4"/>
+                            </td>
+                            <td>
+                                <field name="Measured5"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Reported at</strong>
+                            </td>
+                            <td>
+                                <field name="Reportat"/>
+                            </td>
+                            <td>C</td>
+                            <td>
+                                <field name="Reported1"/>
+                            </td>
+                            <td>
+                                <field name="Reported2"/>
+                            </td>
+                            <td>
+                                <field name="Reported3"/>
+                            </td>
+                            <td>
+                                <field name="Reported4"/>
+                            </td>
+                            <td>
+                                <field name="Reported5"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Primary Winding Resistance:
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div align="center"/>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Current</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Duration</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Resistance</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>H1 - H2</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H1H2Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H1H2Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H1H2Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>H2 - H3</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H2H3Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H2H3Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H2H3Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>H3 - H1</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H3H1Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H3H1Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="H3H1Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Secondary Winding Resistance:
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div align="center"/>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Current</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Duration</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Resistance</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X0 - X1</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X1Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X1Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X1Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X0 - X2</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X2Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X2Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X2Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X0 - X3</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X3Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X3Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X0X3Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td>
+                                <div align="center"/>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Current</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Duration</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <strong>Resistance</strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X1 - X2</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X1X2Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X1X2Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X1X2Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X2 - X3</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X2X3Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X2X3Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X2X3Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">
+                                    <strong>X3 - X1</strong>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X3X1Current"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X3X1Duration"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div align="center">
+                                    <field name="X3X1Resistance"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Dissipation Factor &amp; Insulation Cpacitance:
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <strong>CH-L &amp; CH-G</strong>
+                            </td>
+                            <td>
+                                <strong>CH-G</strong>
+                            </td>
+                            <td>
+                                <strong>CH-L</strong>
+                            </td>
+                            <td>
+                                <strong>CL-G</strong>
+                            </td>
+                            <td>
+                                <strong>CL-H &amp; CL-G</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Dissipation Factor</strong>
+                            </td>
+                            <td>
+                                <field name="DisFactor1"/>
+                            </td>
+                            <td>
+                                <field name="DisFactor2"/>
+                            </td>
+                            <td>
+                                <field name="DisFactor3"/>
+                            </td>
+                            <td>
+                                <field name="DisFactor4"/>
+                            </td>
+                            <td>
+                                <field name="DisFactor5"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Capacitance (Reading) Multiplier (F)</strong>
+                            </td>
+                            <td>
+                                <field name="CapReading1"/>
+                            </td>
+                            <td>
+                                <field name="CapReading2"/>
+                            </td>
+                            <td>
+                                <field name="CapReading3"/>
+                            </td>
+                            <td>
+                                <field name="CapReading4"/>
+                            </td>
+                            <td>
+                                <field name="CapReading5"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Capacitance (F)</strong>
+                            </td>
+                            <td>
+                                <field name="Capacitance1"/>
+                            </td>
+                            <td>
+                                <field name="Capacitance2"/>
+                            </td>
+                            <td>
+                                <field name="Capacitance3"/>
+                            </td>
+                            <td>
+                                <field name="Capacitance4"/>
+                            </td>
+                            <td>
+                                <field name="Capacitance5"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <h4>
+                        Notes &amp; Comments:
+                    </h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td height="99">
+                                <field name="Comments"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">(C) Correct (N/C) Non Conform (N/A) Non Applicable (N/V) Non
+                                    Verified (ok) Satisfactory
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </group>
+            </field>
+        </record>
+    </data>
+</openerp>

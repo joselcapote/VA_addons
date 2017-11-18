@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- List view  -->
+        <record id="lv_ac_cable_test_tree_view" model="ir.ui.view">
+            <field name="name">lv_ac_cable_test_tree_view</field>
+            <field name="model">component_test.lv_ac_cable_test</field>
+            <field name="arch" type="xml">
+                <tree string="Component">
+                    <field name="date_execution"/>
+                    <field name="job_number"/>
+                    <field name="technician"/>
+                    <field name="component_name"/>
+                    <field name="site_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="component_test.lv_ac_cable_form">
+            <field name="name">component_test.lv_ac_cable_form</field>
+            <field name="model">component_test.lv_ac_cable_test</field>
+            <field name="inherit_id" ref="component_test.testsheets_form_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <!--Here replace the Testsheet info group to add the Specific TestSheet Data-->
+                <group name="testsheet_info" position="replace">
+
+                    <h4>Mechanical  Electrical Inspection:</h4>
+                    <table width="100%" cellspacing="0">
+                        <tr>
+                            <td width="36%">
+                                <table width="100%" border="1" cellspacing="0">
+                                    <tr>
+                                        <td width="80%">
+                                            <div align="center">
+                                                <strong>Description</strong>
+                                            </div>
+                                        </td>
+                                        <td width="10%">
+                                            <div align="center">
+                                                <strong>Status</strong>
+                                            </div>
+                                        </td>
+                                        <td width="10%">
+                                            <div align="center">
+                                                <strong>Notes</strong>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Compare cable data with drawings and specifications</td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status1"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes1"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Inspect exposed sections for physical damage and correct connection with single line diagram</td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status2"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes2"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Inspect compression-applied connectors for correct  match and indentation</td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status3"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes3"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Verify cable colour coding with applicable specifications and OESC</td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status4"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes4"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Verify tightness of accessible bolted electrical connections by calibrated torque-wrench method </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status5"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes5"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80%">Verify correct A, B, C phase sequence</td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Status6"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div align="center">
+                                                <field name="Notes6"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <p> </p>
+                    <h4>Insulation Resistance (MΩ) as per NETA Specifications:</h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td width="17%">
+                                <strong>Phase-to-Phase</strong>
+                            </td>
+                            <td width="23%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="20%"><strong>A-B:</strong></td>
+                                        <td width="70%"><field name="PhtoPhAB"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="20%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="20%">
+                                            <strong>B-A:</strong>
+                                        </td>
+                                        <td width="75%"><field name="PhtoPhBA"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="20%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="20%">
+                                            <strong>C-A:</strong>
+                                        </td>
+                                        <td width="82%"><field name="PhtoPhCA"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><strong>Phase-to-Ground</strong></td>
+                            <td width="20%"><table width="100%" cellspacing="0">
+                                <tr>
+                                    <td width="30%"><strong>A-GND:</strong></td>
+                                    <td><field name="PhtoGroundA"/></td>
+                                </tr>
+                            </table>
+                            </td>
+                            <td width="20%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="30%"><strong>B-GND:</strong></td>
+                                        <td><field name="PhtoGroundB"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="20%">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td width="30%"><strong>C-GND:</strong></td>
+                                        <td><field name="PhtoGroundC"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr noshade="noshade" size="2"/>
+                    <p> </p>
+                    <h4>Notes and Comments:</h4>
+                    <table width="100%" border="1" cellspacing="0">
+                        <tr>
+                            <td height="99">
+                                <field name="Comments"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div align="center">(C) Correct    (N/C) Non Conform    (N/A) Non Applicable    (N/V) Non Verified    (ok) Satisfactory</div>
+                            </td>
+                        </tr>
+                    </table>
+                </group>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

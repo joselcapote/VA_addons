@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_test_order_manager,component_test.order manager,model_component_test_order,component_test.group_test_manager,1,1,1,1
+access_test_order_user,component_test.order user,model_component_test_order,component_test.group_test_user,1,1,1,1

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <!-- All Component action -->
+        <record id="action_all_components" model="ir.actions.act_window">
+            <field name="name">All Components View</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.component</field>
+            <field name="group"></field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree, form</field>
+            <field name="view_id" eval="False"/>
+            <field name="context">{'group_by': ['site_id', 'location_id']}</field>
+        </record>
+
+        <!-- Top menu item -->
+        <menuitem name="Components"
+            id="menu_component_top_root"
+            sequence="80"/>
+
+        <!-- Component menu -->
+        <menuitem name="Components"
+                  id="menu_components_by_Site"
+                  parent="menu_component_top_root"
+                  groups="component.group_component_component_customer"
+                  sequence="90"/>
+
+        <!-- All Component menu -->
+        <menuitem name="All Components"
+                  action="action_all_components"
+                  id="menu_components_components"
+                  parent="menu_components_by_Site"
+                  groups="component.group_component_component_customer"
+                  sequence="91"/>
+
+        <!-- All Component Form View  -->
+        <record id="all_components_form_view" model="ir.ui.view">
+            <field name="name">component_form_view</field>
+            <field name="model">component.component</field>
+<!--
+            <field name="inherit_id" ref="components_form_view"/>
+-->
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Popo--">
+                    <header>
+
+                    </header>
+                    <sheet>
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                            <field name="category_ids" widget="many2many_tags" locationholder="Tags..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Component Form View  -->
+        <record id="components_form_view" model="ir.ui.view">
+            <field name="name">components_form_view</field>
+            <field name="model">component.component</field>
+            <field name="type">form</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <form string="Components" version="7.0">
+                    <header>
+                        <field name="maintenance_state_id" widget="statusbar" clickable="True" groups="component.group_mro_user"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group align="left">
+                                <div class="oe_title">
+                                    <field name="image_medium" widget="image" class="oe_avatar oe_left"/>
+                                </div>
+                                <div>
+                                    <label for="name" class="oe_edit_only"/>
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+                                    <field name="category_ids" widget="many2many_tags" locationholder="Tags..." string=" "/>
+                                </div>
+                            </group>
+                            <group >
+                                <div>
+                                    <button type="object" class="oe_highlight" string="Test Sheets" name="action_get_test_tree_view"/>
+                                    <group>
+                                        <field name="test_count"/>
+                                    </group>
+                                </div>
+                                <div>
+                                    <button type="object" class="oe_highlight" string="Document" name="action_get_attachment_tree_view"/>
+                                    <group>
+                                        <field name="attachment_number"/>
+                                    </group>
+                                </div>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="site_id"/>
+                            <field name="location_id" domain="[('site_id','=',site_id)]"/>
+                        </group>
+                        <notebook>
+                            <page name="general_info" string="General">
+                                <group>
+                                    <group name="basic">
+                                        <field name="component_number"/>
+                                        <field name="model"/>
+                                        <field name="manufacturer"/>
+                                        <field name="serial"/>
+                                        <field name="user_id"/>
+                                        <field name="customer_id"></field>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="component_info" string="Component Spec">
+                                <group name="aditional">
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Component Kanban View  -->
+        <record model="ir.ui.view" id="components_kanban_view">
+            <field name="name">Component Kanban</field>
+            <field name="model">component.component</field>
+            <field name="arch" type="xml">
+                <kanban quick_create="false" create="true">
+                    <field name="maintenance_state_id"/>
+                    <field name="maintenance_state_color"/>
+                    <field name="user_id"/>
+                    <field name="criticality"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette">
+                                <div class="codup_kanban_left">
+                                    <a name="open_component_view" type="object"><img t-att-src="kanban_image('component.component', 'image_small', record.id.value)" class="oe_kanban_image"/></a>
+                                    <div t-attf-title="#{record.maintenance_state_id.value}" t-attf-class="codup_status_color_#{record.maintenance_state_color.raw_value} codup_status"></div>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a name="open_component_view" type="object"><field name="name"/></a>
+                                    </h4>
+                                    <ul>
+                                        <li>Type: <field name="electric_component_type"></field></li>
+                                        <li>Model: <field name="model"></field></li>
+                                        <li>Manufacturer: <field name="manufacturer"></field></li>
+                                        <li>Serial No: <field name="serial"></field></li>
+                                        <li class="codup_kanban_info">
+                                            <a t-if="record.criticality.raw_value == 0" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 0" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value lte 1" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 1" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value lte 2" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 2" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" width="24" height="24" class="oe_kanban_avatar"/>
+                                        </li>
+                                    </ul>
+                                    <group name="extended">
+                                        <li><field name="electric_info"/></li>
+                                    </group>
+                                    <group>
+                                        <div class="oe_kanban_bottom_left oe_margin_top_4">
+                                            <a t-if="record.attachment_number" name="action_get_attachment_tree_view" type="object"> <field name="attachment_number"/> Documents</a>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right oe_margin_top_4">
+                                            <a t-if="record.test_count" name="action_get_test_tree_view" type="object"> <field name="test_count"/> Tests</a>
+                                        </div>
+                                    </group>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="component_tree_view">
+            <field name="name">Place Tree View</field>
+            <field name="model">component.location</field>
+            <field name="arch" type="xml">
+                <tree create="true">
+                    <field name="site_id"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Electric Component Kanban View  -->
+        <record model="ir.ui.view" id="components_electric_kanban_view">
+            <field name="name">Electric Component Kanban</field>
+            <field name="model">component.component</field>
+            <field name="arch" type="xml">
+                <kanban quick_create="false" create="true">
+                    <field name="maintenance_state_id"/>
+                    <field name="maintenance_state_color"/>
+                    <field name="user_id"/>
+                    <field name="criticality"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette">
+                                <div class="codup_kanban_left">
+                                    <a name="open_component_view" type="object"><img t-att-src="kanban_image('component.component', 'image_small', record.id.value)" class="oe_kanban_image"/></a>
+                                    <div t-attf-title="#{record.maintenance_state_id.value}" t-attf-class="codup_status_color_#{record.maintenance_state_color.raw_value} codup_status"></div>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a name="open_component_view" type="object"><field name="name"/></a>
+                                    </h4>
+                                    <ul>
+                                        <li>Type: <field name="electric_component_type"></field></li>
+                                        <li>Model: <field name="model"></field></li>
+                                        <li>Manufacturer: <field name="manufacturer"></field></li>
+                                        <li>Serial No: <field name="serial"></field></li>
+                                        <li class="codup_kanban_info">
+                                            <a t-if="record.criticality.raw_value == 0" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 0" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value lte 1" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 1" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value lte 2" t-attf-title="#{record.criticality.value}" class="codup_attention_off"><span class="fa fa-exclamation-triangle"/></a>
+                                            <a t-if="record.criticality.raw_value gt 2" t-attf-title="#{record.criticality.value}" class="codup_attention_on"><span class="fa fa-exclamation-triangle"/></a>
+                                            <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" width="24" height="24" class="oe_kanban_avatar"/>
+                                        </li>
+                                    </ul>
+                                    <group name="extended">
+                                        <li><field name="electric_info"/></li>
+                                    </group>
+                                    <group>
+                                        <div class="oe_kanban_bottom_left oe_margin_top_4">
+                                            <a t-if="record.attachment_number" name="action_get_attachment_tree_view" type="object"> <field name="attachment_number"/> Documents</a>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right oe_margin_top_4">
+                                            <a t-if="record.test_count" name="action_get_test_tree_view" type="object"> <field name="test_count"/> Tests</a>
+                                        </div>
+                                    </group>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Component Tree View  -->
+        <record id="components_tree_view" model="ir.ui.view">
+            <field name="name">component.component.tree</field>
+            <field name="model">component.component</field>
+            <field name="arch" type="xml">
+                <tree string="Component" create="false">
+                    <field name="component_number"/>
+                    <field name="name"/>
+                    <field name="criticality"/>
+                    <field name="user_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Actions-->
+        <record model="ir.actions.act_window.view" id="action_components_kanban_view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="components_kanban_view"/>
+            <field name="act_window_id" ref="action_all_components"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_components_tree_view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="components_tree_view"/>
+            <field name="act_window_id" ref="action_all_components"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="action_components_form_view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="all_components_form_view"/>
+            <field name="act_window_id" ref="action_all_components"/>
+        </record>
+
+        <!-- Component Search  -->
+        <record model="ir.ui.view" id="components_search">
+            <field name="name">Component Search</field>
+            <field name="model">component.component</field>
+            <field name="arch" type="xml">
+                <search string="Component Search">
+                    <field name="component_number"/>
+                    <field name="name"/>
+                    <field name="criticality"/>
+                    <field name="user_id"/>
+                    <field name="category_ids"/>
+                    <separator />
+                    <group expand="0" string="Group By">
+                      <filter name="group_name"
+                              string="Name"
+                              context="{'group_by': 'name'}"
+                              />
+                      <filter name="group_user"
+                              string="User"
+                              context="{'group_by': 'user_id'}"
+                              />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_component_search_mro" model="ir.ui.view">
+            <field name="name">component search view mro</field>
+            <field name="model">component.component</field>
+            <field name="inherit_id" ref="components_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='group_user']" position="after">
+                  <filter name="group_maintenance_state"
+                          string="Status"
+                          context="{'group_by': 'maintenance_state_id'}"
+                          />
+                </xpath>
+            </field>
+        </record>
+
+ 	</data>
+</openerp>

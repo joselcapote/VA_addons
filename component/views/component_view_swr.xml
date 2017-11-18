@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+        <record id="action_swr_components" model="ir.actions.act_window">
+            <field name="name">Switch Relay</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.swr_component</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{'group_by': ['site_id', 'location_id']}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a new SWR component.
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!-- Component item -->
+        <menuitem name="Switch Relay"
+                  action="action_swr_components"
+                  id="menu_swr_components"
+                  parent="menu_components_components"
+                  groups="component.group_component_component_customer"
+                  sequence="103"/>
+
+        <!-- Electric Component Kanban View  -->
+        <record model="ir.ui.view" id="electric_swr_component_kanban">
+            <field name="name">electric_swr_component_kanban</field>
+            <field name="model">component.swr_component</field>
+            <field name="inherit_id" ref="components_electric_kanban_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='extended']" position="inside">
+                </xpath>
+            </field>
+        </record>
+
+        <!-- SWR Form View  -->
+        <record id="swr_component_form_view" model="ir.ui.view">
+            <field name="name">swr_component_form_view</field>
+            <field name="model">component.swr_component</field>
+            <field name="inherit_id" ref="component.components_form_view"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name = 'aditional']" position="replace">
+                    <group>
+<!--
+                        <field name="awg">AWG</field>
+                        <field name="per_phase">Per Phase</field>
+                        <field name="from_component_id">From</field>
+                        <field name="to_component_id">To</field>
+-->
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

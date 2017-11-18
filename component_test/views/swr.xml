@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="component_test.swr_component_test_form">
+            <field name="name">component_test.swr_component_test_form</field>
+            <field name="model">component_test.swr_component_test</field>
+<!--
+            <field name="inherit_id" ref="test_order_form_view"/>
+-->
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="SWR">
+                <sheet position="after">
+                    <p>
+                        <strong>----SWR----</strong>
+                    </p>
+                    <div style="background-color: #ff0ff0">
+                        <p>
+                            <strong>Equipment Data SWR:</strong>
+                        </p>
+                        <p><strong>Work Order Data:</strong></p>
+                        <table width="90%">
+                            <tr>
+                                <td width="13%" style="vertical-align:bottom"><div align="right">Date:  </div></td>
+                                <td width="16%" style="border:none;border-bottom:solid windowtext 1pt"><field name="date_execution"/></td>
+                                <td width="11%" style="vertical-align:bottom"><div align="right">ACT Job No.:  </div></td>
+                                <td width="18%" style="border:none;border-bottom:solid windowtext 1pt"><field name="job_number"/></td>
+                                <td width="9%" style="vertical-align:bottom"><div align="right">Technicians:  </div></td>
+                                <td width="33%" style="border:none;border-bottom:solid windowtext 1pt"><field name="technician"/></td>
+                            </tr>
+                            <tr><td colspan="6"></td></tr>
+                            <tr>
+                                <td colspan="2"><div align="right">Component:</div></td>
+                                <td colspan="5">
+                                    <field name="component_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="50" style="vertical-align:bottom"><div align="right">Customer:  </div></td>
+                                <td colspan="2" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"><!--<field name="Customer"/>--></td>
+                                <td style="vertical-align:bottom"><div align="right">Site:  </div></td>
+                                <td colspan="2" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"></td>
+                            </tr>
+                            <tr>
+                                <td  height="50" style="vertical-align:bottom"><div align="leftt" colspan="3">Equip. Designation: </div></td>
+                                <td colspan="4" style="vertical-align:bottom;border:none;border-bottom:solid windowtext 1pt"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" cellspacing="0">
+                            <tr>
+                                <td width="14%">
+                                    <div align="right">Manufacturer:</div>
+                                </td>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                                <td width="17%">
+                                    <div align="right">Phase:</div>
+                                </td>
+                                <td colspan="6">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">Power Rating:</div>
+                                </td>
+                                <td width="20%">
+                                    <hr/>
+                                </td>
+                                <td width="6%">
+                                    <div align="center">KVA</div>
+                                </td>
+                                <td>
+                                    <div align="right">Tap:</div>
+                                </td>
+                                <td colspan="6">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">High Voltage:</div>
+                                </td>
+                                <td>
+                                    <hr/>
+                                </td>
+                                <td>
+                                    <div align="center">V</div>
+                                </td>
+                                <td>
+                                    <div align="right">Type of Cooling:</div>
+                                </td>
+                                <td colspan="6">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">Low Voltage:</div>
+                                </td>
+                                <td>
+                                    <hr/>
+                                </td>
+                                <td>
+                                    <div align="center">V</div>
+                                </td>
+                                <td>
+                                    <div align="right">Impedance:</div>
+                                </td>
+                                <td width="15%">
+                                    <hr/>
+                                </td>
+                                <td width="3%">%</td>
+                                <td width="8%">
+                                    <hr/>
+                                </td>
+                                <td width="3%">at</td>
+                                <td width="10%">
+                                    <hr/>
+                                </td>
+                                <td width="4%">C</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">Frequency:</div>
+                                </td>
+                                <td>
+                                    <hr/>
+                                </td>
+                                <td>
+                                    <div align="center">HZ</div>
+                                </td>
+                                <td>
+                                    <div align="right">Temperature Rise:</div>
+                                </td>
+                                <td colspan="5">
+                                    <hr/>
+                                </td>
+                                <td>C</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">Serial No.:</div>
+                                </td>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                                <td>
+                                    <div align="right">Winding Configuration:</div>
+                                </td>
+                                <td colspan="6">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">Type:</div>
+                                </td>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                                <td>
+                                    <div align="right">Style:</div>
+                                </td>
+                                <td colspan="6">
+                                    <hr/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="right">MFG Date:</div>
+                                </td>
+                                <td colspan="2"></td>
+                                <td>
+                                    <div align="right"></div>
+                                </td>
+                                <td colspan="6"></td>
+                            </tr>
+                        </table>
+
+                        <hr/>
+                        <p>
+                            <strong>Mechanical Electrical Inspection:</strong>
+                        </p>
+                        <table width="100%" cellspacing="0">
+                            <tr>
+                                <td width="36%">
+                                    <table width="100%" border="1" cellspacing="0">
+                                        <tr>
+                                            <td width="61%">
+                                                <strong>Description</strong>
+                                            </td>
+                                            <td width="10%">
+                                                <strong>Status</strong>
+                                            </td>
+                                            <td width="29%">
+                                                <strong>Notes</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>External Condition</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Coil, Core Supports</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Primary Connection</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Secondary Connection</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ground Connection</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Temperature Relay</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="23%"></td>
+                                <td width="41%">
+                                    <table width="99%" border="1" cellspacing="0">
+                                        <tr>
+                                            <td width="57%">
+                                                <strong>Description</strong>
+                                            </td>
+                                            <td width="13%">
+                                                <strong>Status</strong>
+                                            </td>
+                                            <td width="30%">
+                                                <strong>Notes</strong>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Inspect Overheating Moisture</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Isolators</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Energized Noise</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Fan Operation</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name Plate Warning Sign</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tap Changer</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <div align="right"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Transformer Turn Ratio Test:</strong>
+                        </p>
+
+                        <table width="100%" border="1" cellspacing="0" xml:space="preserve">
+  <tr>
+    <td rowspan="2"><div align="center"><strong>Tap Position</strong></div></td>
+    <td rowspan="2"><div align="center"><strong>Pri.Voltage</strong></div></td>
+    <td rowspan="2"><div align="center"><strong>Sec. Voltage</strong></div></td>
+    <td rowspan="2"><div align="center"><strong>Calc. Ratio</strong></div></td>
+    <td colspan="2"><div align="center"><strong>H3H1/X0X1</strong></div></td>
+    <td colspan="2"><div align="center"><strong>H1H2/X0X2</strong></div></td>
+    <td colspan="2"><div align="center"><strong>H2H3/X0X3</strong></div></td>
+  </tr>
+  <tr>
+    <td><div align="center"><strong>Ratio</strong></div></td>
+    <td><div align="center"><strong>mA</strong></div></td>
+    <td><div align="center"><strong>Ratio</strong></div></td>
+    <td><div align="center"><strong>mA</strong></div></td>
+    <td><div align="center"><strong>Ratio</strong></div></td>
+    <td><div align="center"><strong>mA</strong></div></td>
+  </tr>
+  <tr>
+    <td>Site:<!--<field name="Site"/>--></td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+    <td>  </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+                        <hr/>
+                        <p>
+                            <strong>Transformer Surge Arrestor:</strong>
+                        </p>
+                        <table width="100%" cellspacing="0">
+                            <tr>
+                                <td width="13%">
+                                    <div align="right">Manufacturer:</div>
+                                </td>
+                                <td width="25%">
+                                    <hr/>
+                                </td>
+                                <td width="10%">Catalog No.:</td>
+                                <td width="15%">
+                                    <hr/>
+                                </td>
+                                <td width="14%">Mac MCOV Rating:</td>
+                                <td width="23%">
+                                    <hr/>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Insulation Resistance (5000 VDC for 1 Minute):</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td width="17%">
+                                    <strong>Phase_to_Ground</strong>
+                                </td>
+                                <td width="23%">
+                                    <table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="30%" valign="bottom">A_GND:</td>
+                                            <td width="70%">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="26%">
+                                    <table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="25%">B_GND:</td>
+                                            <td width="75%"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="34%">
+                                    <table width="100%" cellspacing="0">
+                                        <tr>
+                                            <td width="18%">C_GND:</td>
+                                            <td width="82%"/>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Insulation Resistance as per NETA Specifications (M&#8486;):</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td colspan="3"></td>
+                                <td width="13%">
+                                    <strong>HV/Ground</strong>
+                                </td>
+                                <td width="19%">
+                                    <strong>HV/LV Ground</strong>
+                                </td>
+                                <td width="13%">
+                                    <strong>LV/Groun</strong>
+                                </td>
+                                <td width="19%">
+                                    <strong>LV/HV Ground</strong>
+                                </td>
+                                <td width="15%">
+                                    <strong>Core/Ground</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <strong>Test Voltage</strong>
+                                </td>
+                                <td>5000 VDC</td>
+                                <td>5000 VDC</td>
+                                <td>5000 VDC</td>
+                                <td>5000 VDC</td>
+                                <td>500 VDC</td>
+                            </tr>
+                            <tr>
+                                <td width="12%">
+                                    <strong>Measured at</strong>
+                                </td>
+                                <td width="5%"></td>
+                                <td width="4%">C</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Reported at</strong>
+                                </td>
+                                <td>20</td>
+                                <td>C</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Primary Winding Resistance:</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Current</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Duration</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Resistance</strong>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>H1 - H2</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>H2 - H3</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>H3 - H1</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Secondary Winding Resistance:</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Current</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Duration</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Resistance</strong>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X0 - X1</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X0 - X2</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X0 - X3</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Current</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Duration</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <strong>Resistance</strong>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X1 - X2</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X2 - X3</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">
+                                        <strong>X3 - X1</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">5 A</div>
+                                </td>
+                                <td>
+                                    <div align="center">1-Minute</div>
+                                </td>
+                                <td>
+                                    <div align="center"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Dissipation Factor Insulation Cpacitance:</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <strong>CH-L CH-G</strong>
+                                </td>
+                                <td>
+                                    <strong>CH-G</strong>
+                                </td>
+                                <td>
+                                    <strong>CH-L</strong>
+                                </td>
+                                <td>
+                                    <strong>CL-G</strong>
+                                </td>
+                                <td>
+                                    <strong>CL-H CL-G</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Dissipation Factor</strong>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Capacitance (Reading) Multiplier (F)</strong>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Capacitance (F)</strong>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <p>
+                            <strong>Notes Comments:</strong>
+                        </p>
+                        <table width="100%" border="1" cellspacing="0">
+                            <tr>
+                                <td height="99"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div align="center">(C) Correct (N/C) Non Conform (N/A) Non Applicable (N/V) Non
+                                        Verified (&#61520;) Satisfactory
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Test order menu -->
+        <record id="swr_component_test_tree_view" model="ir.ui.view">
+            <field name="name">swr_component_test_tree_view</field>
+            <field name="model">component_test.swr_component_test</field>
+            <field name="arch" type="xml">
+                <tree string="Component">
+                    <field name="job_number"/>
+                    <!--<field name="component_name"/>-->
+                    <field name="technician"/>
+                    <field name="date_execution"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</openerp>
