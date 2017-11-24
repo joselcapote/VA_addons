@@ -37,21 +37,18 @@
             <div class="o_cexplorer_sidebar_container col-sm-3 hidden-xs"/>
             <div class="col-sm-9">
                 <notebook>
-                    <page name="properties_page" string="Properties">
-                        <div class="o_cexplorer-properties-control-panel">
-                            <div class="o_cexplorer-properties-buttons">
-                            </div>
-                        </div>
-                        <div class="o_cexplorer_properties"/>
-                    </page>
                     <page name="cexplorer_page" string="Explorer">
                         <div class="o_cexplorer-control-panel">
                             <div class="o_cexplorer-cp-buttons"/>
                         </div>
                         <div class="o_cexplorer_view"/>
                     </page>
-                    <page name="devices_page" string="Devices">
-                        <div class="o_cexplorer_devices"/>
+                    <page name="properties_page" string="Properties">
+                        <div class="o_cexplorer-properties-control-panel">
+                            <div class="o_cexplorer-properties-buttons">
+                            </div>
+                        </div>
+                        <div class="o_cexplorer_properties"/>
                     </page>
                     <page name="sld_page" string="Single Line Diagram">
                         <div class="o_cexplorer-sld-control-panel">

@@ -58,6 +58,13 @@ class Component_project(model_with_image):
             res[docs['res_id']] = component_docs.search_count(cr,uid, [('res_id', '=', docs['res_id'])], context=context)
         return res
 
+    def _site_count(self, cr, uid, ids, field_name, arg, context=None):
+        res = dict.fromkeys(ids, 0)
+        sites = self.pool['component.site']
+        for project in self.browse(cr, uid, ids, context):
+            res[project.id] = sites.search_count(cr, uid, [('project_id',"=",project.id)], context);
+        return res;
+
     _columns = {
         'name': fields.char('Project Name', size=64, required=True),
         'abstract': fields.char('Project abstract', size=256, required=False),
@@ -67,8 +74,34 @@ class Component_project(model_with_image):
         'scope_of_work': fields.char('Scope of work', size=256, required=False, translate=False),
         'site_ids':        fields.one2many('component.site', 'id', 'Sites', help='The list of project sites', ondelete='cascade'),
         'attachment_number': fields.function(_get_attachment_number, string="Documents Attached", type="integer"),
-        'attachment_ids': fields.one2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'component.component')], string='Attachments')
+        'attachment_ids': fields.one2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'component.component')], string='Attachments'),
+        'site_count':   fields.function(_site_count, string='Location count', type='integer'),
     }
+
+    def open_project_view(self, cr, uid, ids, context=None):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': "component.project", # this model
+            'res_id': ids[0], # the current wizard record
+            'view_type': 'form',
+            'view_mode': 'form,list',
+            'target': 'current'}
+
+    def action_get_sites_kanban_view(self, cr, uid, ids, context=None):
+        ctx = dict()
+        for project in self.browse(cr, uid, ids, context):
+            ctx.update({
+                'default_project_id': project.id,
+            })
+            return {
+                'name': ('New project'),
+                'view_type': 'kanban',
+                'view_mode': 'kanban,list',
+                'res_model': 'component.project',
+                'context': ctx,
+                'domain': str([('project_id', '=', project.id)]),
+                'type': 'ir.actions.act_window',
+            }
 
     @api.model
     def create(self, vals):

@@ -50,6 +50,8 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 if (this.valid("show_component_view")){
                     this.getParent().getParent().show_component_view(this.model, this.id);
                 }
+            } else {
+                this._super.apply(this, arguments);
             }
         },
     });
@@ -343,7 +345,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             //creando la vista de kanban para los locations, debe tener un resumen de los objetos que contiene y poder navegar
             // hacia adentro
             this.show_location_view();
-            this.load_devices();
+            //this.load_devices();
         },
         load_devices: function () {
             var self = this;

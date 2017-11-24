@@ -100,6 +100,21 @@ odoo.define('component_explorer.widgets', function (require) {
                                     default_parent_model: model
                                 });
                                 break;
+                            case "add_location":
+                                self.getParent().add_record("component.location", {
+                                    default_site_id: id,
+                                });
+                                break;
+                            case "add_sublocation":
+                                self.getParent().add_record("component.sublocation", {
+                                    default_location_id: id,
+                                });
+                                break;
+                            case "add_site":
+                                self.getParent().add_record("component.site", {
+                                    default_project_id: id,
+                                });
+                                break;
                             case "properties":
                                 self.getParent().show_properties(model, id);
                                 break;
