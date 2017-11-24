@@ -338,6 +338,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         },
         start: function () {
             this._super();
+            this.$(".o_cexplorer_sidebar_container").css("height", "100%");
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
@@ -470,6 +471,21 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 })
             });
         },
+        show_project_view: function () {
+            var self = this;
+            this.right_panel_parent = this.$(".o_cexplorer_view");
+            this.current_model = "component.project";
+            this.remove_any_previous_view();
+            this.view_model.query(['id','name','type']).filter([['name','=','Project Kanban']]).first().then(function(view) {
+                self.right_panel_view = new widgets.CExplorerKanbanView(self, self.site_dataset, view.id, self.get_default_kanban_options("location"));
+                self.right_panel_view.appendTo(self.right_panel_parent);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    self.right_panel_view.do_search([], self.options.context, []);
+                    self.active_view = self.right_panel_parent;
+                })
+            });
+        },
         show_property_view: function (model, id) {
             var self = this;
             this.property_panel_parent = this.$(".o_cexplorer_properties");
@@ -498,6 +514,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             var self = this;
             this.$("#map").detach();
             this.$(".o_cexplorer_sld").append("<div id='map' style='width: 800px; height: 400px' />");
+            OpenLayers.ImgPath = "/component/static/lib/OpenLayers/img/";
             this.map = new OpenLayers.Map("map");
             //this.map.updateSize();
             this.datasets.get_dataset(model).read_slice([], [["id","=",Number(id)]]).done(function (records) {
@@ -612,11 +629,8 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 this.select_component_model(function (dialog) {
                     self.do_switch_view(self.selected_component_model, context);
                 });
-            }else if (this.current_model == "component.site"){
-                this.do_switch_view("component.site");
-            }else if (this.right_panel_view != null){
-                this.do_switch_view("component.location");
-                //this.do_action(this.get_create_action(_lt("New location"), "component.location"));
+            }else{
+                this.do_switch_view(model, context);
             }
         },
         select_component_model: function (do_it) {
@@ -676,26 +690,35 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             }
         },
         delete_project: function (id) {
-            var self = this;
-            this.project_dataset.unlink([Number(id)]).done(function () {
-                self.list_view.reload_content();
-            });
+            this.remove_record(this.project_dataset, id);
         },
         delete_site: function (id) {
+            alert('delete_site:'+id);
+            this.remove_record(this.site_dataset, id);
+        },
+        remove_record: function (dataset, id) {
             var self = this;
-            this.site_dataset.unlink([Number(id)]).done(function () {
-                self.list_view.reload_content();
-            });
+            function do_it() {
+                return $.when(self.dataset.unlink([id])).done(function () {
+                    Dialog.alert(this, _t("Changes where done."));
+                    self.list_view.reload_content();
+                    return true;
+                });
+            }
+
+            if (this.options.confirm_on_delete) {
+                Dialog.confirm(this, _t("Are you sure you want to delete this record ?"), {confirm_callback: do_it});
+            } else {
+                do_it();
+            }
         },
         delete_location: function (id) {
-            var self = this;
-            this.location_dataset.unlink([Number(id)]).done(function () {
-                self.list_view.reload_content();
-            });
+            this.remove_record(this.location_dataset, id);
+        },
+        delete_sublocation: function (id) {
+            this.remove_record(this.sublocation_dataset, id);
         }
     });
-
-// static method to open simple confirm dialog
 
     ListView.List.include(/** @lends instance.web.ListView.List# */{
         row_clicked: function (e) {

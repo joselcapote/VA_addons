@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
     <t t-name="ProjectTreeView">
-        <div id="tree">
+        <div id="tree" style="height: 100%">
             <ul id="treeData">
 
             </ul>

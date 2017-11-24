@@ -22,6 +22,8 @@ odoo.define('component_explorer.widgets', function (require) {
         appendTo: function (target) {
             this._super(target);
             this.load_project_data()
+            this.$("#tree").css("height", "100%");
+            this.$(".ui-fancytree").css("height", "100%");
         },
         delete_selected: function (key) {
             var pair = key.split("_");
@@ -32,6 +34,8 @@ odoo.define('component_explorer.widgets', function (require) {
                 deleted = this.getParent().delete_site(pair[1]);
             } else if (pair[0] == 'location') {
                 deleted = this.getParent().delete_location(pair[1]);
+            } else if (pair[0] == 'sublocation') {
+                deleted = this.getParent().delete_sublocation(pair[1]);
             }
             if (deleted){
                 var tree = this.$el.fancytree("getTree");
@@ -86,7 +90,7 @@ odoo.define('component_explorer.widgets', function (require) {
                     actions: function (node, action) {
                         var pair = node.key.split("_");
                         var model = "component."+pair[0];
-                        var id = pair[1];
+                        var id = Number(pair[1]);
                         switch (action) {
                             case "delete":
                                 self.delete_selected(node.key);
@@ -112,7 +116,7 @@ odoo.define('component_explorer.widgets', function (require) {
                                 break;
                             case "add_site":
                                 self.getParent().add_record("component.site", {
-                                    default_project_id: id,
+                                    default_project_id: id
                                 });
                                 break;
                             case "properties":
@@ -124,24 +128,28 @@ odoo.define('component_explorer.widgets', function (require) {
                     }
                 },
                 activate: function (event, data) {
-                    var pair = data.node.key.split("_");
-                    var model = "component."+pair[0];
-                    var id = pair[1];
-                    if (pair[0] == 'project') {
-                        self.getParent().show_site_view(id);
-                        self.getParent().show_property_view(model, id)
-                    } else if (pair[0] == 'site') {
-                        self.getParent().show_location_view(id);
-                        self.getParent().show_property_view(model, id)
-                        self.getParent().show_sld_view(model, id)
-                    } else if (pair[0] == 'location') {
-                        self.getParent().show_location_mixed_view(id);
-                        self.getParent().show_property_view(model, id)
-                        self.getParent().show_sld_view(model, id)
-                    } else if (pair[0] == 'sublocation') {
-                        self.getParent().show_component_view(model, id);
-                        self.getParent().show_property_view(model, id)
-                        self.getParent().show_sld_view(model, id)
+                    if (data.node.key == 'root'){
+                        self.getParent().show_project_view(id);
+                    }else{
+                        var pair = data.node.key.split("_");
+                        var model = "component."+pair[0];
+                        var id = pair[1];
+                        if (pair[0] == 'project') {
+                            self.getParent().show_site_view(id);
+                            self.getParent().show_property_view(model, id)
+                        } else if (pair[0] == 'site') {
+                            self.getParent().show_location_view(id);
+                            self.getParent().show_property_view(model, id)
+                            self.getParent().show_sld_view(model, id)
+                        } else if (pair[0] == 'location') {
+                            self.getParent().show_location_mixed_view(id);
+                            self.getParent().show_property_view(model, id)
+                            self.getParent().show_sld_view(model, id)
+                        } else if (pair[0] == 'sublocation') {
+                            self.getParent().show_component_view(model, id);
+                            self.getParent().show_property_view(model, id)
+                            self.getParent().show_sld_view(model, id)
+                        }
                     }
                 },
             });

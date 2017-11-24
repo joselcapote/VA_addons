@@ -75,7 +75,7 @@ class Component_project(model_with_image):
         'site_ids':        fields.one2many('component.site', 'id', 'Sites', help='The list of project sites', ondelete='cascade'),
         'attachment_number': fields.function(_get_attachment_number, string="Documents Attached", type="integer"),
         'attachment_ids': fields.one2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'component.component')], string='Attachments'),
-        'site_count':   fields.function(_site_count, string='Location count', type='integer'),
+        'site_count':   fields.function(_site_count, string='Site count', type='integer'),
     }
 
     def open_project_view(self, cr, uid, ids, context=None):

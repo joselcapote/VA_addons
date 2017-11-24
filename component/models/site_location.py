@@ -113,6 +113,10 @@ class site(model_with_sld):
         res = super(site, self).create(vals)
         return res
 
+    @api.model
+    def unlink(self, cr, uid, ids, context=None):
+        context = context or {}
+        super(site, self).unlink(cr, uid, ids, context=context)
 
 class site_location_base(model_with_sld):
     _name = 'component.locationbase'
