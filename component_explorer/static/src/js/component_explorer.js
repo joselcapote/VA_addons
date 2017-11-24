@@ -339,6 +339,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         start: function () {
             this._super();
             this.$(".o_cexplorer_sidebar_container").css("height", "100%");
+            $(".oe-control-panel").css("height", "0");
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));

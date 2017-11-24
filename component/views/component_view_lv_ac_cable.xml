@@ -18,12 +18,14 @@
         </record>
 
         <!-- Menu Item AC LV Cable -->
+<!--
         <menuitem name="AC LV Cable"
                   action="action_cable_components"
                   id="menu_cable_components"
                   parent="menu_components_components"
                   groups="component.group_component_component_customer"
                   sequence="104"/>
+-->
 
         <!-- Kanban View AC LC Cable -->
         <record model="ir.ui.view" id="electric_cable_component_kanban">

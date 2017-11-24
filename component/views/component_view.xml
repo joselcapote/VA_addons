@@ -13,25 +13,29 @@
             <field name="context">{'group_by': ['parent_id']}</field>
         </record>
 
-        <!-- Top menu item -->
+<!--
+        &lt;!&ndash; Top menu item &ndash;&gt;
         <menuitem name="Components"
             id="menu_component_top_root"
             sequence="80"/>
 
-        <!-- Component menu -->
+        &lt;!&ndash; Component menu &ndash;&gt;
         <menuitem name="Components"
                   id="menu_components_by_Site"
                   parent="menu_component_top_root"
                   groups="component.group_component_component_customer"
                   sequence="90"/>
+-->
 
         <!-- All Component menu -->
+<!--
         <menuitem name="All Components"
                   action="action_all_components"
                   id="menu_components_components"
                   parent="menu_components_by_Site"
                   groups="component.group_component_component_customer"
                   sequence="91"/>
+-->
 
         <!-- All Component Form View  -->
         <record id="all_components_form_view" model="ir.ui.view">

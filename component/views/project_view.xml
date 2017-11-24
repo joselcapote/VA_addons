@@ -87,13 +87,15 @@
             </field>
         </record>
 
-        <!-- Sites item -->
+<!--
+        &lt;!&ndash; Sites item &ndash;&gt;
         <menuitem name="Project"
                   action="action_project_form"
                   id="menu_project"
                   parent="menu_component_top_root"
                   groups="component.group_component_component_customer"
                   sequence="200"/>
+-->
 
     </data>
 </openerp>

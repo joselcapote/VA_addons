@@ -18,12 +18,14 @@
         </record>
 
         <!-- Menu Item AC LV Cable -->
+<!--
         <menuitem name="Dry Transformers"
                   action="action_dry_transformer_components"
                   id="menu_dry_transformer_components"
                   parent="menu_components_components"
                   groups="component.group_component_component_customer"
                   sequence="105"/>
+-->
 
         <!-- Kanban View Dry Transformer -->
         <record model="ir.ui.view" id="electric_dry_transformer_component_kanban">

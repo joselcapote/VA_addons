@@ -19,12 +19,14 @@
         </record>
 
         <!-- Component item -->
+<!--
         <menuitem name="Switch Relay"
                   action="action_swr_components"
                   id="menu_swr_components"
                   parent="menu_components_components"
                   groups="component.group_component_component_customer"
                   sequence="103"/>
+-->
 
         <!-- Electric Component Kanban View  -->
         <record model="ir.ui.view" id="electric_swr_component_kanban">

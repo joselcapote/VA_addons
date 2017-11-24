@@ -18,12 +18,14 @@
         </record>
 
         <!-- Component item -->
+<!--
         <menuitem name="LV Circuit breaker"
                   action="action_cb_components"
                   id="menu_cb_components"
                   parent="menu_components_components"
                   groups="component.group_component_component_customer"
                   sequence="102"/>
+-->
 
 
         <!-- Electric Component Kanban View  -->

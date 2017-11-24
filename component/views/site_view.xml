@@ -342,6 +342,7 @@
         </record>
 
         <!-- Sites item -->
+<!--
         <menuitem name="Sites"
                   action="action_site_form"
                   id="menu_sites"
@@ -368,6 +369,7 @@
                   groups="component.group_component_component_customer"
                   parent="menu_component_top_root"
                   sequence="200"/>
+-->
 
         <!--        <menuitem
                     parent="point_of_sale.menu_point_config_product"
