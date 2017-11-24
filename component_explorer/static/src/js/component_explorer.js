@@ -421,14 +421,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             };
             return action
         },
-        add_project: function () {
-            var self = this;
-            this.view_manager.do_action(this.new_record_action("component.project"), {
-                on_close: function() {
-                    self.load_treeview();
-                },
-            });
-        },
         show_properties_action: function (model, id) {
             var action = {
                 type: 'ir.actions.act_window',
@@ -472,19 +464,9 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             });
         },
         show_project_view: function () {
-            var self = this;
             this.right_panel_parent = this.$(".o_cexplorer_view");
-            this.current_model = "component.project";
-            this.remove_any_previous_view();
-            this.view_model.query(['id','name','type']).filter([['name','=','Project Kanban']]).first().then(function(view) {
-                self.right_panel_view = new widgets.CExplorerKanbanView(self, self.site_dataset, view.id, self.get_default_kanban_options("location"));
-                self.right_panel_view.appendTo(self.right_panel_parent);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_search([], self.options.context, []);
-                    self.active_view = self.right_panel_parent;
-                })
-            });
+            var project_view = new widgets.ProjectView(this);
+            project_view.appendTo(this.right_panel_parent);
         },
         show_property_view: function (model, id) {
             var self = this;
@@ -698,19 +680,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         },
         remove_record: function (dataset, id) {
             var self = this;
-            function do_it() {
-                return $.when(self.dataset.unlink([id])).done(function () {
+            Dialog.confirm(this, _t("Are you sure you want to delete this record ?"), {confirm_callback: function () {
+                return $.when(dataset.unlink([id])).done(function () {
                     Dialog.alert(this, _t("Changes where done."));
                     self.list_view.reload_content();
                     return true;
                 });
-            }
-
-            if (this.options.confirm_on_delete) {
-                Dialog.confirm(this, _t("Are you sure you want to delete this record ?"), {confirm_callback: do_it});
-            } else {
-                do_it();
-            }
+            }});
         },
         delete_location: function (id) {
             this.remove_record(this.location_dataset, id);

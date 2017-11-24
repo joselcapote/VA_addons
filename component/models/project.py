@@ -72,10 +72,10 @@ class Component_project(model_with_image):
         'contract_no': fields.char('Contract Nummber', size=64),
         'contacts': fields.many2many('res.partner', 'project_contacts', 'id', 'partner_id', string='Contacts'),
         'scope_of_work': fields.char('Scope of work', size=256, required=False, translate=False),
-        'site_ids':        fields.one2many('component.site', 'id', 'Sites', help='The list of project sites', ondelete='cascade'),
+        'site_ids':        fields.one2many('component.site', 'id', 'Sites', help='The list of project sites'),
+        'site_count':   fields.function(_site_count, string='Site count', type='integer'),
         'attachment_number': fields.function(_get_attachment_number, string="Documents Attached", type="integer"),
         'attachment_ids': fields.one2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'component.component')], string='Attachments'),
-        'site_count':   fields.function(_site_count, string='Site count', type='integer'),
     }
 
     def open_project_view(self, cr, uid, ids, context=None):
@@ -111,4 +111,14 @@ class Component_project(model_with_image):
     @api.multi
     def write(self, vals):
         res = super(Component_project, self).write(vals)
+        return res
+
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        sites = self.pool['component.site']
+        site_ids = sites.search(cr, uid, [('project_id', 'in', ids)], context=context)
+        sites.unlink(cr, uid, site_ids, context=context)
+
+        res = super(Component_project, self).unlink(cr, uid, ids, context)
         return res

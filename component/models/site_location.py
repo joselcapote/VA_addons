@@ -82,7 +82,7 @@ class site(model_with_sld):
         'name':             fields.char('Site Name', required=True, help='An internal identification of the Site'),
         'description':      fields.char('Description', required=True, help='A description of the Site'),
         'project_id':       fields.many2one('component.project','Project'),
-        'location_ids':     fields.one2many('component.location', 'site_id', 'Location', help='The list of Location in this Site', ondelete='cascade'),
+        'location_ids':     fields.one2many('component.location', 'site_id', 'Location', help='The list of Location in this Site'),
         'sequence':         fields.integer('Sequence',help='Used to sort Sites'),
         'location_count':   fields.function(_location_count, string='Location count', type='integer'),
     }
@@ -113,10 +113,15 @@ class site(model_with_sld):
         res = super(site, self).create(vals)
         return res
 
-    @api.model
     def unlink(self, cr, uid, ids, context=None):
-        context = context or {}
-        super(site, self).unlink(cr, uid, ids, context=context)
+        if context is None:
+            context = {}
+        locations = self.pool['component.location']
+        location_ids = locations.search(cr, uid, [('site_id', 'in', ids)], context=context)
+        locations.unlink(cr, uid, location_ids, context=context)
+        res = super(site, self).unlink(cr, uid, ids, context)
+        return res
+
 
 class site_location_base(model_with_sld):
     _name = 'component.locationbase'
@@ -210,11 +215,26 @@ class site_location(model_with_sld):
     _columns = {
         'site_id':      fields.many2one('component.site','Site', required=True),
         'sublocation_count': fields.function(_sublocation_count, string='Component count', type='integer'),
-        'sublocation_ids':     fields.one2many('component.sublocation', 'location_id', 'Sub-locations', help='The list of sub-locations in this Location', ondelete='cascade'),
+        'sublocation_ids':     fields.one2many('component.sublocation', 'location_id', 'Sub-locations', help='The list of sub-locations in this Location'),
 
         'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.location')], string='Devices'),
         'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
+
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+
+        sublocations = self.pool['component.sublocation']
+        sublocation_ids = sublocations.search(cr, uid, [('location_id', 'in', ids)], context=context)
+        sublocations.unlink(cr, uid, sublocation_ids, context=context)
+
+        devices = self.pool['component.component']
+        device_ids = devices.search(cr, uid, [('parent_id', 'in', ids), ('parent_model', '=', 'component.location')], context=context)
+        devices.unlink(cr, uid, device_ids, context=context)
+
+        res = super(site_location, self).unlink(cr, uid, ids, context)
+        return res
 
 class site_sublocation(model_with_sld):
     _name = 'component.sublocation'
@@ -233,3 +253,14 @@ class site_sublocation(model_with_sld):
         'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.sublocation')], string='Devices'),
         'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
+
+    def unlink(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+
+        devices = self.pool['component.component']
+        device_ids = devices.search(cr, uid, [('parent_id', 'in', ids), ('parent_model', '=', 'component.location')], context=context)
+        devices.unlink(cr, uid, device_ids, context=context)
+
+        res = super(site_sublocation, self).unlink(cr, uid, ids, context)
+        return res

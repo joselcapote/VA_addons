@@ -28,14 +28,15 @@ odoo.define('component_explorer.widgets', function (require) {
         delete_selected: function (key) {
             var pair = key.split("_");
             var deleted = false;
+            var id = Number(pair[1]);
             if (pair[0] == 'project') {
-                deleted = this.getParent().delete_project(pair[1]);
+                deleted = this.getParent().delete_project(id);
             } else if (pair[0] == 'site') {
-                deleted = this.getParent().delete_site(pair[1]);
+                deleted = this.getParent().delete_site(id);
             } else if (pair[0] == 'location') {
-                deleted = this.getParent().delete_location(pair[1]);
+                deleted = this.getParent().delete_location(id);
             } else if (pair[0] == 'sublocation') {
-                deleted = this.getParent().delete_sublocation(pair[1]);
+                deleted = this.getParent().delete_sublocation(id);
             }
             if (deleted){
                 var tree = this.$el.fancytree("getTree");
@@ -96,7 +97,8 @@ odoo.define('component_explorer.widgets', function (require) {
                                 self.delete_selected(node.key);
                                 break;
                             case "add_project":
-                                self.getParent().add_project();
+                                self.getParent().add_record("component.project", {
+                                });
                                 break;
                             case "add_device":
                                 self.getParent().add_record("component.component", {
@@ -385,6 +387,61 @@ odoo.define('component_explorer.widgets', function (require) {
         }
     });
 
+    var ProjectView = Widget.extend({
+        init: function (parent) {
+            this._super(parent);
+            this.current_model = "component.project";
+            this.dataset = new data.DataSetSearch(this, this.current_model, {});
+            this.view_model = new Model('ir.ui.view');
+        },
+        appendTo: function (target) {
+            this._super(target);
+            this.load(target)
+        },
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                }
+            };
+        },
+        load: function (target) {
+            var self = this;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.list_view.activate_location_node(location);
+                cexplorer.remove_any_previous_view(target);
+            }
+            this.view_model.query(['id','name','type']).filter([['name','=','Project Kanban Explorer']]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, {});
+                self.right_panel_view.appendTo(self.target);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    self.right_panel_view.do_search([], {}, []);
+                })
+                self.getParent().right_panel_view = self.right_panel_view;
+            });
+        }
+    });
+
     var SubLocationView = Widget.extend({
         init: function (parent, parent_id) {
             this._super(parent);
@@ -574,6 +631,7 @@ odoo.define('component_explorer.widgets', function (require) {
         CExplorerKanbanView: CExplorerKanbanView,
         ComponentsView: ComponentsView,
         LocationView: LocationView,
+        ProjectView: ProjectView,
         SublocationComponentMixedView: SublocationComponentMixedView,
     };
 });

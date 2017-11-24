@@ -53,6 +53,39 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="project_kanban_view_explorer">
+            <field name="name">Project Kanban Explorer</field>
+            <field name="model">component.project</field>
+            <field name="arch" type="xml">
+                <kanban quick_create="true" create="true">
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="codup_kanban_left">
+                                    <a name="open_project_view" type="object">
+                                        <img t-att-src="kanban_image('component.project', 'image_small', record.id.value)"
+                                             class="oe_kanban_image"/>
+                                    </a>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a name="open_project_view" type="object">
+                                            <field name="name"/>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <group>
+                                    <div class="oe_kanban_bottom_right oe_margin_top_4">
+                                        <p> <field name="site_count"/> Sites</p>
+                                    </div>
+                                </group>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 
         <!-- Sites item -->
         <menuitem name="Project"
