@@ -22,6 +22,7 @@
 from openerp.osv import fields, osv
 
 from openerp import tools
+from openerp import api
 
 STATE_COLOR_SELECTION = [
     ('0', 'Red'),
@@ -113,7 +114,7 @@ class Component_component(osv.osv):
         # restore order of the search
         result.sort(lambda x,y: cmp(stage_ids.index(x[0]), stage_ids.index(y[0])))
         return result, {}
-        
+
     def get_formview_id(self, cr, uid, id, context=None):
         model, view_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'component', 'components_kanban_view')
         return view_id
@@ -148,28 +149,34 @@ class Component_component(osv.osv):
 
     def _get_project(self, cr, uid, ids, name, args, context=None):
         result = dict.fromkeys(ids, False)
-        sites = self._get_sites(self, cr, uid, ids, name, context)
+        if not(isinstance(ids, list)):
+            ids = [ids]
+        sites = self._get_site(cr, uid, ids, name, context)
         for device in self.browse(cr, uid, ids, context=context):
             result[device.id] = sites[device.id].project_id
         return result
 
     def _get_site(self, cr, uid, ids, name, args, context=None):
+        if not(isinstance(ids, list)):
+            ids = [ids]
         result = dict.fromkeys(ids, False)
-        locations = self._get_location(self, cr, uid, ids, name, context)
+        locations = self._get_location(cr, uid, ids, name, context)
         for device in self.browse(cr, uid, ids, context=context):
             result[device.id] = locations[device.id].site_id
         return result
 
     def _get_location(self, cr, uid, ids, name, args, context=None):
+        if not(isinstance(ids, list)):
+            ids = [ids]
         result = dict.fromkeys(ids, False)
         for device in self.browse(cr, uid, ids, context=context):
             if (device.parent_model == 'component.sublocation'):
-                for parent in device.model_id:
-                    sublocation = parent.parent_id
-                    result[device.id] = sublocation.location_id
+                for sublocation in self.pool['component.sublocation'].browse(cr, uid, [device.parent_id], context=context):
+                    for location in sublocation.location_id:
+                        result[device.id] = location
             else:
                 #El padre es un location y se toma su valor directamente
-                for parent in device.model_id:
+                for parent in device.parent_id:
                     result[device.id] = parent.parent_id
         return result
 
@@ -177,8 +184,7 @@ class Component_component(osv.osv):
         result = dict.fromkeys(ids, False)
         for device in self.browse(cr, uid, ids, context=context):
             if (device.parent_model == 'component.sublocation'):
-                for parent in device.model_id:
-                    result[device.id] = parent.parent_id
+                result[device.id] = device.parent_id
             else:
                 result[device.id] = False
         return result
@@ -223,17 +229,18 @@ class Component_component(osv.osv):
                  "resized as a 64x64px image, with aspect ratio preserved. "\
                  "Use this field anywhere a small image is required."),
         'category_ids': fields.many2many('component.category', id1='component_id', id2='category_id', string='Tags'),
-        'project_id': fields.function(_get_project, type='many2one', relation='component.project', string='Project', store=True),
-        'site_id': fields.function(_get_site, type='many2one', relation='component.site', string='Site', store=True),
-        'location_id': fields.function(_get_location, type='many2one', relation='component.location', string='Location', store=True),
-        'sublocation_id': fields.function(_get_sublocation, type='many2one', relation='component.sublocation', string='Sublocation', store=True),
+        'project_id': fields.function(_get_project, type='many2one', relation='component.project', string='Project'),
+        'site_id': fields.function(_get_site, type='many2one', relation='component.site', string='Site'),
+        'location_id': fields.function(_get_location, type='many2one', relation='component.location', string='Location'),
+        'sublocation_id': fields.function(_get_sublocation, type='many2one', relation='component.sublocation', string='Sublocation'),
         'electric_component_type': fields.selection(ELECTRIC_ASSET_TYPE_SELECTION, string="Type", readonly=False,
                                                     required=True, help="Type of the electric component."),
 
         'parent_model': fields.char('Parent Model', readonly=True, help="The Location or Sublocation this Device will be attached to"),
         'parent_field': fields.char('Parent Field', readonly=True),
-        'parent_id': fields.integer('Parent ID', readonly=True, help="The record id this is attached to"),
+        'parent_id': fields.integer('Parent', readonly=True, help="The record id this is attached to"),
 
+        'parent_id': fields.integer('Parent', readonly=True, help="The record id this is attached to"),
     }
 
     _defaults = {
@@ -246,5 +253,3 @@ class Component_component(osv.osv):
         'manufacture_state_id': _read_group_manufacture_state_ids,
         'maintenance_state_id': _read_group_maintenance_state_ids,
     }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

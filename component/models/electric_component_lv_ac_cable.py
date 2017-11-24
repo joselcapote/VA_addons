@@ -8,8 +8,8 @@ ASSET_MODEL = 'component.lv_ac_cable'
 ASSET_MODEL_TEST = 'component_test.lv_ac_cable_test'
 
 class ElectricCableComponent(electric_component_base):
-    _name = ASSET_MODEL
 
+    _name = ASSET_MODEL
     _inherits = {
         'component.component': 'delegated_id',
     }

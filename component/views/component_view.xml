@@ -10,7 +10,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree, form</field>
             <field name="view_id" eval="False"/>
-            <field name="context">{'group_by': ['site_id', 'location_id']}</field>
+            <field name="context">{'group_by': ['parent_id']}</field>
         </record>
 
         <!-- Top menu item -->
@@ -98,8 +98,7 @@
                             </group>
                         </group>
                         <group>
-                            <field name="site_id"/>
-                            <field name="location_id" domain="[('site_id','=',site_id)]"/>
+                            <field name="parent_id"/>
                         </group>
                         <notebook>
                             <page name="general_info" string="General">

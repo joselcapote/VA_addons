@@ -10,9 +10,11 @@
     </t>
 
     <t t-name="SublocationComponentMixedView">
-        <div id="sublocations">
-        </div>
-        <div id="devices">
+        <div class="oe_mixed_view">
+            <div id="sublocations">
+            </div>
+            <div id="devices">
+            </div>
         </div>
     </t>
 

@@ -5,7 +5,7 @@ import logging
 
 from openerp import api
 from openerp import tools
-from openerp.addons.component.models.project import model_with_image
+from project import model_with_image
 from openerp.osv import fields, osv
 
 _logger = logging.getLogger(__name__)

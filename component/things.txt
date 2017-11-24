@@ -5,8 +5,22 @@ $('#hiddenImage').remove();
 alert("width:"+width+" height:"+height);
 
 var img = new Image();
-img.src = some_base64_image_source;
-console.log(img.width);       // This might print out 0!
-img.onload = function() {
-    console.log(img.width);   // This will print out the width.
-}
+ img.src = some_base64_image_source;
+ console.log(img.width);       // This might print out 0!
+ img.onload = function() {
+     console.log(img.width);   // This will print out the width.
+ }
+
+
+ contextMenu: {
+   menu: function(node){
+   if (node.folder){
+     return {
+         'create':{ 'name': 'folder option', 'icon': 'paste'}
+     };
+    } else {
+       return {
+         'create':{ 'name': 'leaf option', 'icon': 'paste'}
+        };
+    }
+ }

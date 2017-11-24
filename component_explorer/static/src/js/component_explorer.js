@@ -7,6 +7,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
     var core = require('web.core');
     var _lt = core._lt;
     var _t = core._t;
+    var _ = require('_');
     var QWeb = core.qweb;
     var View = require('web.View');
     var Widget = require('web.Widget');
@@ -26,15 +27,29 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
     var KanbanRecord = require('web_kanban.Record');
 
     KanbanRecord.include({
+        valid: function (funct) {
+            if (this.getParent()){
+                if (this.getParent().getParent()){
+                    if (this.getParent().getParent()[funct]){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
         on_card_clicked: function () {
             if (this.model === 'component.site') {
-                this.getParent().getParent().show_location_view(this.id);
+                if (this.valid("show_location_view")){
+                    this.getParent().getParent().show_location_view(this.id);
+                }
             } else if (this.model === 'component.location') {
-                this.getParent().getParent().show_location_mixed_view(this.id);
+                if (this.valid("show_location_mixed_view")){
+                    this.getParent().getParent().show_location_mixed_view(this.id);
+                }
             } else if (this.model === 'component.sublocation') {
-                this.getParent().getParent().show_component_view(this.id);
-            } else {
-                this._super.apply(this, arguments);
+                if (this.valid("show_component_view")){
+                    this.getParent().getParent().show_component_view(this.model, this.id);
+                }
             }
         },
     });
@@ -325,10 +340,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
             this.load_treeview();
-            this.right_panel_parent = this.$(".o_cexplorer_view");
-            this.$(".o_cexplorer_view").show_component_view = function (location) {
-                this.show_component_view(location);
-            }
             //creando la vista de kanban para los locations, debe tener un resumen de los objetos que contiene y poder navegar
             // hacia adentro
             this.show_location_view();
@@ -337,7 +348,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         load_devices: function () {
             var self = this;
             this.device_panel_parent = this.$(".o_cexplorer_devices");
-            this.view_model.query(['id','name','type']).filter([['name','=','Device tree']]).first().then(function(view) {
+            this.view_model.query(['id','name','type']).filter([['name','=','Device tree']]).all().then(function(view) {
                 self.device_view = new TreeView(self, self.component_dataset, view.id, self.get_default_device_options());
                 self.device_view.appendTo(self.device_panel_parent);
                 self.device_view.load_view();
@@ -392,14 +403,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             return domain;
         },
         remove_any_previous_view: function () {
-            if (this.right_panel_view != null){
-                this.remove_view(this.right_panel_view);
-                this.right_panel_view = null;
-            }
-            if (this.property_view != null){
-                this.remove_view(this.property_view);
-                this.property_view = null;
-            }
+            this.$(".o_cexplorer_view").children().detach();
         },
         new_record_action: function (model) {
             var action = {
@@ -438,7 +442,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         },
         show_properties: function (model, id) {
             var self = this;
-            alert(model+"_"+id);
             this.view_manager.do_action(this.show_properties_action(model, id), {
                 on_close: function() {
                     self.load_treeview();
@@ -447,12 +450,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         },
         show_site_view: function (project) {
             var self = this;
+            this.right_panel_parent = this.$(".o_cexplorer_view");
             this.current_project = project;
             this.current_model = "component.site";
             this.list_view.activate_project_node(project);
             this.remove_any_previous_view();
             this.view_model.query(['id','name','type']).filter([['name','=','Site Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.site_dataset, view.id, self.get_default_kanban_options("location"));
+                self.right_panel_view = new widgets.CExplorerKanbanView(self, self.site_dataset, view.id, self.get_default_kanban_options("location"));
                 self.right_panel_view.appendTo(self.right_panel_parent);
                 self.right_panel_view.load_view();
                 self.right_panel_view.on("view_loaded", self, function (fields_view) {
@@ -460,8 +464,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     $(".oe_delete_item").on("click", function () {
 
                     });
-                    $(".o-kanban-button-new").parent().detach();
-                    self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
                     self.active_view = self.right_panel_parent;
                 })
             });
@@ -492,11 +494,8 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         //Single Line Diagram View
         show_sld_view: function (model, id) {
             var self = this;
-            this.$("#map").width(800);
-            this.$("#map").height(400);
-            if (this.$(".olMap")!= undefined){
-                this.$(".olMap").detach();
-            }
+            this.$("#map").detach();
+            this.$(".o_cexplorer_sld").append("<div id='map' style='width: 800px; height: 400px' />");
             this.map = new OpenLayers.Map("map");
             //this.map.updateSize();
             this.datasets.get_dataset(model).read_slice([], [["id","=",Number(id)]]).done(function (records) {
@@ -504,91 +503,65 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     if ((records[0]['single_line_diagram'] != undefined)&&(records[0]['single_line_diagram'] != null)){
                         var src = "data:image/png;base64,"+ records[0]['single_line_diagram'];
                         var bounds = new OpenLayers.Bounds(-180, -88.759, 180, 88.759);
-/*
-                        if (self.imageLayer != undefined){
-                            self.map.removeLayer(self.imageLayer);
+
+                        var img = new Image();
+                        img.src = src;
+                        img.onload = function() {
+                            self.imageLayer = new OpenLayers.Layer.Image(
+                                "Single Line Diagram",
+                                src,
+                                bounds,
+                                new OpenLayers.Size(img.width, img.height),
+                                {numZoomLevels: 3}
+                            );
+                            self.map.addLayer(self.imageLayer);
+                            self.map.zoomToExtent(bounds);
                         }
-*/
-                        self.imageLayer = new OpenLayers.Layer.Image(
-                            "Single Line Diagram",
-                            src,
-                            bounds,
-                            new OpenLayers.Size(580, 288),
-                            {numZoomLevels: 3}
-                        );
-                        self.map.addLayer(self.imageLayer);
-                        self.map.zoomToExtent(bounds);
                     }
                 }
             })
         },
-        show_location_view: function (site) {
+        load_location_view: function (view) {
             var self = this;
-            this.current_site = site;
+            self.right_panel_view = new widgets.CExplorerKanbanView(self, self.location_dataset, view.id, self.get_default_kanban_options("location"));
+            self.right_panel_view.appendTo(self.right_panel_parent);
+            self.right_panel_view.load_view();
+            self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                self.right_panel_view.do_search(self.get_site_domain(self.current_site), self.options.context, []);
+                $(".oe_delete_item").on("click", function () {
 
-            this.list_view.activate_site_node(site);
+                });
+                $(".o-kanban-button-new").parent().detach();
+                self.active_view = self.right_panel_parent;
+            })
 
-            this.current_model = "component.location";
-            this.remove_any_previous_view();
-            this.view_model.query(['id','name','type']).filter([['name','=','Place Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.location_dataset, view.id, self.get_default_kanban_options("location"));
-                self.right_panel_view.appendTo(self.right_panel_parent);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_search(self.get_site_domain(self.current_site), self.options.context, []);
-                    $(".oe_delete_item").on("click", function () {
-
-                    });
-                    $(".oe_component_by_location_view").show_component_view = function (location) {
-                        alert(location);
-                    };
-                    $(".o-kanban-button-new").parent().detach();
-/*
-                    self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
-*/
-                    self.active_view = self.right_panel_parent;
-                })
-            });
+        },
+        show_location_view: function (site) {
+            this.right_panel_parent = this.$(".o_cexplorer_view");
+            var location_view = new widgets.LocationView(this, site);
+            location_view.appendTo(this.right_panel_parent);
         },
         show_location_mixed_view: function (sublocation) {
-
+            this.right_panel_parent = this.$(".o_cexplorer_view");
+            var prev_view = this.$(".oe_mixed_view");
+            if (prev_view){
+                prev_view.detach();
+            }
+            var component_view = new widgets.SublocationComponentMixedView(this, sublocation);
+            component_view.appendTo(this.right_panel_parent);
         },
-        show_component_view: function (location, where) {
-            var self = this;
-            this.current_location = location;
-            this.current_model = "component.component";
-            this.list_view.activate_location_node(location);
-            this.remove_any_previous_view(self.right_panel_parent);
-            var component_view_parent = self.right_panel_parent;
+        show_component_view: function (model, id, where) {
+            this.right_panel_parent = this.$(".o_cexplorer_view");
+            var component_view_parent = this.right_panel_parent;
             if (where){
                 component_view_parent = where;
             }
-            this.view_model.query(['id','name','type']).filter([['name','=','Component Kanban']]).first().then(function(view) {
-                //var options = {"view_id": view.id, "view_type": view.type, "context": self.context, "toolbar": false};
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("component"));
-                self.right_panel_view.appendTo(component_view_parent);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    var context = {"default_site_id": self.current_site, "default_location_id": self.current_location};
-                    var location_domin = self.get_location_domain(self.current_location, self.current_query);
-                    //alert(JSON.stringify(location_domin)+"\nlocation:"+self.current_location+"\nquery:"+self.current_query);
-                    self.right_panel_view.do_search(location_domin, context, []);
-                    $(".o-kanban-button-new").parent().detach();
-/*
-                    self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
-*/
-                })
-            });
+            var component_view = new widgets.ComponentsView(this, id, model);
+            component_view.appendTo(component_view_parent);
         },
-        do_switch_view: function(model){
+        do_switch_view: function(model, context){
             var self = this;
             this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
-                var context = {};
-                if (model == 'component.site'){
-                    context = {"default_project_id": Number(self.current_project), "default_site_id": Number(self.current_site)};
-                }else{
-                    context = {"default_site_id": Number(self.current_site), "default_location_id": Number(self.current_location)};
-                }
                 if (self.prev_form_dialog){
                     self.prev_form_dialog.destroy();
                 }
@@ -628,15 +601,14 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
 */
             });
         },
-        add_record: function() {
+        add_record: function(model, context) {
+            if (model){
+                this.current_model = model;
+            }
             if (this.current_model == "component.component") {
                 var self = this;
                 this.select_component_model(function (dialog) {
-                    self.do_switch_view(self.selected_component_model);
-                    /*
-                     var action = self.get_create_action(_lt("New component"), self.selected_component_model);
-                     self.do_action(action);
-                     */
+                    self.do_switch_view(self.selected_component_model, context);
                 });
             }else if (this.current_model == "component.site"){
                 this.do_switch_view("component.site");

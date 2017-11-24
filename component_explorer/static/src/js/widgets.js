@@ -7,7 +7,12 @@ odoo.define('component_explorer.widgets', function (require) {
     var Widget = require('web.Widget');
     var core = require('web.core');
     var Model = require('web.Model');
+    var Dialog = require('web.Dialog');
+    var KanbanView = require('web_kanban.KanbanView');
+    var data = require('web.data');
+
     var QWeb = core.qweb;
+    var _lt = core._lt;
 
     var ProjectTreeView = Widget.extend({
         template: "ProjectTreeView",
@@ -39,49 +44,44 @@ odoo.define('component_explorer.widgets', function (require) {
             //ahora se cargan los locations
             this.device_fields = ['id', 'name'];
             var self = this;
-
-/*
-            $("#tree").contextmenu({
-                delegate: "span.fancytree-title",
-//			menu: "#options",
-                menu: [
-                    {title: "Cut", cmd: "cut", uiIcon: "ui-icon-scissors"},
-                    {title: "Copy", cmd: "copy", uiIcon: "ui-icon-copy"},
-                    {title: "Paste", cmd: "paste", uiIcon: "ui-icon-clipboard", disabled: false },
-                    {title: "----"},
-                    {title: "Edit", cmd: "edit", uiIcon: "ui-icon-pencil", disabled: true },
-                    {title: "Delete", cmd: "delete", uiIcon: "ui-icon-trash", disabled: true },
-                    {title: "More", children: [
-                        {title: "Sub 1", cmd: "sub1"},
-                        {title: "Sub 2", cmd: "sub1"}
-                    ]}
-                ],
-                beforeOpen: function(event, ui) {
-                    var node = $.ui.fancytree.getNode(ui.target);
-//                node.setFocus();
-                    node.setActive();
-                },
-                select: function(event, ui) {
-                    var node = $.ui.fancytree.getNode(ui.target);
-                    alert("select " + ui.cmd + " on " + node);
-                }
-            });
-*/
-
             this.tree = this.$el.fancytree({
                 extensions: ['contextMenu'],
                 contextMenu: {
-                    menu: {
-                        'delete': {'name': 'Delete', 'icon': 'delete', 'disabled': false},
-                        'add_project': {'name': 'Add project', 'icon': 'new', 'disabled': false},
-                        'add_site': {'name': 'Add site', 'icon': 'new', 'disabled': false},
-                        'add_location': {'name': 'Add location', 'icon': 'new', 'disabled': false},
-                        'add_sublocation': {'name': 'Add sublocation', 'icon': 'new', 'disabled': false},
-                        'add_device': {'name': 'Add device', 'icon': 'new', 'disabled': false},
-                        'properties': {'name': 'Properties', 'icon': 'new', 'disabled': false},
-                    },
-                    beforeOpen: function(event, data){
-                        alert(data.node.key);
+                    menu: function(node){
+                        if (node.key == "root"){
+                            return {
+                                'add_project': {'name': 'Add project', 'icon': 'new', 'disabled': false},
+                            };
+                        }else{
+                            var pair = node.key.split("_");
+                            var model = pair[0];
+                            if (model == "project"){
+                                return {
+                                    'delete': {'name': 'Delete', 'icon': 'delete', 'disabled': false},
+                                    'add_site': {'name': 'Add site', 'icon': 'new', 'disabled': false},
+                                    'properties': {'name': 'Properties', 'icon': 'new', 'disabled': false},
+                                };
+                            } else if (model == "site"){
+                                return {
+                                    'delete': {'name': 'Delete', 'icon': 'delete', 'disabled': false},
+                                    'add_location': {'name': 'Add location', 'icon': 'new', 'disabled': false},
+                                    'properties': {'name': 'Properties', 'icon': 'new', 'disabled': false},
+                                };
+                            } else if (model == "location"){
+                                return {
+                                    'delete': {'name': 'Delete', 'icon': 'delete', 'disabled': false},
+                                    'add_sublocation': {'name': 'Add sublocation', 'icon': 'new', 'disabled': false},
+                                    'add_device': {'name': 'Add device', 'icon': 'new', 'disabled': false},
+                                    'properties': {'name': 'Properties', 'icon': 'new', 'disabled': false},
+                                };
+                            } else if (model == "sublocation"){
+                                return {
+                                    'delete': {'name': 'Delete', 'icon': 'delete', 'disabled': false},
+                                    'add_device': {'name': 'Add device', 'icon': 'new', 'disabled': false},
+                                    'properties': {'name': 'Properties', 'icon': 'new', 'disabled': false},
+                                };
+                            }
+                        }
                     },
                     actions: function (node, action) {
                         var pair = node.key.split("_");
@@ -93,6 +93,12 @@ odoo.define('component_explorer.widgets', function (require) {
                                 break;
                             case "add_project":
                                 self.getParent().add_project();
+                                break;
+                            case "add_device":
+                                self.getParent().add_record("component.component", {
+                                    default_parent_id: id,
+                                    default_parent_model: model
+                                });
                                 break;
                             case "properties":
                                 self.getParent().show_properties(model, id);
@@ -114,11 +120,11 @@ odoo.define('component_explorer.widgets', function (require) {
                         self.getParent().show_property_view(model, id)
                         self.getParent().show_sld_view(model, id)
                     } else if (pair[0] == 'location') {
-                        self.getParent().show_component_view(id);
+                        self.getParent().show_location_mixed_view(id);
                         self.getParent().show_property_view(model, id)
                         self.getParent().show_sld_view(model, id)
                     } else if (pair[0] == 'sublocation') {
-                        self.getParent().show_component_view(id);
+                        self.getParent().show_component_view(model, id);
                         self.getParent().show_property_view(model, id)
                         self.getParent().show_sld_view(model, id)
                     }
@@ -272,8 +278,8 @@ odoo.define('component_explorer.widgets', function (require) {
         add_record: function() {
             this.cexplorer_view.add_record();
         },
-        show_component_view: function (location) {
-            this.parent.show_component_view(location);
+        show_component_view: function (model, id) {
+            this.parent.show_component_view(model, id);
         },
         remove_record: function (id) {
             var self = this;
@@ -291,61 +297,261 @@ odoo.define('component_explorer.widgets', function (require) {
         }
     });
 
-    var ComponentsView = Widget.extend({
-        init: function (parent, location, where) {
+    var LocationView = Widget.extend({
+        init: function (parent, parent_id) {
             this._super(parent);
-            this.location = location;
-            this.current_model = "component.component";
-            this.where = where;
+            this.parent_id = parent_id;
+            this.current_model = "component.location";
+            this.dataset = new data.DataSetSearch(this, this.current_model, {
+                default_site_id: parent_id,
+            });
+            this.view_model = new Model('ir.ui.view');
         },
         appendTo: function (target) {
             this._super(target);
-            this.load()
+            this.load(target)
         },
-        load: function () {
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                    default_location_id: this.current_location,
+                    default_site_id: this.current_site,
+                }
+            };
+        },
+        get_sublocation_domain: function () {
+            return [["site_id","=",Number(this.parent_id)]];
+        },
+        load: function (target) {
             var self = this;
-            parent.list_view.activate_location_node(location);
-            parent.remove_any_previous_view(parent.right_panel_parent);
-            var component_view_parent = self.right_panel_parent;
-            if (this.where){
-                component_view_parent = this.where;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.list_view.activate_location_node(location);
+                cexplorer.remove_any_previous_view(target);
             }
-            this.view_model.query(['id','name','type']).filter([['name','=','Component Kanban']]).first().then(function(view) {
-                //var options = {"view_id": view.id, "view_type": view.type, "context": self.context, "toolbar": false};
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("component"));
-                self.right_panel_view.appendTo(component_view_parent);
+            this.view_model.query(['id','name','type']).filter([['name','=','Location Kanban Explorer']]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("location"));
+                self.right_panel_view.appendTo(self.target);
                 self.right_panel_view.load_view();
                 self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    var context = {"default_site_id": self.current_site, "default_location_id": self.current_location};
-                    var location_domin = self.get_location_domain(self.current_location, self.current_query);
-                    //alert(JSON.stringify(location_domin)+"\nlocation:"+self.current_location+"\nquery:"+self.current_query);
-                    self.right_panel_view.do_search(location_domin, context, []);
-                    $(".o-kanban-button-new").parent().detach();
-                    /*
-                     self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
-                     */
+                    var context = {default_location_id: self.parent_id};
+                    var domain = self.get_sublocation_domain();
+                    self.right_panel_view.do_search(domain, context, []);
                 })
+                self.getParent().right_panel_view = self.right_panel_view;
+            });
+        }
+    });
+
+    var SubLocationView = Widget.extend({
+        init: function (parent, parent_id) {
+            this._super(parent);
+            this.parent_id = parent_id;
+            this.current_model = "component.sublocation";
+            this.dataset = new data.DataSetSearch(this, this.current_model, {
+                default_location_id: parent_id,
+            });
+            this.view_model = new Model('ir.ui.view');
+        },
+        appendTo: function (target) {
+            this._super(target);
+            this.load(target)
+        },
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                    default_location_id: this.current_location,
+                    default_site_id: this.current_site,
+                }
+            };
+        },
+        get_sublocation_domain: function () {
+            return [["location_id","=",Number(this.parent_id)]];
+        },
+        load: function (target) {
+            var self = this;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.list_view.activate_location_node(location);
+                cexplorer.remove_any_previous_view(target);
+            }
+            this.view_model.query(['id','name','type']).filter([['name','=','Sublocation Kanban Explorer']]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("sublocation"));
+                self.right_panel_view.appendTo(self.target);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    var context = {default_location_id: self.parent_id};
+                    var domain = self.get_sublocation_domain();
+                    self.right_panel_view.do_search(domain, context, []);
+                })
+                self.getParent().right_panel_view = self.right_panel_view;
+            });
+        }
+    });
+
+    var ComponentsView = Widget.extend({
+        init: function (parent, parent_id, parent_model) {
+            this._super(parent);
+            this.parent_id = parent_id;
+            this.parent_model = parent_model;
+            this.current_model = "component.component";
+            this.dataset = new data.DataSetSearch(this, "component.component", {
+                default_parent_id: parent_id,
+                default_parent_model: parent_model
+            });
+            this.view_model = new Model('ir.ui.view');
+        },
+        appendTo: function (target) {
+            this._super(target);
+            this.load(target)
+        },
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                    default_location_id: this.current_location,
+                    default_site_id: this.current_site,
+                }
+            };
+        },
+        get_component_domain: function () {
+            return [["parent_id","=",Number(this.parent_id)], ["parent_model","=",this.parent_model]];
+        },
+        load: function (target) {
+            var self = this;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.list_view.activate_location_node(location);
+                cexplorer.remove_any_previous_view(target);
+            }
+            this.view_model.query(['id','name','type']).filter([['name','=','Component Kanban']]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("component"));
+                self.right_panel_view.appendTo(self.target);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    var context = {default_parent_id: self.parent_id, default_parent_model: self.parent_model};
+                    var domain = self.get_component_domain();
+                    self.right_panel_view.do_search(domain, context, []);
+                })
+                self.getParent().right_panel_view = self.right_panel_view;
             });
         }
     });
 
     var SublocationComponentMixedView = Widget.extend({
-        init: function (parent) {
+        template: "SublocationComponentMixedView",
+        init: function (parent, parent_id) {
             this._super(parent);
+            this.parent_id = parent_id;
+            this.parent_model = "component.location";
+            this.node_name = this.parent_model.split(".")[1]+"_"+parent_id;
+            this.view_model = new Model('ir.ui.view');
         },
         appendTo: function (target) {
             this._super(target);
             this.load()
         },
-        load: function () {
-
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                    default_location_id: this.parent_id,
+                }
+            };
         },
-        show_component_view: function (location, where) {
-        }
+        show_location_view: function () {
+            var sublocation_view = new SubLocationView(this, this.parent_id);
+            sublocation_view.appendTo(this.$("#sublocations"));
+        },
+        show_component_view: function () {
+            var component_view = new ComponentsView(this, this.parent_id, this.parent_model);
+            component_view.appendTo(this.$("#devices"));
+        },
+        load: function () {
+            this.show_location_view();
+            this.show_component_view();
+        },
     });
 
     return {
-        ProjectTreeView: ProjectTreeView
+        ProjectTreeView: ProjectTreeView,
+        CExplorerKanbanView: CExplorerKanbanView,
+        ComponentsView: ComponentsView,
+        LocationView: LocationView,
+        SublocationComponentMixedView: SublocationComponentMixedView,
     };
 });
 

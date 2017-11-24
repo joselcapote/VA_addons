@@ -87,7 +87,7 @@
         </record>
 
         <record model="ir.ui.view" id="location_kanban_view_explorer">
-            <field name="name">Place Kanban Explorer</field>
+            <field name="name">Location Kanban Explorer</field>
             <field name="model">component.location</field>
             <field name="arch" type="xml">
                 <kanban quick_create="true" create="true">
@@ -136,7 +136,6 @@
             <field name="arch" type="xml">
                 <kanban quick_create="true" create="true">
                     <field name="name"/>
-                    <field name="site_id"/>
                     <field name="id"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -224,6 +223,23 @@
             <field name="res_model">component.location</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to add a Site to the project.
+                </p>
+                <p>
+                    A Site represents a location where components are located, this is where you can
+                    define Locations.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sublocation_form">
+            <field name="name">Sublocations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">component.sublocation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Click to add a Site to the project.
@@ -336,6 +352,13 @@
         <menuitem name="Locations"
                   action="action_location_form"
                   id="menu_locations"
+                  parent="menu_component_top_root"
+                  groups="component.group_component_component_customer"
+                  sequence="200"/>
+
+        <menuitem name="Sublocations"
+                  action="action_sublocation_form"
+                  id="menu_sublocations"
                   parent="menu_component_top_root"
                   groups="component.group_component_component_customer"
                   sequence="200"/>

@@ -8,8 +8,8 @@ ASSET_MODEL = 'component.dry_transformer'
 ASSET_MODEL_TEST = 'component_test.dry_transformer_test'
 
 class ElectricComponentDryTransformer(electric_component_base):
-    _name = ASSET_MODEL
 
+    _name = ASSET_MODEL
     _inherits = {
         'component.component': 'delegated_id',
     }

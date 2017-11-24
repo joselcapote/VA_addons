@@ -169,6 +169,10 @@ class ElectricComponent(electric_component_base):
             res[docs['res_id']] = component_docs.search_count(cr,uid, [('res_id', '=', docs['res_id'])], context=context)
         return res
 
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form', context=None, toolbar=False, submenu=False):
+        result = super(ElectricComponent, self).fields_view_get(cr, uid, view_id, view_type, context, toolbar, submenu)
+        return result
+
     _columns = {
         'electric_info': fields.function(electric_info, 'Information', type='char'),
         'customer_id': fields.many2one('res.partner', 'Customer'),

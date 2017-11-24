@@ -8,6 +8,7 @@ ASSET_MODEL = 'component.lv_cb_component'
 ASSET_MODEL_TEST = 'component_test.lv_cb_test'
 
 class CBComponent(electric_component_base):
+
     _name = ASSET_MODEL
     _inherits = {
         'component.component': 'delegated_id',
