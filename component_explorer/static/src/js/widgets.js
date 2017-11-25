@@ -132,25 +132,28 @@ odoo.define('component_explorer.widgets', function (require) {
                 activate: function (event, data) {
                     if (data.node.key == 'root'){
                         self.getParent().show_project_view(id);
+                        self.getParent().hide_sld_view();
+                        self.getParent().hide_property_view();
                     }else{
                         var pair = data.node.key.split("_");
                         var model = "component."+pair[0];
                         var id = pair[1];
                         if (pair[0] == 'project') {
                             self.getParent().show_site_view(id);
-                            self.getParent().show_property_view(model, id)
+                            self.getParent().show_property_view(model, id);
+                            self.getParent().hide_sld_view();
                         } else if (pair[0] == 'site') {
                             self.getParent().show_location_view(id);
-                            self.getParent().show_property_view(model, id)
-                            self.getParent().show_sld_view(model, id)
+                            self.getParent().show_property_view(model, id);
+                            self.getParent().show_sld_view(model, id);
                         } else if (pair[0] == 'location') {
                             self.getParent().show_location_mixed_view(id);
-                            self.getParent().show_property_view(model, id)
-                            self.getParent().show_sld_view(model, id)
+                            self.getParent().show_property_view(model, id);
+                            self.getParent().show_sld_view(model, id);
                         } else if (pair[0] == 'sublocation') {
                             self.getParent().show_component_view(model, id);
-                            self.getParent().show_property_view(model, id)
-                            self.getParent().show_sld_view(model, id)
+                            self.getParent().show_property_view(model, id);
+                            self.getParent().show_sld_view(model, id);
                         }
                     }
                 },

@@ -37,20 +37,20 @@
             <div class="o_cexplorer_sidebar_container col-sm-3 hidden-xs"/>
             <div class="col-sm-9">
                 <notebook>
-                    <page name="cexplorer_page" string="Explorer">
+                    <page name="cexplorer_page" string="Explorer" t-att-class="cexplorer_page">
                         <div class="o_cexplorer-control-panel">
                             <div class="o_cexplorer-cp-buttons"/>
                         </div>
                         <div class="o_cexplorer_view"/>
                     </page>
-                    <page name="properties_page" string="Properties">
+                    <page name="properties_page" string="Properties"  t-att-class="properties_page">
                         <div class="o_cexplorer-properties-control-panel">
                             <div class="o_cexplorer-properties-buttons">
                             </div>
                         </div>
                         <div class="o_cexplorer_properties"/>
                     </page>
-                    <page name="sld_page" string="Single Line Diagram">
+                    <page name="sld_page" string="Single Line Diagram" t-att-class="sld_page">
                         <div class="o_cexplorer-sld-control-panel">
                             <div class="o_cexplorer-sld-buttons">
                             </div>

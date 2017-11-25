@@ -432,16 +432,51 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 flags: {
                     action_buttons: true,
                     create: false,
-                }
+                },
+                buttons: [
+                    {text: _t("Save"), classes: 'btn-primary', close: true, click: function() {
+                        $.when(self.prev_form_dialog.view_form.save()).done(function() {
+                            self.prev_form_dialog.close();
+                            if (self.current_model == "component.component"){
+                                self.show_component_view(self.current_location);
+                            }else{
+                                self.show_location_view(self.current_site);
+                                self.list_view.reload_content();
+                            }
+                        });
+                    }},
+                    {text: _t("Close"), close: true}
+                ]
             };
             return action
         },
         show_properties: function (model, id) {
             var self = this;
-            this.view_manager.do_action(this.show_properties_action(model, id), {
-                on_close: function() {
-                    self.load_treeview();
-                },
+            this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
+                if (self.prev_form_dialog) {
+                    self.prev_form_dialog.destroy();
+                }
+                self.prev_form_dialog = new form_common.FormViewDialog(self, {
+                    res_model: model,
+                    title: "Edit..",
+                    view_id: view.id,
+                    res_id: id,
+                    readonly: false,
+                    buttons: [
+                        {text: _t("Save"), classes: 'btn-primary', close: true, click: function() {
+                            $.when(self.prev_form_dialog.view_form.save()).done(function() {
+                                self.prev_form_dialog.close();
+                                if (self.current_model == "component.component"){
+                                    self.show_component_view(self.current_location);
+                                }else{
+                                    self.show_location_view(self.current_site);
+                                    self.list_view.reload_content();
+                                }
+                            });
+                        }},
+                        {text: _t("Close"), close: true}
+                    ]
+                }).open();
             });
         },
         show_site_view: function (project) {
@@ -469,8 +504,12 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             var project_view = new widgets.ProjectView(this);
             project_view.appendTo(this.right_panel_parent);
         },
+        hide_property_view: function () {
+            this.$(".o_cexplorer_properties").hide();
+        },
         show_property_view: function (model, id) {
             var self = this;
+            this.$(".o_cexplorer_properties").show();
             this.property_panel_parent = this.$(".o_cexplorer_properties");
             if (this.property_view!=null){
                 this.remove_view(this.property_view);
@@ -484,18 +523,19 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     self.datasets.get_dataset(model).read_slice([], {domain: domain}).done(function (records) {
                         if (records.length != 0){
                             self.property_view.load_record(records[0]);
-/*
-                            self.property_view.render_buttons($(".o_cexplorer-properties-buttons"));
-*/
                         }
                     })
                 })
             });
         },
         //Single Line Diagram View
+        hide_sld_view: function () {
+            this.$(".o_cexplorer_sld").hide();
+        },
         show_sld_view: function (model, id) {
             var self = this;
             this.$("#map").detach();
+            this.$(".o_cexplorer_sld").show();
             this.$(".o_cexplorer_sld").append("<div id='map' style='width: 800px; height: 400px' />");
             OpenLayers.ImgPath = "/component/static/lib/OpenLayers/img/";
             this.map = new OpenLayers.Map("map");
