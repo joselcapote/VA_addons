@@ -201,7 +201,10 @@ class ElectricComponent(electric_component_base):
         'electric_component_type': 'all_components',
     }
 
-    # @classmethod
-    # def _build_model(cls, pool, cr):
-    #     model = super(BaseModel)._build_model(cls, pool, cr)
-    #     return model
+    def unlink(self, cr, uid, ids, context=None):
+        for component in self.browse(cr, uid, ids, context=context):
+            if not('delegated_id' in component):
+                true_components = self.pool[component.component_model]
+                def_id = true_components.search(cr, uid, [('delegated_id', '=', component.id)], limit=1)
+                self.pool[component.component_model].unlink(cr, uid, def_id, context=context)
+        return super(ElectricComponent, self).unlink(cr, uid, ids, context)

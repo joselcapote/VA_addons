@@ -141,7 +141,7 @@
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click">
                                 <div class="codup_kanban_left">
-                                    <a name="open_location_view" type="object">
+                                    <a name="open_sublocation_view" type="object">
                                         <img t-att-src="kanban_image('component.location', 'image_small', record.id.value)"
                                              class="oe_kanban_image"/>
                                     </a>
@@ -280,7 +280,7 @@
                             </group>
                         </page>
                         <page string='Devices'>
-                            <field name="component_ids">
+                            <field name="component_ids" context="{'default_parent_model': 'component.location', 'default_parent_id': active_id}">
                                 <tree string='Devices'>
                                     <field name="name"/>
                                     <field name="model"/>
@@ -329,7 +329,7 @@
                             </group>
                         </page>
                         <page string='Devices'>
-                            <field name="component_ids">
+                            <field name="component_ids" context="{'default_parent_model': 'component.sublocation', 'default_parent_id': active_id}">
                                 <tree string='Devices'>
                                     <field name="name"/>
                                     <field name="model"/>

@@ -339,7 +339,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         start: function () {
             this._super();
             this.$(".o_cexplorer_sidebar_container").css("height", "100%");
-            $(".oe-control-panel").css("height", "0");
+            $(".oe-right-toolbar").hide();
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
@@ -450,6 +450,58 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             };
             return action
         },
+        process_dataset_command: function(model, parent_id,  command){
+            var self = this;
+            var id = command[1];
+            if (!id || _.isString(id) || _.isNumber(id)) {
+                switch (command[0]) {
+                    case form_common.commands.CREATE:
+                        var component = {'parent_id': parent_id, 'parent_model': model};
+                        for (var propiedad in command[2]) {
+                            component[propiedad] = command[2][propiedad];
+                        }
+                        var dataset = new data.DataSet(self, component.component_model, {});
+                        dataset.create(component, {}).then(function (id) {
+                            component['id'] = id;
+                            self.trigger('write_completed saved', component);
+                            return;
+                        });
+                        break;
+                    case form_common.commands.UPDATE:
+                        return dataset.write(id, command[2], internal_options).then(function () {
+                            if (dataset.ids.indexOf(id) === -1) {
+                                dataset.ids.push(id);
+                            }
+                        });
+                    case form_common.commands.FORGET:
+                    case form_common.commands.DELETE:
+                        var dataset = new data.DataSet(self, "component.component", {});
+                        return dataset.unlink([id]).done(function () {
+                            self.show_property_view(model, parent_id);
+                            self.show_component_view(model, parent_id);
+                        });
+                    case form_common.commands.LINK_TO:
+/*
+                        var dataset = new data.DataSet(self, model, {});
+                        if (dataset.ids.indexOf(id) === -1) {
+                            return dataset.add_ids([id], internal_options);
+                        }
+                        return;
+*/
+                    case form_common.commands.DELETE_ALL:
+/*
+                        var dataset = new data.DataSet(self, model, {});
+                        return dataset.reset_ids([], {keep_read_data: true});
+*/
+                    case form_common.commands.REPLACE_WITH:
+/*
+                        var dataset = new data.DataSet(self, model, {});
+                        dataset.ids = [];
+                        return dataset.alter_ids(command[2], internal_options);
+*/
+                }
+            }
+        },
         show_properties: function (model, id) {
             var self = this;
             this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
@@ -475,8 +527,18 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                             });
                         }},
                         {text: _t("Close"), close: true}
-                    ]
+                    ],
+                    write_function: function(id, withdata, options) {
+                        if (withdata.component_ids){
+                            for(var i = 0; withdata.component_ids.length; i++){
+                                self.process_dataset_command(model, id, withdata.component_ids[i]);
+                            }
+                        }
+                    }
                 }).open();
+                self.prev_form_dialog.on('write_completed', self, function() {
+                    self.show_property_view(model, id);
+                });
             });
         },
         show_site_view: function (project) {
@@ -629,18 +691,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                         {text: _t("Close"), close: true}
                     ]
                 }).open();
-/*
-                self.right_panel_view = new FormView(self, self.dataset, view.id, context);
-                self.right_panel_view.appendTo(self.right_panel_parent);
-                //self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_show().then(function() {
-                        self.do_show();
-                    });
-                    $(".o-kanban-button-new").parent().detach();
-                    self.right_panel_view.render_buttons($(".o_cexplorer-cp-buttons"));
-                })
-*/
             });
         },
         add_record: function(model, context) {

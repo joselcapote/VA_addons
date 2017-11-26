@@ -10,9 +10,14 @@ odoo.define('component_explorer.widgets', function (require) {
     var Dialog = require('web.Dialog');
     var KanbanView = require('web_kanban.KanbanView');
     var data = require('web.data');
+    var ListView = require('web.ListView');
+    var form_common = require('web.form_common');
+
+    var form_relational = require('web.form_relational')
 
     var QWeb = core.qweb;
     var _lt = core._lt;
+    var _t = core._t;
 
     var ProjectTreeView = Widget.extend({
         template: "ProjectTreeView",
@@ -626,6 +631,151 @@ odoo.define('component_explorer.widgets', function (require) {
         load: function () {
             this.show_location_view();
             this.show_component_view();
+        },
+    });
+
+    core.form_widget_registry.get('one2many').include({
+        init: function () {
+            this._super.apply(this, arguments);
+            this.x2many_views.list.include({
+                select_component_model: function (do_it) {
+                    var component_types = [];
+                    component_types.push({title: "LV AC Cable", model: "component.lv_ac_cable"});
+                    component_types.push({title: 'SWR', model: "component.swr_component"});
+                    component_types.push({title: 'Dry Transformer', model: "component.dry_transformer"});
+                    component_types.push({title: 'LV Circuit breaker', model: "'component.lv_cb_component"});
+                    var buttons = [
+                        {
+                            text: _t("Ok"),
+                            classes: 'btn-primary',
+                            close: true,
+                            click: do_it
+                        },
+                        {
+                            text: _t("Cancel"),
+                            close: true,
+                            click: options && options.cancel_callback
+                        }
+                    ];
+                    var options = {
+                        size: 'medium',
+                        buttons: buttons,
+                        title: _t("Select component type"),
+                        $content: QWeb.render('ComponentTypeSelectDialog', {component_types: component_types}),
+                    };
+                    var dialog = new Dialog(this, options).open();
+                    var self = this;
+                    dialog.$el.find('input').click(function() {
+                        var value = $(this).attr('value');
+                        self.selected_component_model = value;
+                    });
+                    return dialog;
+                },
+                do_switch_view: function(model, context){
+                    var self = this;
+                    this.view_model = new Model('ir.ui.view');
+                    this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
+                        self.createdialog = new form_common.SelectCreateDialog(this, {
+                            res_model: model,
+                            domain: self.x2m.build_domain(),
+                            context: context,
+                            title: _t("Create: ") + self.x2m.string,
+                            initial_view: "form",
+                            disable_multiple_selection: true,
+                            alternative_form_view: self.x2m.field.views ? self.x2m.field.views.form : undefined,
+                            create_function: function(withdata, options) {
+                                withdata['component_model']=model;
+                                return self.x2m.data_create(withdata, options);
+                            },
+                                /*
+                            write_function: function(id, withdata, options, sup) {
+                                alert("write_function");
+
+                                                                alert(JSON.stringify(withdata));
+                                                                var dataset = new data.DataSet(self.x2m, model, self.x2m.build_context());
+                                                                dataset.create(withdata, self.x2m.internal_options).then(function (id) {
+                                                                    alert(JSON.stringify(fields_view.fields));
+                                */
+/*
+                                    dataset.read_ids([id], view).then(function (records) {
+                                        alert(JSON.stringify(records));
+                                        self.trigger('write_completed saved', r[0]);
+                                    });
+                                });
+                            },
+ */
+                            read_function: function(ids, fields, options) {
+                                return self.x2m.data_read(ids, fields, options);
+                            },
+                            parent_view: self.x2m.view,
+                            child_name: self.x2m.name,
+                            form_view_options: {'not_interactible_on_create':true},
+                            on_selected: function() {
+                                self.x2m.reload_current_view();
+                            }
+                        }).open();
+/*
+                        self.prev_form_dialog = new form_common.FormViewDialog(self, {
+                            res_model: model,
+                            context: context,
+                            title: "New..",
+                            view_id: view.id,
+                            res_id: null,
+                            readonly: false,
+                            buttons: [
+                                {text: _t("Save"), classes: 'btn-primary', close: true, click: function() {
+                                    $.when(self.prev_form_dialog.view_form.save()).done(function() {
+                                        self.prev_form_dialog.close();
+                                        self.reload_content();
+                                    });
+                                }},
+                                {text: _t("Close"), close: true}
+                            ]
+                        }).open();
+*/
+                    });
+                },
+                do_add_record: function () {
+                    if (this.dataset.model == 'component.component') {
+                        this.$('table:first').show();
+                        this.$('.oe_view_nocontent').remove();
+                        var self = this;
+                        this.select_component_model(function (dialog) {
+                            var context= self.x2m.build_context();
+                            self.do_switch_view(self.selected_component_model, context);
+                        });
+                    } else {
+                        this._super.apply(this, arguments);
+                    }
+                },
+            });
+        },
+    });
+
+    ListView.List.include({
+        do_switch_view: function(model, context){
+            var self = this;
+            this.view_model = new Model('ir.ui.view');
+            this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
+                if (self.prev_form_dialog){
+                    self.prev_form_dialog.destroy();
+                }
+                context.view_id= view.id;
+                alert(JSON.stringify(context));
+                self.prev_form_dialog = new form_common.FormViewDialog(self, context).open();
+            });
+        },
+        row_clicked: function (event, view) {
+            if (this.view.model == 'component.component'){
+                var model = new Model('component.component', {});
+                var parent_id = this.dataset.ids[this.dataset.index];
+                var self = this;
+                model.call("open_component_view", [parent_id]).then(function(action){
+                    self.prev_form_dialog = new form_common.FormViewDialog(self, action).open();
+                });
+            }else{
+                return this._super.row_clicked(event); // The record can't be edited so open it in a modal (use-case: readonly mode)
+            }
         },
     });
 

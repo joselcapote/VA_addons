@@ -148,15 +148,6 @@ class site_location_base(model_with_sld):
         'active': True,
     }
 
-    def open_location_view(self, cr, uid, ids, context=None):
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': "component.location", # this model
-            'res_id': ids[0], # the current wizard record
-            'view_type': 'form',
-            'view_mode': 'form,list',
-            'target': 'current'}
-
     def action_get_components_kanban_view(self, cr, uid, ids, context=None):
         ctx = dict()
         for location in self.browse(cr, uid, ids, context):
@@ -204,6 +195,15 @@ class site_location(model_with_sld):
                                           ['parent_id'], ['parent_id'], context):
             res[component['parent_id']] = components.search_count(cr,uid, [('parent_id', '=', component['parent_id'])], context=context)
         return res
+
+    def open_location_view(self, cr, uid, ids, context=None):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': "component.location", # this model
+            'res_id': ids[0], # the current wizard record
+            'view_type': 'form',
+            'view_mode': 'form,list',
+            'target': 'current'}
 
     def _sublocation_count(self, cr, uid, ids, field_name, arg, context=None):
         res = dict.fromkeys(ids, 0)
@@ -253,6 +253,15 @@ class site_sublocation(model_with_sld):
         'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.sublocation')], string='Devices'),
         'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
+
+    def open_location_view(self, cr, uid, ids, context=None):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': "component.sublocation", # this model
+            'res_id': ids[0], # the current wizard record
+            'view_type': 'form',
+            'view_mode': 'form,list',
+            'target': 'new'}
 
     def unlink(self, cr, uid, ids, context=None):
         if context is None:
