@@ -235,6 +235,12 @@ class site_location(model_with_sld):
         res = super(site_location, self).unlink(cr, uid, ids, context)
         return res
 
+    @api.multi
+    def write(self, vals):
+        # self._test_image_small(vals)
+        res = super(site_location, self).write(vals)
+        return res
+
 class site_sublocation(model_with_sld):
     _name = 'component.sublocation'
     _inherit = 'component.locationbase'

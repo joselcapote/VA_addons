@@ -188,7 +188,7 @@
                             <td height="70"><div align="center">Description:</div></td>
                             <td><div><field name="description"/></div> </td>
                             <td><div align="center">SLD:</div></td>
-                            <td><div><field name="image" widget="image"/></div> </td>
+                            <td><div><field name="single_line_diagram" widget="image"/></div> </td>
                         </tr>
                         <tr>
                             <td height="30"> </td>
@@ -300,6 +300,7 @@
             <field name="arch" type="xml">
                 <form string="Sites Locations">
 
+<!--
                     <table width="100%" cellspacing="2">
                         <tr>
                             <td width="13%"><div align="center">Location name: </div></td>
@@ -326,9 +327,8 @@
                             <td> </td>
                         </tr>
                     </table>
-
-
-                   <!-- <group col="2">
+-->
+                    <group col="2">
                         <group align="left">
                             <div class="oe_title">
                                 <field name="image_small" widget="image" class="oe_avatar oe_left"/>
@@ -337,20 +337,22 @@
                             <div>
                                 <field name="name"/>
                                 <field name="site_id"/>
+                                <field name="description"/>
                             </div>
                         </group>
                     </group>
                     <notebook>
+<!--
                         <page string="Appearance">
                             <group col="4" string="Appearance">
                                 <field name="shape"/>
-                                <field name="color"/>
                                 <field name="position_h"/>
                                 <field name="position_v"/>
                                 <field name="width"/>
                                 <field name="height"/>
                             </group>
                         </page>
+-->
                         <page string='Devices'>
                             <field name="component_ids" context="{'default_parent_model': 'component.location', 'default_parent_id': active_id}">
                                 <tree string='Devices'>
@@ -367,7 +369,7 @@
                                 </tree>
                             </field>
                         </page>
-                    </notebook>-->
+                    </notebook>
                 </form>
             </field>
         </record>
@@ -381,8 +383,7 @@
             <field name="model">component.sublocation</field>
             <field name="arch" type="xml">
                 <form string="Sublocations">
-
-
+<!--
                     <table width="100%" cellspacing="2">
                         <tr>
                             <td width="13%"><div align="center">SubLocation name: </div></td>
@@ -409,10 +410,11 @@
                             <td> </td>
                         </tr>
                     </table>
+-->
 
 
 
-                    <!--   <group col="2">
+                       <group col="2">
                            <group align="left">
                                <div class="oe_title">
                                    <field name="image_small" widget="image" class="oe_avatar oe_left"/>
@@ -421,20 +423,22 @@
                                <div>
                                    <field name="name"/>
                                    <field name="location_id"/>
+                                   <field name="description"/>
                                </div>
                            </group>
                        </group>
                        <notebook>
+<!--
                            <page string="Appearance">
                                <group col="4" string="Appearance">
                                    <field name="shape"/>
-                                  &lt;!&ndash; <field name="color"/>&ndash;&gt;
                                    <field name="position_h"/>
                                    <field name="position_v"/>
                                    <field name="width"/>
                                    <field name="height"/>
                                </group>
                            </page>
+-->
                            <page string='Devices'>
                                <field name="component_ids">
                                    <tree string='Devices'>
@@ -443,7 +447,7 @@
                                    </tree>
                                </field>
                            </page>
-                       </notebook>-->
+                       </notebook>
                 </form>
             </field>
         </record>

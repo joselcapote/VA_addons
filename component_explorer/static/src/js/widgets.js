@@ -29,6 +29,12 @@ odoo.define('component_explorer.widgets', function (require) {
             this.load_project_data()
             this.$("#tree").css("height", "100%");
             this.$(".ui-fancytree").css("height", "100%");
+
+/*
+            alert(this.$(".fancytree-title").length);
+            this.$(".fancytree-title").addClass("fancytree-selector");
+            this.$(".fancytree-icon").addClass("fancytree-selector");
+*/
         },
         delete_selected: function (key) {
             var pair = key.split("_");
@@ -57,6 +63,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.tree = this.$el.fancytree({
                 extensions: ['contextMenu'],
                 contextMenu: {
+                    selector: "fancytree-selector",
                     menu: function(node){
                         if (node.key == "root"){
                             return {
@@ -162,6 +169,18 @@ odoo.define('component_explorer.widgets', function (require) {
                         }
                     }
                 },
+                expand: function(event, data){
+                    self.$('.fancytree-icon').addClass(function (index, currentClass) {
+                        if (!('fancytree-selector' in currentClass.split(/\s+/))){
+                            return 'fancytree-selector';
+                        }
+                    });
+                    self.$('.fancytree-title').addClass(function (index, currentClass) {
+                        if (!('fancytree-selector' in currentClass.split(/\s+/))){
+                            return 'fancytree-selector';
+                        }
+                    });
+                }
             });
             var self = this;
             var projectNode = self.$el.fancytree("getRootNode");

@@ -339,7 +339,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         start: function () {
             this._super();
             this.$(".o_cexplorer_sidebar_container").css("height", "100%");
-            $(".oe-right-toolbar").hide();
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
@@ -534,6 +533,8 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                                 self.process_dataset_command(model, id, withdata.component_ids[i]);
                             }
                         }
+                        var dataset = new data.DataSet(self, model, {});
+                        return dataset.write(id, withdata, {});
                     }
                 }).open();
                 self.prev_form_dialog.on('write_completed', self, function() {
@@ -753,7 +754,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                         }
                         var locations_domain = [["id", "in", locations]];
                         self.location_dataset = new data.DataSetSearch(self, "component.location", self.get_context(), locations_domain);
-                        alert(self.location_dataset.size());
                         self.load_treeview(locations_domain);
                     }
                 });
@@ -766,7 +766,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this.remove_record(this.project_dataset, id);
         },
         delete_site: function (id) {
-            alert('delete_site:'+id);
             this.remove_record(this.site_dataset, id);
         },
         remove_record: function (dataset, id) {

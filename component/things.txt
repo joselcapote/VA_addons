@@ -25,3 +25,4 @@ var img = new Image();
     }
  }
  todo: Arreglar el click derecho sobre la imagen del treeview
+ todo: Se muestra siempre el mismo sld

@@ -621,3 +621,17 @@ msgstr ""
 msgid "Yellow"
 msgstr ""
 
+#. module: component
+#: field:component.sld,single_line_diagram:0
+msgid "Single line diagram"
+msgstr ""
+
+#. module: component
+#: field:component.location,name:0
+msgid "Location name"
+msgstr ""
+
+#. module: component
+#: field:component.location,description:0
+msgid "Location description"
+msgstr ""
