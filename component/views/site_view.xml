@@ -170,20 +170,60 @@
             <field name="model">component.site</field>
             <field name="arch" type="xml">
                 <form string="Sites">
-                    <group col="4">
+
+                    <table width="100%" cellspacing="2">
+                        <tr>
+                            <td width="13%"><div align="center">Site name: </div></td>
+                            <td><div><field name="name"/></div> </td>
+                            <td width="13%"><div align="center">Project name: </div></td>
+                            <td><div><field name="project_id"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td height="70"><div align="center">Description:</div></td>
+                            <td><div><field name="description"/></div> </td>
+                            <td><div align="center">SLD:</div></td>
+                            <td><div><field name="image" widget="image"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </table>
+
+<!--
+                    <notebook>
+                        <page name="location" string="Locations">
+                            &lt;!&ndash;  <field name="company_id"/>&ndash;&gt;
+                            <field name="location_ids"/>
+                            &lt;!&ndash; <field name="scope_of_work"/>&ndash;&gt;
+                        </page>
+                    </notebook>-->
+
+
+
+                 
+                  <!--  <group col="4">
                         <field name="name"/>
                         <field name="project_id"/>
                         <field name="description"/>
-                        <!--<field name="pos_config_id" />-->
-                        <field name="image" widget="image"/>
+                        &lt;!&ndash;<field name="pos_config_id" />&ndash;&gt;
+                      &lt;!&ndash;  <field name="image" widget="image"/>&ndash;&gt;
                         <field name="single_line_diagram" widget="image"/>
                     </group>
                     <field name="location_ids">
-                        <tree string='Locations'>
+                       &lt;!&ndash; <tree string='Locations'>
                             <field name="name"/>
                             <field name="shape"/>
-                        </tree>
-                    </field>
+                        </tree>&ndash;&gt;
+                    </field>-->
                 </form>
             </field>
         </record>
@@ -251,12 +291,44 @@
             </field>
         </record>
 
+
+
+        <!--Location view-->
         <record model="ir.ui.view" id="view_site_location_form">
             <field name="name">Site Locations</field>
             <field name="model">component.location</field>
             <field name="arch" type="xml">
                 <form string="Sites Locations">
-                    <group col="2">
+
+                    <table width="100%" cellspacing="2">
+                        <tr>
+                            <td width="13%"><div align="center">Location name: </div></td>
+                            <td><div><field name="name"/></div> </td>
+                            <td width="13%"><div align="center">Site name: </div></td>
+                            <td><div><field name="site_id"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td height="70"><div align="center">Description:</div></td>
+                            <td><div><field name="description"/></div> </td>
+                            <td><div align="center">SLD:</div></td>
+                            <td><div><field name="single_line_diagram" widget="image" class="oe_avatar oe_left"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </table>
+
+
+                   <!-- <group col="2">
                         <group align="left">
                             <div class="oe_title">
                                 <field name="image_small" widget="image" class="oe_avatar oe_left"/>
@@ -295,48 +367,83 @@
                                 </tree>
                             </field>
                         </page>
-                    </notebook>
+                    </notebook>-->
                 </form>
             </field>
         </record>
+
+
+        <!--sublocation view-->
+
 
         <record model="ir.ui.view" id="view_site_sublocation_form">
             <field name="name">Site Sublocations</field>
             <field name="model">component.sublocation</field>
             <field name="arch" type="xml">
                 <form string="Sublocations">
-                    <group col="2">
-                        <group align="left">
-                            <div class="oe_title">
-                                <field name="image_small" widget="image" class="oe_avatar oe_left"/>
-                                <field name="single_line_diagram" widget="image" class="oe_avatar oe_left"/>
-                            </div>
-                            <div>
-                                <field name="name"/>
-                                <field name="location_id"/>
-                            </div>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Appearance">
-                            <group col="4" string="Appearance">
-                                <field name="shape"/>
-                                <field name="color"/>
-                                <field name="position_h"/>
-                                <field name="position_v"/>
-                                <field name="width"/>
-                                <field name="height"/>
-                            </group>
-                        </page>
-                        <page string='Devices'>
-                            <field name="component_ids" context="{'default_parent_model': 'component.sublocation', 'default_parent_id': active_id}">
-                                <tree string='Devices'>
-                                    <field name="name"/>
-                                    <field name="model"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+
+
+                    <table width="100%" cellspacing="2">
+                        <tr>
+                            <td width="13%"><div align="center">SubLocation name: </div></td>
+                            <td><div><field name="name"/></div> </td>
+                            <td width="13%"><div align="center">Location name: </div></td>
+                            <td><div><field name="location_id"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td height="70"><div align="center">Description:</div></td>
+                            <td><div><field name="description"/></div> </td>
+                            <td><div align="center">SLD:</div></td>
+                            <td><div><field name="single_line_diagram" widget="image" class="oe_avatar oe_left"/></div> </td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                    </table>
+
+
+
+                    <!--   <group col="2">
+                           <group align="left">
+                               <div class="oe_title">
+                                   <field name="image_small" widget="image" class="oe_avatar oe_left"/>
+                                   <field name="single_line_diagram" widget="image" class="oe_avatar oe_left"/>
+                               </div>
+                               <div>
+                                   <field name="name"/>
+                                   <field name="location_id"/>
+                               </div>
+                           </group>
+                       </group>
+                       <notebook>
+                           <page string="Appearance">
+                               <group col="4" string="Appearance">
+                                   <field name="shape"/>
+                                  &lt;!&ndash; <field name="color"/>&ndash;&gt;
+                                   <field name="position_h"/>
+                                   <field name="position_v"/>
+                                   <field name="width"/>
+                                   <field name="height"/>
+                               </group>
+                           </page>
+                           <page string='Devices'>
+                               <field name="component_ids">
+                                   <tree string='Devices'>
+                                       <field name="name"/>
+                                       <field name="model"/>
+                                   </tree>
+                               </field>
+                           </page>
+                       </notebook>-->
                 </form>
             </field>
         </record>

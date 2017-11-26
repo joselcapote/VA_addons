@@ -6,35 +6,81 @@
             <field name="model">component.project</field>
             <field name="arch" type="xml">
                 <form string="Project">
-                    <group col="4" align="left">
-                        <div class="oe_title">
-                            <field name="image" widget="image"  width="128px" height="128px" class="oe_avatar oe_left"/>
-                        </div>
-                        <div colspan="2">
-                            <field name="name"/>
-                            <field name="abstract"/>
-                            <field name="contract_no"/>
-                        </div>
-                        <div>
-                            <button type="object" class="oe_highlight" string="Document" name="action_get_attachment_tree_view"/>
-                            <group>
-                                <field name="attachment_number"/>
-                            </group>
-                        </div>
-                    </group>
+
+                    <table width="100%" cellspacing="2">
+                        <tr>
+                            <td  width="13%" style="vertical-align:bottom"><div align="center">Project Name:  </div></td>
+                            <td colspan="5"><field name="name"/></td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td width="13%" style="vertical-align:bottom"><div align="center">Customer:</div></td>
+                            <td><field name="company_id"/></td>
+                            <td width="13%" style="vertical-align:bottom"><div align="center">Contact:</div></td>
+                            <td><field name="company_id"/></td>
+                            <td width="13%" style="vertical-align:bottom"><div align="center">KRKA Manager:</div></td>
+                            <td><field name="company_id"/></td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        <tr>
+                            <td><div align="center">Scope of work: </div></td>
+                            <td colspan="5"><field name="scope_of_work"/></td>
+                        </tr>
+                        <tr>
+                            <td height="30"> </td>
+                        </tr>
+                    </table>
+
+                        <!--<group col="4" align="left">
+                           &lt;!&ndash; <div class="oe_title">
+                                <field name="image" widget="image"  width="128px" height="128px" class="oe_avatar oe_left"/>
+                            </div>&ndash;&gt;
+                            <div align="center">Project Name:  </div>
+                            <div colspan="2">
+
+                                <field name="name"/>
+                                <field name="abstract"/>
+                                <field name="contract_no"/>
+                            </div>
+                            <div>
+                                <button type="object" class="oe_highlight" string="Document" name="action_get_attachment_tree_view"/>
+                                <group>
+                                    <field name="attachment_number"/>
+                                </group>
+                            </div>
+                       </group>-->
                     <notebook>
-                        <page name="general_info" string="General">
-                            <field name="company_id"/>
+                        <page name="krka_user" string="KRKA User">
+                          <!--  <field name="company_id"/>-->
                             <field name="contacts"/>
-                            <field name="scope_of_work"/>
+                           <!-- <field name="scope_of_work"/>-->
                         </page>
-                        <page name="sites" string="Sites">
+                        <page name="project_user" string="Customer User">
+                            <!--  <field name="company_id"/>-->
+                            <field name="contacts"/>
+                            <!-- <field name="scope_of_work"/>-->
+                        </page>
+                       <!-- <page name="sites" string="Sites">
                             <field name="site_ids">
                                 <tree string='Sites'>
                                     <field name="name"/>
                                 </tree>
                             </field>
-                        </page>
+                        </page>-->
                     </notebook>
                 </form>
             </field>

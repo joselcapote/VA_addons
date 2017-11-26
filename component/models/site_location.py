@@ -80,7 +80,7 @@ class site(model_with_sld):
 
     _columns = {
         'name':             fields.char('Site Name', required=True, help='An internal identification of the Site'),
-        'description':      fields.char('Description', required=True, help='A description of the Site'),
+        'description':      fields.char('Description', size=255, required=False, help='A description of the Site'),
         'project_id':       fields.many2one('component.project','Project'),
         'location_ids':     fields.one2many('component.location', 'site_id', 'Location', help='The list of Location in this Site'),
         'sequence':         fields.integer('Sequence',help='Used to sort Sites'),
@@ -134,7 +134,6 @@ class site_location_base(model_with_sld):
         'position_v':   fields.float('Vertical Position', help="The location's vertical position from the top to the location's center, in pixels"),
         'width':        fields.float('Width',   help="The location's width in pixels"),
         'height':       fields.float('Height',  help="The location's height in pixels"),
-        'color':        fields.char('Color',    help="The location's color, expressed as a valid 'background' CSS property value"),
         'active':       fields.boolean('Active',help='If false, the location is deactivated and will not be available in the point of sale'),
     }
 
@@ -216,7 +215,7 @@ class site_location(model_with_sld):
         'site_id':      fields.many2one('component.site','Site', required=True),
         'sublocation_count': fields.function(_sublocation_count, string='Component count', type='integer'),
         'sublocation_ids':     fields.one2many('component.sublocation', 'location_id', 'Sub-locations', help='The list of sub-locations in this Location'),
-
+        'description':  fields.char('Description', size=255, required=False, help='A description of the Site'),
         'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.location')], string='Devices'),
         'component_count': fields.function(_component_count, string='Component count', type='integer'),
     }
@@ -252,6 +251,7 @@ class site_sublocation(model_with_sld):
         'location_id':      fields.many2one('component.location','Location', required=True),
         'component_ids': fields.one2many('component.component', 'parent_id', domain=[('parent_model', '=', 'component.sublocation')], string='Devices'),
         'component_count': fields.function(_component_count, string='Component count', type='integer'),
+        'description':  fields.char('Description', size=255, required=False, help='A description of the Site'),
     }
 
     def open_location_view(self, cr, uid, ids, context=None):
