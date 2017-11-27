@@ -223,7 +223,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             if (r){
                 this.view_manager.do_action(r, {
                     on_close: function() {
-                        alert("on_close");
+                        //alert("on_close");
                     },
                 });
             }
@@ -599,7 +599,18 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             var self = this;
             this.$("#map").detach();
             this.$(".o_cexplorer_sld").show();
-            this.$(".o_cexplorer_sld").append("<div id='map' style='width: 800px; height: 400px' />");
+            var width = 800;
+            var height = 400;
+            var sld_element = document.getElementsByClassName("o_cexplorer_sld").item(0);
+            if (sld_element.clientWidth > 0){
+                width = sld_element.clientWidth;
+            }
+            if (sld_element.clientHeight > 0){
+                height = sld_element.clientHeight;
+            }
+            var map_div = "<div id='map' style='width: "+width+"px; height: "+height+"px' />";
+            alert(map_div);
+            this.$(".o_cexplorer_sld").append(map_div);
             OpenLayers.ImgPath = "/component/static/lib/OpenLayers/img/";
             this.map = new OpenLayers.Map("map");
             //this.map.updateSize();

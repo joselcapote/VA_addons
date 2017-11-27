@@ -780,7 +780,7 @@ odoo.define('component_explorer.widgets', function (require) {
                     self.prev_form_dialog.destroy();
                 }
                 context.view_id= view.id;
-                alert(JSON.stringify(context));
+                //alert(JSON.stringify(context));
                 self.prev_form_dialog = new form_common.FormViewDialog(self, context).open();
             });
         },
@@ -793,7 +793,10 @@ odoo.define('component_explorer.widgets', function (require) {
                     self.prev_form_dialog = new form_common.FormViewDialog(self, action).open();
                 });
             }else{
-                return this._super.row_clicked(event); // The record can't be edited so open it in a modal (use-case: readonly mode)
+                $(this).trigger(
+                    'row_link',
+                    [this.dataset.ids[this.dataset.index],
+                        this.dataset, view]);
             }
         },
     });
