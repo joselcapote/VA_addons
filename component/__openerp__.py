@@ -26,7 +26,6 @@ Support following feature:
                 'mail',
                 'web',
                 'component_explorer',
-                'component_plane',
                 ],
 
     'demo': ['component_demo.xml'],
@@ -34,7 +33,6 @@ Support following feature:
         'security/component_security.xml',
         'security/ir.model.access.csv',
         'views/component_explorer.xml',
-        'views/component_plane.xml',
         'views/component_view.xml',
         'views/component_view_lv_ac_cable.xml',
         'views/component_view_lv_cb.xml',

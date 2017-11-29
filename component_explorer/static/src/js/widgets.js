@@ -203,6 +203,16 @@ odoo.define('component_explorer.widgets', function (require) {
                 rootNode.toggleExpanded();
                 self.load_site_data();
             });
+            self.$('.fancytree-icon').addClass(function (index, currentClass) {
+                if (!('fancytree-selector' in currentClass.split(/\s+/))){
+                    return 'fancytree-selector';
+                }
+            });
+            self.$('.fancytree-title').addClass(function (index, currentClass) {
+                if (!('fancytree-selector' in currentClass.split(/\s+/))){
+                    return 'fancytree-selector';
+                }
+            });
         },
         load_site_data: function () {
             this.site_model = new Model('component.site');
