@@ -334,25 +334,24 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         start: function () {
             this._super();
             this.$(".o_cexplorer_sidebar_container").css("height", "100%");
-            $(".nav-tabs").addClass("test_class");
-/*
-            each(function(index) {
-                switch (index){
-                    case 0:
-                        $( this ).addClass( "explorer_page" );
-                        break;
-                    case 1:
-                        $( this ).addClass( "properties_page" );
-                        break;
-                    case 2:
-                        $( this ).addClass( "sld_page" );
-                        break;
-                }
-            });
-*/
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
+
+            this.$('[role="tab"]').each(function(index) {
+                 switch (index){
+                     case 0:
+                         $( this ).parent().addClass( "explorer_page" );
+                         break;
+                     case 1:
+                         $( this ).parent().addClass( "properties_page" );
+                         break;
+                     case 2:
+                         $( this ).parent().addClass( "sld_page" );
+                         break;
+                 }
+            });
+
             this.load_treeview();
         },
         load_devices: function () {
@@ -588,6 +587,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         //Single Line Diagram View
         hide_sld_view: function () {
             this.$(".o_cexplorer_sld").hide();
+            this.$(".sld_page").css( "visibility", "hidden" );
         },
         fix_bounds: function (bounds, width, height) {
             var scale_factor = width/height;
@@ -604,6 +604,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             var self = this;
             this.$("#map").detach();
             this.$(".o_cexplorer_sld").show();
+            this.$(".sld_page").css( "visibility", "visible" );
             var width = 800;
             var height = 400;
             var sld_element = document.getElementsByClassName("o_cexplorer_sld").item(0);
