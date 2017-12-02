@@ -26,15 +26,10 @@ odoo.define('component_explorer.widgets', function (require) {
         },
         appendTo: function (target) {
             this._super(target);
-            this.load_project_data()
+            this.load_project_data();
+            this.activate_node_by_key('root');
             this.$("#tree").css("height", "100%");
             this.$(".ui-fancytree").css("height", "100%");
-
-/*
-            alert(this.$(".fancytree-title").length);
-            this.$(".fancytree-title").addClass("fancytree-selector");
-            this.$(".fancytree-icon").addClass("fancytree-selector");
-*/
         },
         delete_selected: function (key) {
             var pair = key.split("_");
@@ -152,9 +147,6 @@ odoo.define('component_explorer.widgets', function (require) {
                         var id = pair[1];
                         self.getParent().update_view(pair[0], id);
                     }
-                    var tree = self.$el.fancytree("getTree");
-                    //data.node.setActive(false);
-                    //data.node.setFocus();
                 },
                 expand: function(event, data){
                     self.$('.fancytree-icon').addClass(function (index, currentClass) {
@@ -266,6 +258,10 @@ odoo.define('component_explorer.widgets', function (require) {
             var tree = this.$el.fancytree("getTree");
             tree.activateKey(type+"_"+site);
         },
+        activate_node_by_key: function (key) {
+            var tree = this.$el.fancytree("getTree");
+            tree.activateKey(key);
+        },
         activate_node_by_model: function (model, id) {
             var type = model.split('\.')[1];
             this.activate_node(type, id);
@@ -320,6 +316,9 @@ odoo.define('component_explorer.widgets', function (require) {
         add_record: function() {
             this.cexplorer_view.add_record();
         },
+        get_treeview: function () {
+            return this.getParent().getParent().list_view;
+        },
         show_component_view: function (model, id) {
             this.parent.show_component_view(model, id);
         },
@@ -339,21 +338,23 @@ odoo.define('component_explorer.widgets', function (require) {
         }
     });
 
-    var LocationView = Widget.extend({
-        init: function (parent, parent_id) {
+    var BaseKanbanView  = Widget.extend({
+        init: function (parent, parent_model, parent_id) {
             this._super(parent);
             this.parent_id = parent_id;
-            this.current_model = "component.location";
-            this.dataset = new data.DataSetSearch(this, this.current_model, {
-                default_site_id: parent_id,
-            });
+            this.current_model = parent_model;
+            this.dataset = new data.DataSetSearch(this, this.current_model, null);
             this.view_model = new Model('ir.ui.view');
         },
         appendTo: function (target) {
             this._super(target);
             this.load(target)
         },
-        get_default_kanban_options: function (concept) {
+        get_context: function () {
+            return {
+            }
+        },
+        get_default_kanban_options: function () {
             return {
                 // records can be selected one by one
                 selectable: true,
@@ -362,7 +363,7 @@ odoo.define('component_explorer.widgets', function (require) {
                 // whether the column headers should be displayed
                 header: true,
                 // display addition button, with that label
-                addable: _lt("Create "+concept),
+                addable: _lt("Create"),
                 // whether the list view can be sorted, note that once a view has been
                 // sorted it can not be reordered anymore
                 sortable: false,
@@ -373,210 +374,100 @@ odoo.define('component_explorer.widgets', function (require) {
                 disable_editable_mode: false,
                 editable: 'top',
                 creatable: true,
-                context: {
-                    default_location_id: this.current_location,
-                    default_site_id: this.current_site,
-                }
+                context: this.get_context()
             };
         },
-        get_sublocation_domain: function () {
+        get_domain: function () {
+            return [[]];
+        },
+        load: function (target) {
+            var self = this;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.remove_any_previous_view(target);
+            }
+            this.view_model.query(['id','name','type']).filter([['name','=',this.get_view_name()]]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options());
+                self.right_panel_view.appendTo(self.target);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    var context = self.get_context();
+                    var domain = self.get_domain();
+                    //alert(JSON.stringify(context)+'\n'+JSON.stringify(domain));
+                    self.right_panel_view.do_search(domain, context, []);
+                })
+                self.getParent().right_panel_view = self.right_panel_view;
+            });
+        }
+    });
+
+    var LocationView = BaseKanbanView.extend({
+        init: function (parent, parent_id) {
+            this._super(parent, 'component.location', parent_id);
+        },
+        get_view_name: function () {
+            return 'Location Kanban Explorer';
+        },
+        get_domain: function () {
             return [["site_id","=",Number(this.parent_id)]];
         },
-        load: function (target) {
-            var self = this;
-            this.target = target;
-            var cexplorer = this.getParent();
-            if (cexplorer['list_view']){
-                cexplorer.list_view.activate_location_node(location);
-                cexplorer.remove_any_previous_view(target);
-            }
-            this.view_model.query(['id','name','type']).filter([['name','=','Location Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("location"));
-                self.right_panel_view.appendTo(self.target);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    var context = {default_location_id: self.parent_id};
-                    var domain = self.get_sublocation_domain();
-                    self.right_panel_view.do_search(domain, context, []);
-                })
-                self.getParent().right_panel_view = self.right_panel_view;
-            });
-        }
-    });
-
-    var ProjectView = Widget.extend({
-        init: function (parent) {
-            this._super(parent);
-            this.current_model = "component.project";
-            this.dataset = new data.DataSetSearch(this, this.current_model, {});
-            this.view_model = new Model('ir.ui.view');
-        },
-        appendTo: function (target) {
-            this._super(target);
-            this.load(target)
-        },
-        get_default_kanban_options: function (concept) {
+        get_context: function () {
             return {
-                // records can be selected one by one
-                selectable: true,
-                // list rows can be deleted
-                deletable: false,
-                // whether the column headers should be displayed
-                header: true,
-                // display addition button, with that label
-                addable: _lt("Create "+concept),
-                // whether the list view can be sorted, note that once a view has been
-                // sorted it can not be reordered anymore
-                sortable: false,
-                // whether the view rows can be reordered (via vertical drag & drop)
-                reorderable: false,
-                action_buttons: true,
-                //whether the editable property of the view has to be disabled
-                disable_editable_mode: false,
-                editable: 'top',
-                creatable: true,
-                context: {
-                }
-            };
-        },
-        load: function (target) {
-            var self = this;
-            this.target = target;
-            var cexplorer = this.getParent();
-            if (cexplorer['list_view']){
-                cexplorer.list_view.activate_location_node(location);
-                cexplorer.remove_any_previous_view(target);
+                default_site_id: this.parent_id,
             }
-            this.view_model.query(['id','name','type']).filter([['name','=','Project Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, {});
-                self.right_panel_view.appendTo(self.target);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_search([], {}, []);
-                })
-                self.getParent().right_panel_view = self.right_panel_view;
-            });
-        }
+        },
     });
 
-    var SiteView = Widget.extend({
-        init: function (parent) {
-            this._super(parent);
-            this.current_model = "component.site";
-            this.dataset = new data.DataSetSearch(this, this.current_model, {});
-            this.view_model = new Model('ir.ui.view');
-        },
-        appendTo: function (target) {
-            this._super(target);
-            this.load(target)
-        },
-        get_default_kanban_options: function (concept) {
-            return {
-                // records can be selected one by one
-                selectable: true,
-                // list rows can be deleted
-                deletable: false,
-                // whether the column headers should be displayed
-                header: true,
-                // display addition button, with that label
-                addable: _lt("Create "+concept),
-                // whether the list view can be sorted, note that once a view has been
-                // sorted it can not be reordered anymore
-                sortable: false,
-                // whether the view rows can be reordered (via vertical drag & drop)
-                reorderable: false,
-                action_buttons: true,
-                //whether the editable property of the view has to be disabled
-                disable_editable_mode: false,
-                editable: 'top',
-                creatable: true,
-                context: {
-                }
-            };
-        },
-        load: function (target) {
-            var self = this;
-            this.target = target;
-            var cexplorer = this.getParent();
-            if (cexplorer['list_view']){
-                cexplorer.list_view.activate_location_node(location);
-                cexplorer.remove_any_previous_view(target);
-            }
-            this.view_model.query(['id','name','type']).filter([['name','=','Site Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, {});
-                self.right_panel_view.appendTo(self.target);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_search([], {}, []);
-                })
-                self.getParent().right_panel_view = self.right_panel_view;
-            });
-        }
-    });
-
-    var SubLocationView = Widget.extend({
+    var ProjectView = BaseKanbanView.extend({
         init: function (parent, parent_id) {
-            this._super(parent);
-            this.parent_id = parent_id;
-            this.current_model = "component.sublocation";
-            this.dataset = new data.DataSetSearch(this, this.current_model, {
-                default_location_id: parent_id,
-            });
-            this.view_model = new Model('ir.ui.view');
+            this._super(parent, 'component.project', -1);
         },
-        appendTo: function (target) {
-            this._super(target);
-            this.load(target)
+        get_view_name: function () {
+            return 'Project Kanban Explorer';
         },
-        get_default_kanban_options: function (concept) {
+        get_domain: function () {
+            return [];
+        },
+        get_context: function () {
             return {
-                // records can be selected one by one
-                selectable: true,
-                // list rows can be deleted
-                deletable: false,
-                // whether the column headers should be displayed
-                header: true,
-                // display addition button, with that label
-                addable: _lt("Create "+concept),
-                // whether the list view can be sorted, note that once a view has been
-                // sorted it can not be reordered anymore
-                sortable: false,
-                // whether the view rows can be reordered (via vertical drag & drop)
-                reorderable: false,
-                action_buttons: true,
-                //whether the editable property of the view has to be disabled
-                disable_editable_mode: false,
-                editable: 'top',
-                creatable: true,
-                context: {
-                    default_location_id: this.current_location,
-                    default_site_id: this.current_site,
-                }
-            };
+
+            }
         },
-        get_sublocation_domain: function () {
+    });
+
+    var SiteView = BaseKanbanView.extend({
+        init: function (parent, parent_id) {
+            this._super(parent, 'component.site', parent_id);
+        },
+        get_view_name: function () {
+            return 'Site Kanban Explorer';
+        },
+        get_domain: function () {
+            return [["project_id","=",Number(this.parent_id)]];
+        },
+        get_context: function () {
+            return {
+                default_project_id: this.parent_id,
+            }
+        },
+    });
+
+    var SubLocationView = BaseKanbanView.extend({
+        init: function (parent, parent_id) {
+            this._super(parent, 'component.sublocation', parent_id);
+        },
+        get_view_name: function () {
+            return 'Sublocation Kanban Explorer';
+        },
+        get_domain: function () {
             return [["location_id","=",Number(this.parent_id)]];
         },
-        load: function (target) {
-            var self = this;
-            this.target = target;
-            var cexplorer = this.getParent();
-            if (cexplorer['list_view']){
-                cexplorer.list_view.activate_location_node(location);
-                cexplorer.remove_any_previous_view(target);
+        get_context: function () {
+            return {
+                default_location_id: this.parent_id,
             }
-            this.view_model.query(['id','name','type']).filter([['name','=','Sublocation Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, self.get_default_kanban_options("sublocation"));
-                self.right_panel_view.appendTo(self.target);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    var context = {default_location_id: self.parent_id};
-                    var domain = self.get_sublocation_domain();
-                    self.right_panel_view.do_search(domain, context, []);
-                })
-                self.getParent().right_panel_view = self.right_panel_view;
-            });
-        }
+        },
     });
 
     var ComponentsView = Widget.extend({
@@ -629,7 +520,6 @@ odoo.define('component_explorer.widgets', function (require) {
             this.target = target;
             var cexplorer = this.getParent();
             if (cexplorer['list_view']){
-                cexplorer.list_view.activate_location_node(location);
                 cexplorer.remove_any_previous_view(target);
             }
             this.view_model.query(['id','name','type']).filter([['name','=','Component Kanban']]).first().then(function(view) {
@@ -640,6 +530,15 @@ odoo.define('component_explorer.widgets', function (require) {
                     var context = {default_parent_id: self.parent_id, default_parent_model: self.parent_model};
                     var domain = self.get_component_domain();
                     self.right_panel_view.do_search(domain, context, []);
+                    var $kanban_action = self.$('.oe_kanban_action');
+/*
+                    $('<span>')
+                        .addClass('fa fa-trash-o')
+                        .click(function (event) {
+                            alert(delete)
+                        })
+                        .appendTo($kanban_action);
+*/
                 })
                 self.getParent().right_panel_view = self.right_panel_view;
             });

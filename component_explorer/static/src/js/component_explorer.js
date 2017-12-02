@@ -38,17 +38,12 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             return false;
         },
         on_card_clicked: function () {
-            if (this.model === 'component.site') {
-                if (this.valid("show_location_view")){
-                    this.getParent().getParent().show_location_view(this.id);
-                }
-            } else if (this.model === 'component.location') {
-                if (this.valid("show_location_mixed_view")){
-                    this.getParent().getParent().show_location_mixed_view(this.id);
-                }
-            } else if (this.model === 'component.sublocation') {
-                if (this.valid("show_component_view")){
-                    this.getParent().getParent().show_component_view(this.model, this.id);
+            if ((this.model == 'component.project')||(this.model === 'component.site')||
+                (this.model === 'component.location')||(this.model === 'component.sublocation'))
+            {
+                var tree = this.getParent().get_treeview();
+                if (tree){
+                    tree.activate_node_by_model(this.model, this.id);
                 }
             } else {
                 this._super.apply(this, arguments);
@@ -339,14 +334,26 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         start: function () {
             this._super();
             this.$(".o_cexplorer_sidebar_container").css("height", "100%");
+            $(".nav-tabs").addClass("test_class");
+/*
+            each(function(index) {
+                switch (index){
+                    case 0:
+                        $( this ).addClass( "explorer_page" );
+                        break;
+                    case 1:
+                        $( this ).addClass( "properties_page" );
+                        break;
+                    case 2:
+                        $( this ).addClass( "sld_page" );
+                        break;
+                }
+            });
+*/
             var self = this;
             this.view_model = new Model('ir.ui.view');
             this.process_notebook(this.$("notebook"));
             this.load_treeview();
-            //creando la vista de kanban para los locations, debe tener un resumen de los objetos que contiene y poder navegar
-            // hacia adentro
-            this.show_location_view();
-            //this.load_devices();
         },
         load_devices: function () {
             var self = this;
@@ -545,7 +552,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         show_site_view: function (project) {
             this.right_panel_parent = this.$(".o_cexplorer_view");
             this.$(".o_cexplorer_view").children().remove();
-            var site_view = new widgets.SiteView(this);
+            var site_view = new widgets.SiteView(this, project);
             site_view.appendTo(this.right_panel_parent);
         },
         show_project_view: function () {
@@ -668,6 +675,16 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             var component_view = new widgets.ComponentsView(this, id, model);
             component_view.appendTo(component_view_parent);
         },
+        get_parent_model: function (model) {
+            if (model == 'component.site'){
+                return 'component.project';
+            }else if (model == 'component.location'){
+                return 'component.site';
+            }else if (model == 'component.sublocation'){
+                return 'component.location';
+            }
+            return null;
+        },
         do_switch_view: function(model, context){
             var self = this;
             this.view_model.query(['id','name','type']).filter([['model','=',model], ['type','=','form']]).first().then(function(view) {
@@ -686,8 +703,10 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                             $.when(self.prev_form_dialog.view_form.save()).done(function() {
                                 self.prev_form_dialog.close();
                                 var id = -1;
+                                var parent_model = self.get_parent_model(model);
                                 if (context['default_parent_id']){
                                     id = context['default_parent_id'];
+                                    parent_model = context['default_parent_model'];
                                 }else if (context['default_site_id']){
                                     id = context['default_site_id'];
                                 }else if (context['default_location_id']){
@@ -696,9 +715,12 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                                     id = context['default_project_id'];
                                 }
                                 if (id != -1){
-                                    self.list_view.activate_node_by_model(model, id);
+                                    $.when(self.list_view.reload_content()).then(function () {
+                                        self.list_view.activate_node_by_model(model, id);
+                                    });
+                                }else{
+                                    self.list_view.activate_node_by_key('root');
                                 }
-
                             });
                         }},
                         {text: _t("Close"), close: true}
