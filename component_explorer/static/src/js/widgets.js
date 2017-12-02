@@ -150,24 +150,11 @@ odoo.define('component_explorer.widgets', function (require) {
                         var pair = data.node.key.split("_");
                         var model = "component."+pair[0];
                         var id = pair[1];
-                        if (pair[0] == 'project') {
-                            self.getParent().show_site_view(id);
-                            self.getParent().show_property_view(model, id);
-                            self.getParent().hide_sld_view();
-                        } else if (pair[0] == 'site') {
-                            self.getParent().show_location_view(id);
-                            self.getParent().show_property_view(model, id);
-                            self.getParent().show_sld_view(model, id);
-                        } else if (pair[0] == 'location') {
-                            self.getParent().show_location_mixed_view(id);
-                            self.getParent().show_property_view(model, id);
-                            self.getParent().show_sld_view(model, id);
-                        } else if (pair[0] == 'sublocation') {
-                            self.getParent().show_component_view(model, id);
-                            self.getParent().show_property_view(model, id);
-                            self.getParent().show_sld_view(model, id);
-                        }
+                        self.getParent().update_view(pair[0], id);
                     }
+                    var tree = self.$el.fancytree("getTree");
+                    //data.node.setActive(false);
+                    //data.node.setFocus();
                 },
                 expand: function(event, data){
                     self.$('.fancytree-icon').addClass(function (index, currentClass) {
@@ -275,20 +262,13 @@ odoo.define('component_explorer.widgets', function (require) {
             root.removeChildren();
             this.load_project_data();
         },
-        deactivate_lastnode: function () {
-            if (this.lastActive != null){
-                this.lastActive.setSelected(false);
-            }
-        },
         activate_node: function (type, site) {
-            this.deactivate_lastnode();
             var tree = this.$el.fancytree("getTree");
-            var active = tree.getNodeByKey(type+"_"+site);
-            if (active != null){
-                active.makeVisible();
-                active.setFocus();
-                this.lastActive = active;
-            }
+            tree.activateKey(type+"_"+site);
+        },
+        activate_node_by_model: function (model, id) {
+            var type = model.split('\.')[1];
+            this.activate_node(type, id);
         },
         activate_site_node: function (site) {
             this.activate_node("site", site);
@@ -468,6 +448,61 @@ odoo.define('component_explorer.widgets', function (require) {
                 cexplorer.remove_any_previous_view(target);
             }
             this.view_model.query(['id','name','type']).filter([['name','=','Project Kanban Explorer']]).first().then(function(view) {
+                self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, {});
+                self.right_panel_view.appendTo(self.target);
+                self.right_panel_view.load_view();
+                self.right_panel_view.on("view_loaded", self, function (fields_view) {
+                    self.right_panel_view.do_search([], {}, []);
+                })
+                self.getParent().right_panel_view = self.right_panel_view;
+            });
+        }
+    });
+
+    var SiteView = Widget.extend({
+        init: function (parent) {
+            this._super(parent);
+            this.current_model = "component.site";
+            this.dataset = new data.DataSetSearch(this, this.current_model, {});
+            this.view_model = new Model('ir.ui.view');
+        },
+        appendTo: function (target) {
+            this._super(target);
+            this.load(target)
+        },
+        get_default_kanban_options: function (concept) {
+            return {
+                // records can be selected one by one
+                selectable: true,
+                // list rows can be deleted
+                deletable: false,
+                // whether the column headers should be displayed
+                header: true,
+                // display addition button, with that label
+                addable: _lt("Create "+concept),
+                // whether the list view can be sorted, note that once a view has been
+                // sorted it can not be reordered anymore
+                sortable: false,
+                // whether the view rows can be reordered (via vertical drag & drop)
+                reorderable: false,
+                action_buttons: true,
+                //whether the editable property of the view has to be disabled
+                disable_editable_mode: false,
+                editable: 'top',
+                creatable: true,
+                context: {
+                }
+            };
+        },
+        load: function (target) {
+            var self = this;
+            this.target = target;
+            var cexplorer = this.getParent();
+            if (cexplorer['list_view']){
+                cexplorer.list_view.activate_location_node(location);
+                cexplorer.remove_any_previous_view(target);
+            }
+            this.view_model.query(['id','name','type']).filter([['name','=','Site Kanban Explorer']]).first().then(function(view) {
                 self.right_panel_view = new CExplorerKanbanView(self, self.dataset, view.id, {});
                 self.right_panel_view.appendTo(self.target);
                 self.right_panel_view.load_view();
@@ -817,6 +852,7 @@ odoo.define('component_explorer.widgets', function (require) {
         ComponentsView: ComponentsView,
         LocationView: LocationView,
         ProjectView: ProjectView,
+        SiteView: SiteView,
         SublocationComponentMixedView: SublocationComponentMixedView,
     };
 });

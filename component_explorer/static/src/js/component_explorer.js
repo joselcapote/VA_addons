@@ -543,27 +543,14 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             });
         },
         show_site_view: function (project) {
-            var self = this;
             this.right_panel_parent = this.$(".o_cexplorer_view");
-            this.current_project = project;
-            this.current_model = "component.site";
-            this.list_view.activate_project_node(project);
-            this.remove_any_previous_view();
-            this.view_model.query(['id','name','type']).filter([['name','=','Site Kanban Explorer']]).first().then(function(view) {
-                self.right_panel_view = new widgets.CExplorerKanbanView(self, self.site_dataset, view.id, self.get_default_kanban_options("location"));
-                self.right_panel_view.appendTo(self.right_panel_parent);
-                self.right_panel_view.load_view();
-                self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                    self.right_panel_view.do_search(self.get_project_domain(self.current_project), self.options.context, []);
-                    $(".oe_delete_item").on("click", function () {
-
-                    });
-                    self.active_view = self.right_panel_parent;
-                })
-            });
+            this.$(".o_cexplorer_view").children().remove();
+            var site_view = new widgets.SiteView(this);
+            site_view.appendTo(this.right_panel_parent);
         },
         show_project_view: function () {
             this.right_panel_parent = this.$(".o_cexplorer_view");
+            this.$(".o_cexplorer_view").children().remove();
             var project_view = new widgets.ProjectView(this);
             project_view.appendTo(this.right_panel_parent);
         },
@@ -595,6 +582,17 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         hide_sld_view: function () {
             this.$(".o_cexplorer_sld").hide();
         },
+        fix_bounds: function (bounds, width, height) {
+            var scale_factor = width/height;
+            var cy = (bounds.bottom + bounds.top)/2;
+            // alert(cy+','+bounds.bottom);
+            var new_height = bounds.getWidth()/scale_factor;
+            // alert(new_height);
+            var image_bounds = new OpenLayers.Bounds(bounds.left, cy-(new_height/2), bounds.right, cy+(new_height/2));
+            image_bounds = image_bounds.scale(0.25);
+            return image_bounds;
+            // return bounds;
+        },
         show_sld_view: function (model, id) {
             var self = this;
             this.$("#map").detach();
@@ -609,61 +607,56 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 height = sld_element.clientHeight;
             }
             var map_div = "<div id='map' style='width: "+width+"px; height: "+height+"px' />";
-            alert(map_div);
             this.$(".o_cexplorer_sld").append(map_div);
             OpenLayers.ImgPath = "/component/static/lib/OpenLayers/img/";
-            this.map = new OpenLayers.Map("map");
-            //this.map.updateSize();
+            var bounds = new OpenLayers.Bounds(-180, -90, 180, 90);
+            var options = {
+                projection: "EPSG:4326",
+                restrictedExtent: bounds,
+                center: bounds.getCenterLonLat(),
+                zoom: 5,
+            };
+            this.map = new OpenLayers.Map("map", options);
+            var base_layer = new OpenLayers.Layer.Image(
+                "Base",
+                "/component_explorer/static/bg_layer.png",
+                bounds,
+                new OpenLayers.Size(2048, 1024),
+                {}
+            );
+            this.map.addLayer(base_layer);
             this.datasets.get_dataset(model).read_slice([], [["id","=",Number(id)]]).done(function (records) {
                 if (records.length != 0){
                     if ((records[0]['single_line_diagram'] != undefined)&&(records[0]['single_line_diagram'] != null)){
                         var src = "data:image/png;base64,"+ records[0]['single_line_diagram'];
-                        var bounds = new OpenLayers.Bounds(-180, -88.759, 180, 88.759);
-
                         var img = new Image();
                         img.src = src;
                         img.onload = function() {
-                            self.imageLayer = new OpenLayers.Layer.Image(
+                            var img_bounds = self.fix_bounds(bounds, img.width, img.height);
+                            var imageLayer = new OpenLayers.Layer.Image(
                                 "Single Line Diagram",
                                 src,
-                                bounds,
+                                img_bounds,
                                 new OpenLayers.Size(img.width, img.height),
-                                {numZoomLevels: 3}
+                                {isBaseLayer: false, alwaysInRange: true}
                             );
-                            self.map.addLayer(self.imageLayer);
-                            self.map.zoomToExtent(bounds);
+                            self.map.addLayer(imageLayer);
+                            self.map.zoomToMaxExtent();
                         }
                     }
                 }
             })
         },
-        load_location_view: function (view) {
-            var self = this;
-            self.right_panel_view = new widgets.CExplorerKanbanView(self, self.location_dataset, view.id, self.get_default_kanban_options("location"));
-            self.right_panel_view.appendTo(self.right_panel_parent);
-            self.right_panel_view.load_view();
-            self.right_panel_view.on("view_loaded", self, function (fields_view) {
-                self.right_panel_view.do_search(self.get_site_domain(self.current_site), self.options.context, []);
-                $(".oe_delete_item").on("click", function () {
-
-                });
-                $(".o-kanban-button-new").parent().detach();
-                self.active_view = self.right_panel_parent;
-            })
-
-        },
         show_location_view: function (site) {
             this.right_panel_parent = this.$(".o_cexplorer_view");
+            this.$(".o_kanban_view").remove();
             var location_view = new widgets.LocationView(this, site);
             location_view.appendTo(this.right_panel_parent);
         },
-        show_location_mixed_view: function (sublocation) {
+        show_location_mixed_view: function (location) {
             this.right_panel_parent = this.$(".o_cexplorer_view");
-            var prev_view = this.$(".oe_mixed_view");
-            if (prev_view){
-                prev_view.detach();
-            }
-            var component_view = new widgets.SublocationComponentMixedView(this, sublocation);
+            this.$(".oe_mixed_view").remove();
+            var component_view = new widgets.SublocationComponentMixedView(this, location);
             component_view.appendTo(this.right_panel_parent);
         },
         show_component_view: function (model, id, where) {
@@ -692,18 +685,50 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                         {text: _t("Save"), classes: 'btn-primary', close: true, click: function() {
                             $.when(self.prev_form_dialog.view_form.save()).done(function() {
                                 self.prev_form_dialog.close();
-                                if (self.current_model == "component.component"){
-                                    self.show_component_view(self.current_location);
-                                }else{
-                                    self.show_location_view(self.current_site);
-                                    self.list_view.reload_content();
+                                var id = -1;
+                                if (context['default_parent_id']){
+                                    id = context['default_parent_id'];
+                                }else if (context['default_site_id']){
+                                    id = context['default_site_id'];
+                                }else if (context['default_location_id']){
+                                    id = context['default_location_id'];
+                                }else if (context['default_project_id']){
+                                    id = context['default_project_id'];
                                 }
+                                if (id != -1){
+                                    self.list_view.activate_node_by_model(model, id);
+                                }
+
                             });
                         }},
                         {text: _t("Close"), close: true}
                     ]
                 }).open();
             });
+        },
+        update_view_by_model: function (model, id) {
+            var predicate = model.split('\.')[1];
+            this.update_view(predicate, id);
+        },
+        update_view: function (model_predicate, id) {
+            var full_model = 'component.'+model_predicate;
+            if (model_predicate == 'project') {
+                this.show_site_view(id);
+                this.show_property_view(full_model, id);
+                this.hide_sld_view();
+            } else if (model_predicate == 'site') {
+                this.show_location_view(id);
+                this.show_property_view(full_model, id);
+                this.show_sld_view(full_model, id);
+            } else if (model_predicate == 'location') {
+                this.show_location_mixed_view(id);
+                this.show_property_view(full_model, id);
+                this.show_sld_view(full_model, id);
+            } else if (model_predicate == 'sublocation') {
+                this.show_component_view(full_model, id);
+                this.show_property_view(full_model, id);
+                this.show_sld_view(full_model, id);
+            }
         },
         add_record: function(model, context) {
             if (model){
