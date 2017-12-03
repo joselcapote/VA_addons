@@ -38,7 +38,6 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             return false;
         },
         on_card_clicked: function () {
-            alert(this.model+","+this.id);
             if ((this.model == 'component.project')||(this.model == 'component.site')||
                 (this.model == 'component.location')||(this.model == 'component.sublocation'))
             {
@@ -366,6 +365,9 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     self.device_view.do_search(self.get_device_domain(), self.options.context, []);
                 })
             });
+        },
+        get_treeview: function () {
+            return this.list_view;
         },
         load_treeview: function () {
             if ((this.$("#tree")) != undefined){
@@ -718,7 +720,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                                 }
                                 if (id != -1){
                                     $.when(self.list_view.reload_content()).then(function () {
-                                        self.list_view.activate_node_by_model(model, id);
+                                        self.list_view.activate_node_by_model(parent_model, id);
                                     });
                                 }else{
                                     self.list_view.activate_node_by_key('root');

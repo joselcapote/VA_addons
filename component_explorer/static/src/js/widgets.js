@@ -317,7 +317,11 @@ odoo.define('component_explorer.widgets', function (require) {
             this.cexplorer_view.add_record();
         },
         get_treeview: function () {
-            return this.getParent().getParent().list_view;
+            var tree = this.getParent().get_treeview();
+            if (!tree){
+                tree = this.getParent().getParent().get_treeview();
+            }
+            return tree;
         },
         show_component_view: function (model, id) {
             this.parent.show_component_view(model, id);
@@ -345,6 +349,9 @@ odoo.define('component_explorer.widgets', function (require) {
             this.current_model = parent_model;
             this.dataset = new data.DataSetSearch(this, this.current_model, null);
             this.view_model = new Model('ir.ui.view');
+        },
+        get_treeview : function () {
+            return this.getParent().get_treeview();
         },
         appendTo: function (target) {
             this._super(target);
@@ -553,6 +560,9 @@ odoo.define('component_explorer.widgets', function (require) {
             this.parent_model = "component.location";
             this.node_name = this.parent_model.split(".")[1]+"_"+parent_id;
             this.view_model = new Model('ir.ui.view');
+        },
+        get_treeview: function () {
+            return this.getParent().list_view;
         },
         appendTo: function (target) {
             this._super(target);
