@@ -38,8 +38,9 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             return false;
         },
         on_card_clicked: function () {
-            if ((this.model == 'component.project')||(this.model === 'component.site')||
-                (this.model === 'component.location')||(this.model === 'component.sublocation'))
+            alert(this.model+","+this.id);
+            if ((this.model == 'component.project')||(this.model == 'component.site')||
+                (this.model == 'component.location')||(this.model == 'component.sublocation'))
             {
                 var tree = this.getParent().get_treeview();
                 if (tree){
