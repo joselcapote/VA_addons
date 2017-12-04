@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="oe_kanban_details">
                                     <h4>
-                                        <a name="open_location_view" type="object">
+                                        <a name="open_sublocation_view" type="object">
                                             <field name="name"/>
                                         </a>
                                     </h4>

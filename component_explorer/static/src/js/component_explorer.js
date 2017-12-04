@@ -37,6 +37,23 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             }
             return false;
         },
+        renderElement: function () {
+            this._super();
+            var self = this;
+            var is_component = this.model.split('\.')[0] == 'component';
+            if (is_component){
+                this.$('.delete_action').click(function(e){
+                    var id = e.target.getAttribute('data-id');
+                    var tree = self.getParent().get_treeview();
+                    if (tree){
+                        var key = self.model.split('\.')[1]+"_"+id;
+                        tree.delete_selected(key);
+                    }
+                });
+            } else {
+                this._super.apply(this, arguments);
+            }
+        },
         on_card_clicked: function () {
             if ((this.model == 'component.project')||(this.model == 'component.site')||
                 (this.model == 'component.location')||(this.model == 'component.sublocation'))
@@ -56,6 +73,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this._super(parent);
             this.view_manager = parent;
             this.tags_registry = core.form_tag_registry;
+            //this.searchable habilita la barra de búsqueda pero todavía da problemas
             this.searchable = false;
             this.headless = true;
             this.tags_to_init = [];
@@ -485,8 +503,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                     case form_common.commands.DELETE:
                         var dataset = new data.DataSet(self, "component.component", {});
                         return dataset.unlink([id]).done(function () {
-                            self.show_property_view(model, parent_id);
-                            self.show_component_view(model, parent_id);
+                            self.update_view_by_model(model, parent_id);
                         });
                     case form_common.commands.LINK_TO:
 /*
@@ -823,6 +840,10 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 this.location_dataset = new data.DataSetSearch(this, "component.location", this.get_context());
                 this.load_treeview();
             }
+        },
+        delete_component: function (id) {
+            var dataset = new data.DataSet(self, "component.component", {});
+            this.remove_record(dataset, id);
         },
         delete_project: function (id) {
             this.remove_record(this.project_dataset, id);

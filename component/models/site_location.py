@@ -98,7 +98,7 @@ class site(model_with_sld):
             'res_id': ids[0], # the current wizard record
             'view_type': 'form',
             'view_mode': 'form,list',
-            'target': 'current'}
+            'target': 'new'}
 
     def set_background_color(self, cr, uid, id, background, context=None):
         self.write(cr, uid, [id], {'background_color': background}, context=context)
@@ -202,7 +202,7 @@ class site_location(model_with_sld):
             'res_id': ids[0], # the current wizard record
             'view_type': 'form',
             'view_mode': 'form,list',
-            'target': 'current'}
+            'target': 'new'}
 
     def _sublocation_count(self, cr, uid, ids, field_name, arg, context=None):
         res = dict.fromkeys(ids, 0)
@@ -260,7 +260,7 @@ class site_sublocation(model_with_sld):
         'description':  fields.char('Description', size=255, required=False, help='A description of the Site'),
     }
 
-    def open_location_view(self, cr, uid, ids, context=None):
+    def open_sublocation_view(self, cr, uid, ids, context=None):
         return {
             'type': 'ir.actions.act_window',
             'res_model': "component.sublocation", # this model

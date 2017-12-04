@@ -170,14 +170,19 @@
                                     <group name="extended">
                                         <li><field name="electric_info"/></li>
                                     </group>
-                                    <group>
-                                        <div class="oe_kanban_bottom_left oe_margin_top_4">
-                                            <a t-if="record.attachment_number" name="action_get_attachment_tree_view" type="object"> <field name="attachment_number"/> Documents</a>
-                                        </div>
-                                        <div class="oe_kanban_bottom_right oe_margin_top_4">
-                                            <a t-if="record.test_count" name="action_get_test_tree_view" type="object"> <field name="test_count"/> Tests</a>
-                                        </div>
-                                    </group>
+                                    <table style="width:100%">
+                                        <tr>
+                                            <td>
+                                                <a t-if="record.attachment_number" name="action_get_attachment_tree_view" type="object"> <field name="attachment_number"/> Documents</a>
+                                            </td>
+                                            <td>
+                                                <a t-if="record.test_count" name="action_get_test_tree_view" type="object"> <field name="test_count"/> Tests</a>
+                                            </td>
+                                            <td>
+                                                <a><img class="delete_action" t-att-onclick="remove_component" t-attf-data-id="#{record.id.value}" t-att-src='_s + "/component/static/recicle.png"'/></a>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </t>

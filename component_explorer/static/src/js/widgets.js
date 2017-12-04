@@ -26,6 +26,7 @@ odoo.define('component_explorer.widgets', function (require) {
         },
         appendTo: function (target) {
             this._super(target);
+            this.init_tree();
             this.load_project_data();
             this.activate_node_by_key('root');
             this.$("#tree").css("height", "100%");
@@ -43,6 +44,8 @@ odoo.define('component_explorer.widgets', function (require) {
                 deleted = this.getParent().delete_location(id);
             } else if (pair[0] == 'sublocation') {
                 deleted = this.getParent().delete_sublocation(id);
+            } else if (pair[0] == 'component') {
+                deleted = this.getParent().delete_component(id);
             }
             if (deleted){
                 var tree = this.$el.fancytree("getTree");
@@ -50,10 +53,7 @@ odoo.define('component_explorer.widgets', function (require) {
                 todelete.remove();
             }
         },
-        load_project_data: function () {
-            this.project_model = new Model('component.project');
-            //ahora se cargan los locations
-            this.device_fields = ['id', 'name'];
+        init_tree: function () {
             var self = this;
             this.tree = this.$el.fancytree({
                 extensions: ['contextMenu'],
@@ -137,6 +137,7 @@ odoo.define('component_explorer.widgets', function (require) {
                     }
                 },
                 activate: function (event, data) {
+                    self.active_key = data.node.key;
                     if (data.node.key == 'root'){
                         self.getParent().show_project_view(id);
                         self.getParent().hide_sld_view();
@@ -162,12 +163,18 @@ odoo.define('component_explorer.widgets', function (require) {
                 }
             });
             var self = this;
+        },
+        load_project_data: function () {
+            var self = this;
             var projectNode = self.$el.fancytree("getRootNode");
             projectNode.addChildren({
                 key: 'root',
                 title: "Projects",
                 folder: true
             });
+            this.project_model = new Model('component.project');
+            //ahora se cargan los locations
+            this.device_fields = ['id', 'name'];
             var rootNode = self.$el.fancytree("getTree").getNodeByKey('root');
             this.project_model.query(this.device_fields).all().done(function (projects) {
                 for (var i = 0; i < projects.length; i++) {
@@ -180,6 +187,7 @@ odoo.define('component_explorer.widgets', function (require) {
                     });
                 }
                 rootNode.toggleExpanded();
+                self.activate_node_by_key(self.active_key);
                 self.load_site_data();
             });
             self.$('.fancytree-icon').addClass(function (index, currentClass) {
@@ -209,6 +217,7 @@ odoo.define('component_explorer.widgets', function (require) {
                         folder: true,
                     });
                 }
+                self.activate_node_by_key(self.active_key);
                 self.load_location_data();
             });
         },
@@ -228,6 +237,7 @@ odoo.define('component_explorer.widgets', function (require) {
                         folder: true,
                     });
                 }
+                self.activate_node_by_key(self.active_key);
                 self.load_sublocation_data();
             });
         },
@@ -247,12 +257,18 @@ odoo.define('component_explorer.widgets', function (require) {
                         folder: true,
                     });
                 }
+                self.activate_node_by_key(self.active_key);
             });
         },
         reload_content: function () {
             var root = this.$el.fancytree("getRootNode");
             root.removeChildren();
-            this.load_project_data();
+            var self = this;
+            $.when(this.load_project_data()).done(function () {
+                if (self.active_key){
+                    self.activate_node_by_key(self.active_key);
+                }
+            })
         },
         activate_node: function (type, site) {
             var tree = this.$el.fancytree("getTree");
@@ -260,7 +276,9 @@ odoo.define('component_explorer.widgets', function (require) {
         },
         activate_node_by_key: function (key) {
             var tree = this.$el.fancytree("getTree");
-            tree.activateKey(key);
+            if (tree.getNodeByKey(key)){
+                tree.activateKey(key);
+            }
         },
         activate_node_by_model: function (model, id) {
             var type = model.split('\.')[1];
@@ -317,9 +335,15 @@ odoo.define('component_explorer.widgets', function (require) {
             this.cexplorer_view.add_record();
         },
         get_treeview: function () {
-            var tree = this.getParent().get_treeview();
+            var parent = this.getParent();
+            if (parent['get_treeview']){
+                var tree = this.getParent().get_treeview();
+            }
             if (!tree){
-                tree = this.getParent().getParent().get_treeview();
+                var parent = this.getParent().getParent();
+                if (parent['get_treeview']){
+                    var tree = parent.get_treeview();
+                }
             }
             return tree;
         },
@@ -522,6 +546,9 @@ odoo.define('component_explorer.widgets', function (require) {
         get_component_domain: function () {
             return [["parent_id","=",Number(this.parent_id)], ["parent_model","=",this.parent_model]];
         },
+        on_delete_record: function (e) {
+            alert();
+        },
         load: function (target) {
             var self = this;
             this.target = target;
@@ -537,14 +564,14 @@ odoo.define('component_explorer.widgets', function (require) {
                     var context = {default_parent_id: self.parent_id, default_parent_model: self.parent_model};
                     var domain = self.get_component_domain();
                     self.right_panel_view.do_search(domain, context, []);
-                    var $kanban_action = self.$('.oe_kanban_action');
+                    //self.$el.on('click','a[data-id]',self.on_delete_record);
 /*
                     $('<span>')
                         .addClass('fa fa-trash-o')
                         .click(function (event) {
                             alert(delete)
                         })
-                        .appendTo($kanban_action);
+                        .appendTo($delete_action);
 */
                 })
                 self.getParent().right_panel_view = self.right_panel_view;

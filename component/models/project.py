@@ -85,7 +85,7 @@ class Component_project(model_with_image):
             'res_id': ids[0], # the current wizard record
             'view_type': 'form',
             'view_mode': 'form,list',
-            'target': 'current'}
+            'target': 'new'}
 
     def action_get_sites_kanban_view(self, cr, uid, ids, context=None):
         ctx = dict()

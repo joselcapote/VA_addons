@@ -79,7 +79,7 @@ class electric_component_base(osv.osv):
                 'res_id': def_id, # the current wizard record
                 'view_type': 'form',
                 'view_mode': 'form',
-                'target': 'current'}
+                'target': 'new'}
 
     def test_avaliable(self):
         # Aqui se pregunta por uno de los modelos que estarán en el tese,
@@ -127,6 +127,8 @@ class electric_component_base(osv.osv):
                     vals['image_small'] = tools.image_resize_image_small(vals.get('image_medium'), avoid_if_small=True)
         return vals
 
+    def remove_component(self, cr, uid, ids, arg, context=None):
+        return False
 
 class ElectricComponent(electric_component_base):
     _inherit = 'component.component'
