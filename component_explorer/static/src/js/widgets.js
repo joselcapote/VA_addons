@@ -101,6 +101,7 @@ odoo.define('component_explorer.widgets', function (require) {
                         var id = Number(pair[1]);
                         switch (action) {
                             case "delete":
+                                self.active_key = node.parent.key;
                                 self.delete_selected(node.key);
                                 break;
                             case "add_project":

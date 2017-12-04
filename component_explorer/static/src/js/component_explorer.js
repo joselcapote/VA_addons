@@ -76,7 +76,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             //this.searchable habilita la barra de búsqueda pero todavía da problemas
             this.searchable = false;
             this.headless = true;
-            this.tags_to_init = [];
+            this.tags_to_init = [];g
         },
         attach_node_attr: function($new_element, $node, attr) {
             $new_element.data(attr, $node.attr(attr));
