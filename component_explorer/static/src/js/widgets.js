@@ -19,15 +19,18 @@ odoo.define('component_explorer.widgets', function (require) {
     var _lt = core._lt;
     var _t = core._t;
 
+    var KanbanRecord = require('web_kanban.Record');
+
     var ProjectTreeView = Widget.extend({
         template: "ProjectTreeView",
-        init: function (parent) {
+        init: function (parent, locations, sublocations) {
             this._super(parent);
+            this.locations = locations;
+            this.sublocations = sublocations;
         },
         appendTo: function (target) {
             this._super(target);
             this.init_tree();
-            this.load_project_data();
             this.activate_node_by_key('root');
             this.$("#tree").css("height", "100%");
             this.$(".ui-fancytree").css("height", "100%");
@@ -48,10 +51,21 @@ odoo.define('component_explorer.widgets', function (require) {
                 deleted = this.getParent().delete_component(id);
             }
             if (deleted){
-                var tree = this.$el.fancytree("getTree");
+                var tree = this.get_tree();
                 var todelete = tree.getNodeByKey(type+"_"+site);
                 todelete.remove();
             }
+        },
+        initialized: function () {
+            if (this.$el['0']){
+                var obj = this.$el['0'];
+                for (var property in obj){
+                    if (property.indexOf('jQuery')==0){
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         init_tree: function () {
             var self = this;
@@ -163,7 +177,13 @@ odoo.define('component_explorer.widgets', function (require) {
                     });
                 }
             });
-            var self = this;
+            this.load_project_data();
+        },
+        get_tree: function () {
+            if (!this.initialized()){
+                this.init_tree();
+            }
+            return this.$el.fancytree("getTree");
         },
         load_project_data: function () {
             var self = this;
@@ -176,7 +196,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.project_model = new Model('component.project');
             //ahora se cargan los locations
             this.device_fields = ['id', 'name'];
-            var rootNode = self.$el.fancytree("getTree").getNodeByKey('root');
+            var rootNode = this.get_tree().getNodeByKey('root');
             this.project_model.query(this.device_fields).all().done(function (projects) {
                 for (var i = 0; i < projects.length; i++) {
                     var project = projects[i];
@@ -210,7 +230,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.site_model.query(this.site_fields).all().done(function (sites) {
                 for (var i = 0; i < sites.length; i++) {
                     var site = sites[i];
-                    var tree = self.$el.fancytree("getTree");
+                    var tree = self.get_tree();
                     var projectNode = tree.getNodeByKey('project_' + site.project_id[0]);
                     var siteNode = projectNode.addChildren({
                         key: 'site_' + site.id,
@@ -230,7 +250,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.location_model.query(this.location_fields).all().done(function (locations) {
                 for (var i = 0; i < locations.length; i++) {
                     var location = locations[i];
-                    var tree = self.$el.fancytree("getTree");
+                    var tree = self.get_tree();
                     var siteNode = tree.getNodeByKey('site_' + location.site_id[0]);
                     var siteNode = siteNode.addChildren({
                         key: 'location_' + location.id,
@@ -250,8 +270,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.sublocation_model.query(this.sublocation_fields).all().done(function (sublocations) {
                 for (var i = 0; i < sublocations.length; i++) {
                     var sublocation = sublocations[i];
-                    var tree = self.$el.fancytree("getTree");
-                    var locationNode = tree.getNodeByKey('location_' + sublocation.location_id[0]);
+                    var locationNode = self.get_tree().getNodeByKey('location_' + sublocation.location_id[0]);
                     var siteNode = locationNode.addChildren({
                         key: 'sublocation_' + sublocation.id,
                         title: sublocation.name,
@@ -272,11 +291,15 @@ odoo.define('component_explorer.widgets', function (require) {
             })
         },
         activate_node: function (type, site) {
-            var tree = this.$el.fancytree("getTree");
+            var tree = this.get_tree();
             tree.activateKey(type+"_"+site);
         },
         activate_node_by_key: function (key) {
-            var tree = this.$el.fancytree("getTree");
+/*
+            var initialized = this.$el.fancytree("initialized");
+            alert(initialized);
+*/
+            var tree = this.get_tree();
             if (tree.getNodeByKey(key)){
                 tree.activateKey(key);
             }
@@ -294,6 +317,48 @@ odoo.define('component_explorer.widgets', function (require) {
         activate_project_node: function (project) {
             this.activate_node("project", project);
         }
+    });
+
+    KanbanRecord.include({
+        valid: function (funct) {
+            if (this.getParent()){
+                if (this.getParent().getParent()){
+                    if (this.getParent().getParent()[funct]){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        renderElement: function () {
+            this._super();
+            var self = this;
+            var is_component = this.model.split('\.')[0] == 'component';
+            if (is_component){
+                this.$('.delete_action').click(function(e){
+                    var id = e.target.getAttribute('data-id');
+                    var tree = self.getParent().get_treeview();
+                    if (tree){
+                        var key = self.model.split('\.')[1]+"_"+id;
+                        tree.delete_selected(key);
+                    }
+                });
+            } else {
+                this._super.apply(this, arguments);
+            }
+        },
+        on_card_clicked: function () {
+            if ((this.model == 'component.project')||(this.model == 'component.site')||
+                (this.model == 'component.location')||(this.model == 'component.sublocation'))
+            {
+                var tree = this.getParent().get_treeview();
+                if (tree){
+                    tree.activate_node_by_model(this.model, this.id);
+                }
+            } else {
+                this._super.apply(this, arguments);
+            }
+        },
     });
 
     var CExplorerKanbanView = KanbanView.extend({

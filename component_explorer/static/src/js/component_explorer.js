@@ -24,59 +24,15 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
 
     var widgets = require('component_explorer.widgets');
 
-    var KanbanRecord = require('web_kanban.Record');
-
-    KanbanRecord.include({
-        valid: function (funct) {
-            if (this.getParent()){
-                if (this.getParent().getParent()){
-                    if (this.getParent().getParent()[funct]){
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
-        renderElement: function () {
-            this._super();
-            var self = this;
-            var is_component = this.model.split('\.')[0] == 'component';
-            if (is_component){
-                this.$('.delete_action').click(function(e){
-                    var id = e.target.getAttribute('data-id');
-                    var tree = self.getParent().get_treeview();
-                    if (tree){
-                        var key = self.model.split('\.')[1]+"_"+id;
-                        tree.delete_selected(key);
-                    }
-                });
-            } else {
-                this._super.apply(this, arguments);
-            }
-        },
-        on_card_clicked: function () {
-            if ((this.model == 'component.project')||(this.model == 'component.site')||
-                (this.model == 'component.location')||(this.model == 'component.sublocation'))
-            {
-                var tree = this.getParent().get_treeview();
-                if (tree){
-                    tree.activate_node_by_model(this.model, this.id);
-                }
-            } else {
-                this._super.apply(this, arguments);
-            }
-        },
-    });
-
     var BaseFormView = View.extend({
         init: function (parent, dataset, view_id, options) {
             this._super(parent);
             this.view_manager = parent;
             this.tags_registry = core.form_tag_registry;
             //this.searchable habilita la barra de búsqueda pero todavía da problemas
-            this.searchable = false;
+            this.searchable = true;
             this.headless = true;
-            this.tags_to_init = [];g
+            this.tags_to_init = [];
         },
         attach_node_attr: function($new_element, $node, attr) {
             $new_element.data(attr, $node.attr(attr));
@@ -387,11 +343,11 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
         get_treeview: function () {
             return this.list_view;
         },
-        load_treeview: function () {
+        load_treeview: function (locations, sublocations) {
             if ((this.$("#tree")) != undefined){
                 this.$("#tree").remove();
             }
-            this.list_view = new widgets.ProjectTreeView(this);
+            this.list_view = new widgets.ProjectTreeView(this, locations, sublocations);
             this.list_view.appendTo(this.$('.o_cexplorer_sidebar_container'));
         },
         on_view: function () {
@@ -825,15 +781,18 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             if ((this.current_query != undefined)&&(this.current_query.length > 0)){
                 var componentModel = new Model("component.component");
                 var self = this;
-                componentModel.query(['id', 'location_id']).filter(this.current_query).all().then(function(components) {
+                componentModel.query(['id', 'parent_id', 'parent_model']).filter(this.current_query).all().then(function(components) {
                     if (components.length > 0){
                         var locations = [];
+                        var sublocations = [];
                         for(var i= 0; i < components.length; i++){
-                            locations.push(components[i].location_id[0]);
+                            if (components[i].parent_model == 'component.location'){
+                                locations.push(components[i].parent_id[0]);
+                            }else{
+                                sublocations.push(components[i].parent_id[0]);
+                            }
                         }
-                        var locations_domain = [["id", "in", locations]];
-                        self.location_dataset = new data.DataSetSearch(self, "component.location", self.get_context(), locations_domain);
-                        self.load_treeview(locations_domain);
+                        self.load_treeview(locations, sublocations);
                     }
                 });
             }else{

@@ -176,8 +176,8 @@ class Component_component(osv.osv):
                         result[device.id] = location
             else:
                 #El padre es un location y se toma su valor directamente
-                for parent in device.parent_id:
-                    result[device.id] = parent.parent_id
+                # for parent in device.parent_id:
+                result[device.id] = device.parent_id
         return result
 
     def _get_sublocation(self, cr, uid, ids, name, args, context=None):

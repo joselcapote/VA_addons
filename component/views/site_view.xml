@@ -68,15 +68,18 @@
                                 </div>
                                 <group>
                                     <div class="oe_kanban_bottom_right oe_margin_top_4">
-                                        <!--
-                                                                                <a t-if="record.component_count" href="" t-attf-onclick="alert($('.o_cexplorer_view').html())"> <field name="component_count"/> Components</a>
-                                        -->
-                                        <p> <field name="location_count"/> Locations</p>
-                                        <!--
-                                                                                <a class="oe_delete_item">
-                                                                                    <img src="/component/static/recicle.png"/>
-                                                                                </a>
-                                        -->
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p> <field name="location_count"/> Locations</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:right">
+                                                    <a><img class="delete_action" t-att-onclick="remove_component" t-attf-data-id="#{record.id.value}" t-att-src='_s + "/component/static/recicle.png"'/></a>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </group>
                             </div>
@@ -110,17 +113,21 @@
                                         </a>
                                     </h4>
                                 </div>
+
                                 <group>
                                     <div class="oe_kanban_bottom_right oe_margin_top_4">
-                                        <!--
-                                                                                <a t-if="record.component_count" href="" t-attf-onclick="alert($('.o_cexplorer_view').html())"> <field name="component_count"/> Components</a>
-                                        -->
-                                        <p> <field name="component_count"/> Components</p>
-                                        <!--
-                                                                                <a class="oe_delete_item">
-                                                                                    <img src="/component/static/recicle.png"/>
-                                                                                </a>
-                                        -->
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p> <field name="component_count"/> Components</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:right">
+                                                    <a><img class="delete_action" t-att-onclick="remove_component" t-attf-data-id="#{record.id.value}" t-att-src='_s + "/component/static/recicle.png"'/></a>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </group>
                             </div>
@@ -155,7 +162,18 @@
                                 </div>
                                 <group>
                                     <div class="oe_kanban_bottom_right oe_margin_top_4">
-                                        <p> <field name="component_count"/> Components</p>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <p> <field name="component_count"/> Components</p>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:right">
+                                                    <a><img class="delete_action" t-att-onclick="remove_component" t-attf-data-id="#{record.id.value}" t-att-src='_s + "/component/static/recicle.png"'/></a>
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </div>
                                 </group>
                             </div>
