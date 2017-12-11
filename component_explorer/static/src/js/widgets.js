@@ -177,7 +177,8 @@ odoo.define('component_explorer.widgets', function (require) {
                     });
                 }
             });
-            this.load_project_data();
+            //this.load_project_data();
+            this.load_sublocation_data();
         },
         get_tree: function () {
             if (!this.initialized()){
@@ -243,7 +244,11 @@ odoo.define('component_explorer.widgets', function (require) {
             });
         },
         load_location_data: function () {
-            this.location_model = new Model('component.location');
+            var domain = [];
+            if (this.locations){
+                domain = [['id', 'in', this.locations]];
+            }
+            this.location_model = new Model('component.location', {}, domain);
             //ahora se cargan los locations
             this.location_fields = ['id', 'name', 'site_id'];
             var self = this;
@@ -262,15 +267,116 @@ odoo.define('component_explorer.widgets', function (require) {
                 self.load_sublocation_data();
             });
         },
+        ensure_root_node: function(){
+            var rootNode = this.getNodeByKey('root');
+            if (!rootNode){
+                var mainNode = this.$el.fancytree("getRootNode");
+                rootNode = mainNode.addChildren({
+                    key: 'root',
+                    title: "Projects",
+                    folder: true
+                });
+            }
+            return rootNode;
+        },
+        ensure_project_node: function (project) {
+            var projectNode = this.get_tree().getNodeByKey('project_' + site);
+            if ((!projectNode)||(projectNode == null)){
+                this.project_model = new Model('component.project', {}, ['id','=',project]);
+                //ahora se cargan los locations
+                this.device_fields = ['id', 'name'];
+                var rootNode = this.ensure_root_node();
+                var def = $.Deferred();
+                this.project_model.query(this.device_fields).all().done(function (projects) {
+                    for (var i = 0; i < projects.length; i++) {
+                        var project = projects[i];
+                        projectNode = rootNode.addChildren({
+                            key: 'project_' + project.id,
+                            title: project.name,
+                            tooltip: project.abstract,
+                            folder: true
+                        });
+                        def = projectNode;
+                    }
+                    rootNode.toggleExpanded();
+                    self.activate_node_by_key(self.active_key);
+                    self.load_site_data();
+                });
+                projectNode = def.promise();
+            }
+            return projectNode;
+        },
+        ensure_site_node: function (site) {
+            return new Promise(function (resolve, reject) {
+                var siteNode = this.get_tree().getNodeByKey('site_' + site);
+                if ((!siteNode)||(siteNode == null)){
+                    this.site_model = new Model('component.site', {}, ['id','=',site]);
+                    //ahora se cargan los locations
+                    this.site_fields = ['id', 'name', 'project_id'];
+                    var self = this;
+                    this.site_model.query(this.site_fields).all().done(function (sites) {
+                        for (var i = 0; i < sites.length; i++) {
+                            var site = sites[i];
+                            var tree = self.get_tree();
+                            var projectNode = self.ensure_project_node(site.project_id[0]);
+                            var siteNode = projectNode.addChildren({
+                                key: 'site_' + site.id,
+                                title: site.name,
+                                folder: true,
+                            });
+                        }
+                        resolve(siteNode);
+                    });
+                }
+                resolve(siteNode);
+            });
+        },
+        ensure_location_node: function (location) {
+            return new Promise(function (resolve, reject) {
+                var locationNode = this.get_tree().getNodeByKey('location_' + location);
+                if ((!locationNode) || (locationNode == null)) {
+                    var domain = [['id', '=', location]];
+                    if (this.locations) {
+                        domain = [['id', '=', location], ['id', 'in', locations]];
+                    }
+                    this.location_model = new Model('component.location', {}, domain);
+                    //ahora se cargan los locations
+                    this.location_fields = ['id', 'name', 'site_id'];
+                    var self = this;
+                    this.location_model.query(this.location_fields).all().done(function (locations) {
+                        for (var i = 0; i < locations.length; i++) {
+                            var location = locations[i];
+                            var tree = self.get_tree();
+                            var siteNode = self.ensure_site_node(location.site_id[0]);
+                            locationNode = siteNode.addChildren({
+                                key: 'location_' + location.id,
+                                title: location.name,
+                                folder: true,
+                            });
+                        }
+                        self.activate_node_by_key(self.active_key);
+                        self.load_sublocation_data();
+                    });
+                }
+                resolve(locationNode);
+            });
+        },
         load_sublocation_data: function () {
-            this.sublocation_model = new Model('component.sublocation');
+            var domain = [];
+            if (this.sublocations){
+                domain = [['id', 'in', this.sublocations]];
+            }
+            this.sublocation_model = new Model('component.sublocation', {}, domain);
             //ahora se cargan los locations
             this.sublocation_fields = ['id', 'name', 'location_id'];
             var self = this;
             this.sublocation_model.query(this.sublocation_fields).all().done(function (sublocations) {
                 for (var i = 0; i < sublocations.length; i++) {
                     var sublocation = sublocations[i];
-                    var locationNode = self.get_tree().getNodeByKey('location_' + sublocation.location_id[0]);
+                    alert(JSON.stringify(sublocation));
+                    var locationNode = self.ensure_location_node(sublocation.location_id[0]);
+                    alert(locationNode);
+                    //var locationNode = self.get_tree().getNodeByKey('location_' + sublocation.location_id[0]);
                     var siteNode = locationNode.addChildren({
                         key: 'sublocation_' + sublocation.id,
                         title: sublocation.name,
