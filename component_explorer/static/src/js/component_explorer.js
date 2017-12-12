@@ -702,13 +702,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                                 }else if (context['default_project_id']){
                                     id = context['default_project_id'];
                                 }
-                                $.when(self.list_view.reload_content()).then(function () {
+                                    $.when(self.list_view.reload_content()).then(function () {
                                     if (id != -1){
                                         self.list_view.activate_node_by_model(parent_model, id);
-                                    }else{
-                                        self.list_view.activate_node_by_key('root');
-                                    }
-                                });
+                                }else{
+                                    self.list_view.activate_node_by_key('root');
+                                }
+                            });
                             });
                         }},
                         {text: _t("Close"), close: true}

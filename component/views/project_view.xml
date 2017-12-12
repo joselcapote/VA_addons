@@ -67,12 +67,14 @@
                     <notebook>
                         <page name="krka_user" string="KRKA User">
                           <!--  <field name="company_id"/>-->
-                            <field name="krkacontacts"/>
+                            <field name="krkacontacts" context="{'default_company_id': 1, 'default_company_ids':[1]}"
+                                   domain="[('company_id','=',1)]"/>
                            <!-- <field name="scope_of_work"/>-->
                         </page>
                         <page name="project_user" string="Customer User">
                             <!--  <field name="company_id"/>-->
-                            <field name="procontacts"/>
+                            <field name="procontacts" context="{'default_company_id': company_id, 'default_company_ids':[company_id]}"
+                                   domain="[('company_id','=',company_id)]"/>
                             <!-- <field name="scope_of_work"/>-->
                         </page>
                        <!-- <page name="sites" string="Sites">
