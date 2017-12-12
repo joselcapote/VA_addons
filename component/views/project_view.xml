@@ -21,12 +21,12 @@
                             <td> </td>
                         </tr>
                         <tr>
-                            <td width="13%" style="vertical-align:bottom"><div align="center">Customer:</div></td>
+                            <td width="13%" style="vertical-align:bottom"><div align="center">Company:</div></td>
                             <td><field name="company_id"/></td>
-                            <td width="13%" style="vertical-align:bottom"><div align="center">Contact:</div></td>
-                            <td><field name="company_id"/></td>
-                            <td width="13%" style="vertical-align:bottom"><div align="center">KRKA Manager:</div></td>
-                            <td><field name="company_id"/></td>
+                            <td width="15%" style="vertical-align:bottom"><div align="center">Company Contact:</div></td>
+                            <td><field name="company_contacts"/></td>
+                            <td width="13%" style="vertical-align:bottom"><div align="center">KRKA Contact:</div></td>
+                            <td><field name="krka_contacts"/></td>
                         </tr>
                         <tr>
                             <td height="30"> </td>
@@ -37,7 +37,7 @@
                             <td> </td>
                         </tr>
                         <tr>
-                            <td><div align="center">Scope of work: </div></td>
+                            <td valign="bottom"><div align="center" valign="bottom">Scope of work: </div></td>
                             <td colspan="5"><field name="scope_of_work"/></td>
                         </tr>
                         <tr>
@@ -63,15 +63,16 @@
                                 </group>
                             </div>
                        </group>-->
+                    <div>User Access Right</div>
                     <notebook>
                         <page name="krka_user" string="KRKA User">
                           <!--  <field name="company_id"/>-->
-                            <field name="contacts"/>
+                            <field name="krkacontacts"/>
                            <!-- <field name="scope_of_work"/>-->
                         </page>
                         <page name="project_user" string="Customer User">
                             <!--  <field name="company_id"/>-->
-                            <field name="contacts"/>
+                            <field name="procontacts"/>
                             <!-- <field name="scope_of_work"/>-->
                         </page>
                        <!-- <page name="sites" string="Sites">

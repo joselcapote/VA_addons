@@ -198,6 +198,7 @@ odoo.define('component_explorer.widgets', function (require) {
             this.device_fields = ['id', 'name'];
             var rootNode = this.get_tree().getNodeByKey('root');
             this.project_model.query(this.device_fields).all().done(function (projects) {
+                var projects_ids = [];
                 for (var i = 0; i < projects.length; i++) {
                     var project = projects[i];
                     rootNode.addChildren({
@@ -206,10 +207,11 @@ odoo.define('component_explorer.widgets', function (require) {
                         tooltip: project.abstract,
                         folder: true
                     });
+                    projects_ids.push(project.id);
                 }
                 rootNode.toggleExpanded();
                 self.activate_node_by_key(self.active_key);
-                self.load_site_data();
+                self.load_site_data(projects_ids);
             });
             self.$('.fancytree-icon').addClass(function (index, currentClass) {
                 if (!('fancytree-selector' in currentClass.split(/\s+/))){
@@ -222,12 +224,14 @@ odoo.define('component_explorer.widgets', function (require) {
                 }
             });
         },
-        load_site_data: function () {
-            this.site_model = new Model('component.site');
+        load_site_data: function (projects) {
+            var domain = [['project_id','in',projects]];
+            this.site_model = new Model('component.site', {}, domain);
             //ahora se cargan los locations
             this.site_fields = ['id', 'name', 'project_id'];
             var self = this;
             this.site_model.query(this.site_fields).all().done(function (sites) {
+                var site_ids = [];
                 for (var i = 0; i < sites.length; i++) {
                     var site = sites[i];
                     var tree = self.get_tree();
@@ -237,17 +241,19 @@ odoo.define('component_explorer.widgets', function (require) {
                         title: site.name,
                         folder: true,
                     });
+                    site_ids.push(site.id);
                 }
                 self.activate_node_by_key(self.active_key);
-                self.load_location_data();
+                self.load_location_data(site_ids);
             });
         },
-        load_location_data: function () {
-            this.location_model = new Model('component.location');
+        load_location_data: function (site_ids) {
+            this.location_model = new Model('component.location', {},  [['site_id','in',site_ids]]);
             //ahora se cargan los locations
             this.location_fields = ['id', 'name', 'site_id'];
             var self = this;
             this.location_model.query(this.location_fields).all().done(function (locations) {
+                var location_ids = [];
                 for (var i = 0; i < locations.length; i++) {
                     var location = locations[i];
                     var tree = self.get_tree();
@@ -257,13 +263,14 @@ odoo.define('component_explorer.widgets', function (require) {
                         title: location.name,
                         folder: true,
                     });
+                    location_ids.push(location.id);
                 }
                 self.activate_node_by_key(self.active_key);
-                self.load_sublocation_data();
+                self.load_sublocation_data(location_ids);
             });
         },
-        load_sublocation_data: function () {
-            this.sublocation_model = new Model('component.sublocation');
+        load_sublocation_data: function (location_ids) {
+            this.sublocation_model = new Model('component.sublocation', {},  [['location_id','in',location_ids]]);
             //ahora se cargan los locations
             this.sublocation_fields = ['id', 'name', 'location_id'];
             var self = this;

@@ -58,13 +58,13 @@
 
         <!--    Component explorer  -->
         <record id="action_component_explorer" model="ir.actions.act_window">
-            <field name="name">Component explorer</field>
+            <field name="name">Project explorer</field>
             <field name="res_model">component.component</field>
             <field name="view_mode">component_explorer</field>
             <field name="view_id" ref="view_component_explorer"/>
         </record>
 
-        <menuitem name="Component explorer"
+        <menuitem name="Project explorer"
                   id="menu_site_explorer"
                   action="action_component_explorer"
                   web_icon="component,static/description/icon.png"

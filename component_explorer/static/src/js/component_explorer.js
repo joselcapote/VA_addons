@@ -30,7 +30,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             this.view_manager = parent;
             this.tags_registry = core.form_tag_registry;
             //this.searchable habilita la barra de búsqueda pero todavía da problemas
-            this.searchable = true;
+            this.searchable = false;
             this.headless = true;
             this.tags_to_init = [];
         },
@@ -609,10 +609,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                 {}
             );
             this.map.addLayer(base_layer);
-            this.datasets.get_dataset(model).read_slice([], [["id","=",Number(id)]]).done(function (records) {
-                if (records.length != 0){
-                    if ((records[0]['single_line_diagram'] != undefined)&&(records[0]['single_line_diagram'] != null)){
-                        var src = "data:image/png;base64,"+ records[0]['single_line_diagram'];
+            var domain = [["id","=",Number(id)]];
+            var model = new Model(model, {}, domain);
+            model.query(['single_line_diagram','name']).first().done(function (record) {
+                if (record){
+                    if (record['single_line_diagram'] != false){
+                        var src = "/web/image?model="+model+"&id="+Number(id)+"&field=single_line_diagram";
+                        var src = "data:image/png;base64,"+ record['single_line_diagram'];
                         var img = new Image();
                         img.src = src;
                         img.onload = function() {
@@ -627,9 +630,17 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                             self.map.addLayer(imageLayer);
                             self.map.zoomToMaxExtent();
                         }
+                    }else{
+                        self.hide_sld_view();
                     }
+                }else{
+                    self.hide_sld_view();
                 }
+            });
+/*
+            this.datasets.get_dataset(model).read_slice([], domain).done(function (records) {
             })
+*/
         },
         show_location_view: function (site) {
             this.right_panel_parent = this.$(".o_cexplorer_view");
@@ -691,13 +702,13 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
                                 }else if (context['default_project_id']){
                                     id = context['default_project_id'];
                                 }
-                                if (id != -1){
-                                    $.when(self.list_view.reload_content()).then(function () {
+                                $.when(self.list_view.reload_content()).then(function () {
+                                    if (id != -1){
                                         self.list_view.activate_node_by_model(parent_model, id);
-                                    });
-                                }else{
-                                    self.list_view.activate_node_by_key('root');
-                                }
+                                    }else{
+                                        self.list_view.activate_node_by_key('root');
+                                    }
+                                });
                             });
                         }},
                         {text: _t("Close"), close: true}
@@ -748,7 +759,7 @@ odoo.define('component_explorer.ComponentExplorerView', function (require) {
             component_types.push({title: 'SWR', model: "component.swr_component"});
             //component_types.push({title: 'Switch', model: "component.switch"});
             component_types.push({title: 'Dry Transformer', model: "component.dry_transformer"});
-            component_types.push({title: 'LV Circuit breaker', model: "'component.lv_cb_component"});
+            component_types.push({title: 'LV Circuit breaker', model: "component.lv_cb_component"});
             var buttons = [
                 {
                     text: _t("Ok"),

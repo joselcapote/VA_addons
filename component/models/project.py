@@ -68,10 +68,16 @@ class Component_project(model_with_image):
     _columns = {
         'name': fields.char('Project Name', size=64, required=True),
         'abstract': fields.char('Project abstract', size=256, required=False),
-        'company_id': fields.many2one('res.company', 'Client'),
+
+        'company_id':  fields.many2one('res.company', 'Client'),
+        'company_contacts': fields.many2one('res.partner', 'company_Contact',domain=[('company_type','=','person')]),
+        'krka_contacts': fields.many2one('res.partner', 'krka_Contact',domain=[('company_type','=','person')]),
+
+        'krkacontacts': fields.many2many('res.users', 'krka_contacts', 'id', 'partner_id', string='krkacontacts'),
+        'procontacts': fields.many2many('res.users', 'project_contacts', 'id', 'partner_id', string='procontacts'),
+
         'contract_no': fields.char('Contract Nummber', size=64),
-        'contacts': fields.many2many('res.partner', 'project_contacts', 'id', 'partner_id', string='Contacts'),
-        'scope_of_work': fields.char('Scope of work', size=256, required=False, translate=False),
+        'scope_of_work': fields.text('Scope of work', size=256, required=False, translate=False),
         'site_ids':        fields.one2many('component.site', 'id', 'Sites', help='The list of project sites'),
         'site_count':   fields.function(_site_count, string='Site count', type='integer'),
         'attachment_number': fields.function(_get_attachment_number, string="Documents Attached", type="integer"),
